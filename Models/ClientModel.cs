@@ -24,9 +24,9 @@ namespace TradesWomanBE.Models
         public string? FoundUsOn { get; set;}
         public string? DateJoinedEAW { get; set;}
         public string? CTWIStipends { get; set;}
-        // public ProgramInfo ProgramInfo { get; set;}
+        public ProgramModel? ProgramInfo { get; set;}
 
-        // public Meetings[] Meetings { get; set;}
+        public MeetingsModel? Meetings { get; set;}
 
 
         public bool IsDeleted { get; set; } 
