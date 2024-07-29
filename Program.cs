@@ -1,9 +1,30 @@
+using Microsoft.EntityFrameworkCore;
+using TradesWomanBE.Services;
+using TradesWomanBE.Services.Context;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 
+builder.Services.AddScoped<ClientServices>();
+builder.Services.AddScoped<UserServices>();
+
+var connectionString = builder.Configuration.GetConnectionString("TEString");
+
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddCors(options => {
+    options.AddPolicy("TEPolicy", 
+    builder => {
+        builder.WithOrigins("http://localhost:3000", "http://localhost:3001")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -17,6 +38,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("TEPolicy");
 
 app.UseAuthorization();
 
