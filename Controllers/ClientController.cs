@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TradesWomanBE.Models;
 using TradesWomanBE.Services;
-using TradesWomanBE.Services.Interfaces;
 
 namespace TradesWomanBE.Controllers
 {
@@ -22,9 +18,9 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("AddClient")]
-        public bool AddClient(ClientServices newClient)
+        public bool AddClient(ClientModel newClient)
         {
-            return _data.AddClient(newClient);
+            return _clientServices.AddClient(newClient);
         }
     }
 }

@@ -13,6 +13,5 @@ namespace TradesWomanBE.Models
         public string? EnrollDate { get; set; }
         public string? ProgramEndDate { get; set; }
         public string? CurrentStatus { get; set; }
-        
     }
 }

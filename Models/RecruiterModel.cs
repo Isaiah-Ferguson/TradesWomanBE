@@ -19,8 +19,8 @@ namespace TradesWomanBE.Models
         public int? PhoneNumber { get; set; }
         public string? CreatedBy { get; set; }
         public string? Status { get; set;}
+        public string? Salt {get; set;}
+        public string? Hash { get; set; }
         public bool IsDeleted { get; set; }
-
-        public RecruiterModel(){}
     }
 }

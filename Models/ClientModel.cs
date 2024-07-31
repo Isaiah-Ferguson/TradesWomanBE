@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TradesWomanBE.Models
 {
@@ -26,14 +22,10 @@ namespace TradesWomanBE.Models
         public string? DateJoinedEAW { get; set;}
         public string? CTWIStipends { get; set;}
         public string? Address  { get; set;}
-        public ProgramModel? ProgramInfo { get; set;}
-
-        public MeetingsModel? Meetings { get; set;}
-
+        
+        [ForeignKey("ProgramInfoId")]
+        public virtual ProgramModel? ProgramInfo { get; set; }
+        public virtual ICollection<MeetingsModel> Meetings { get; set; } = new List<MeetingsModel>();
         public bool IsDeleted { get; set; } 
-
-        public ClientModel(){}
     }
-
-
 }
