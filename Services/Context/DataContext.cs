@@ -10,7 +10,6 @@ namespace TradesWomanBE.Services.Context
         public DbSet<ProgramModel> Programs { get; set; }
         public DbSet<MeetingsModel> Meetings { get; set; }
         public DbSet<MeetingNotesModel> MeetingNotes { get; set; }
-        public DbSet<NoteModel> Notes { get; set; }
         public DbSet<CTWIStipendsModel> Stipends { get; set; }
        public DataContext(DbContextOptions options) : base (options){}
 
