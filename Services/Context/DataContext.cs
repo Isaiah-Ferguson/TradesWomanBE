@@ -6,6 +6,7 @@ namespace TradesWomanBE.Services.Context
     public class DataContext : DbContext
     {
         public DbSet<ClientModel> ClientInfo { get; set; }
+        public DbSet<AdminUser> AdminUsers { get; set; }
         public DbSet<RecruiterModel> RecruiterInfo { get; set;}
         public DbSet<ProgramModel> Programs { get; set; }
         public DbSet<MeetingsModel> Meetings { get; set; }
