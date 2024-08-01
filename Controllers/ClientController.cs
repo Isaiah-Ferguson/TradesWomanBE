@@ -22,5 +22,13 @@ namespace TradesWomanBE.Controllers
         {
             return _clientServices.AddClient(newClient);
         }
+
+        [HttpGet("GetAllClients")]
+        public IEnumerable<ClientModel> GetAllClients()
+        {
+            return _clientServices.GetAllClients();
+        }
+
+        
     }
 }

@@ -37,6 +37,19 @@ namespace TradesWomanBE.Services
             return _dataContext.SaveChanges() != 0;
         }
 
+        public bool UpdateProgram(ProgramModel programToUpdate)
+        {
+            _dataContext.Update<ProgramModel>(programToUpdate);
+            return _dataContext.SaveChanges() != 0;
+        }
+
+        public bool UpdateCTWIStipend(CTWIStipendsModel stipendInfo)
+        {
+            _dataContext.Update<CTWIStipendsModel>(stipendInfo);
+            return _dataContext.SaveChanges() != 0;
+        }
+
+
         public IEnumerable<ClientModel> GetAllClients()
         {
             return _dataContext.ClientInfo;

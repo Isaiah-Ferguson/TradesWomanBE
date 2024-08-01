@@ -22,23 +22,16 @@ namespace TradesWomanBE.Controllers
 
 
         [HttpPost("Login")]
-        public IActionResult Login(LoginDTO user)
+        public IActionResult Login([FromBody]LoginDTO user)
         {
             return _userService.Login(user);
         }
 
-        // [HttpPost("AddUser")]
-        // public bool AddClient()
-        // {
-
-        // }
-
-        // [HttpPost("CreateRecruiter")]
-        // public bool CreateRecruiter()
-        // {
-            
-        // }
-
+        [HttpPost("AddUser")]
+        public bool CreateAdmin(CreateAccountDTO newAccount)
+        {
+            return _userService.AddUser(newAccount);
+        }
         
     }
 }

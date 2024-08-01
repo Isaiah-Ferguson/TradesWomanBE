@@ -29,7 +29,7 @@ namespace TradesWomanBE.Services
             bool result = false;
             if (!DoesUserExist(userToAdd.Email))
             {
-                RecruiterModel newUser = new();
+                AdminUser newUser = new();
 
                 var hashPassword = HashPassword(userToAdd.Password);
                 newUser.Id = userToAdd.Id;
