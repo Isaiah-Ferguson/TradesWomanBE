@@ -21,7 +21,7 @@ namespace TradesWomanBE.Services
 
         public bool DoesUserExist(string? Email)
         {
-            return _context.RecruiterInfo.SingleOrDefault(client => client.Email == Email) != null;
+            return _context.AdminUsers.SingleOrDefault(client => client.Email == Email) != null;
         }
 
         public bool AddUser(CreateAccountDTO userToAdd)
@@ -74,17 +74,48 @@ namespace TradesWomanBE.Services
 
             using var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 310000, HashAlgorithmName.SHA256);
             var newHash = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(32)); // 256 bits
+            Console.WriteLine(newHash);
             return newHash == storedHash;
         }
 
-        public IActionResult Login(LoginDTO user)
+        // public IActionResult RecruiterLogin(LoginDTO user)
+        // {
+        //     IActionResult result = Unauthorized();
+
+        //     if (DoesUserExist(user.Email))
+        //     {
+
+        //         RecruiterModel foundUser = GetUserByEmail(user.Email);
+        //         if (VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
+        //         {
+
+        //             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+        //             var signinCredntials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+        //             var tokenOptions = new JwtSecurityToken(
+        //                 issuer: "http://localhost:5000",
+        //                 audience: "http://localhost:5000",
+        //                 claims: new List<Claim>(),
+        //                 expires: DateTime.Now.AddMinutes(30),
+        //                 signingCredentials: signinCredntials
+        //             );
+
+        //             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        //             result = Ok(new { Token = tokenString });
+        //         }
+
+        //     }
+
+        //     return result;
+        // }
+
+        public IActionResult AdminLogin(LoginDTO user)
         {
             IActionResult result = Unauthorized();
 
             if (DoesUserExist(user.Email))
             {
 
-                RecruiterModel foundUser = GetUserByEmail(user.Email);
+                AdminUser foundUser = GetUserByEmail(user.Email);
                 if (VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
                 {
 
@@ -107,9 +138,9 @@ namespace TradesWomanBE.Services
             return result;
         }
 
-        public RecruiterModel GetUserByEmail(string Email)
+        public AdminUser GetUserByEmail(string Email)
         {
-            return _context.RecruiterInfo.SingleOrDefault(user => user.Email == Email);
+            return _context.AdminUsers.SingleOrDefault(user => user.Email == Email);
         }
 
         public bool UpdateRecruiter(RecruiterModel userToUpdate)

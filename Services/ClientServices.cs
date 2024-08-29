@@ -1,14 +1,12 @@
 using TradesWomanBE.Models;
-using TradesWomanBE.Models.DTO;
 using TradesWomanBE.Services.Context;
-using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
-
-
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace TradesWomanBE.Services
 {
-    public class ClientServices 
+    public class ClientServices
     {
         private readonly DataContext _dataContext;
         public ClientServices(DataContext dataContext)
@@ -16,87 +14,72 @@ namespace TradesWomanBE.Services
             _dataContext = dataContext;
         }
 
-        public bool DoesClientExist(int? SSNLastFour, string Firstname)
+        public async Task<bool> DoesClientExistAsync(int? SSNLastFour, string Firstname)
         {
-            return _dataContext.ClientInfo.SingleOrDefault(client => client.SSNLastFour == SSNLastFour && client.Firstname == Firstname) != null;
+            return await _dataContext.ClientInfo
+                .SingleOrDefaultAsync(client => client.SSNLastFour == SSNLastFour && client.Firstname == Firstname) != null;
         }
 
-        public bool AddClient(ClientModel clientModel)
+        public async Task<bool> AddClientAsync(ClientModel clientModel)
         {
-            if (!DoesClientExist(clientModel.SSNLastFour, clientModel.Firstname))
+            if (!await DoesClientExistAsync(clientModel.SSNLastFour, clientModel.Firstname))
             {
-                _dataContext.Add(clientModel);
-                return _dataContext.SaveChanges() > 0;
+                await _dataContext.AddAsync(clientModel);
+                return await _dataContext.SaveChangesAsync() > 0;
             }
             return false;
         }
 
-        public bool UpdateClient(ClientModel clientToUpdate)
+        public async Task<bool> EditClientAsync(ClientModel clientModel)
         {
-            _dataContext.Update<ClientModel>(clientToUpdate);
-            return _dataContext.SaveChanges() != 0;
+            if (!await DoesClientExistAsync(clientModel.SSNLastFour, clientModel.Firstname))
+            {
+                _dataContext.Update(clientModel);
+                return await _dataContext.SaveChangesAsync() > 0;
+            }
+            return false;
         }
 
-        public bool UpdateProgram(ProgramModel programToUpdate)
+        public async Task<bool> UpdateClientAsync(ClientModel clientToUpdate)
         {
-            _dataContext.Update<ProgramModel>(programToUpdate);
-            return _dataContext.SaveChanges() != 0;
+            _dataContext.Update(clientToUpdate);
+            return await _dataContext.SaveChangesAsync() != 0;
         }
 
-        public bool UpdateCTWIStipend(CTWIStipendsModel stipendInfo)
+        public async Task<bool> UpdateProgramAsync(ProgramModel programToUpdate)
         {
-            _dataContext.Update<CTWIStipendsModel>(stipendInfo);
-            return _dataContext.SaveChanges() != 0;
+            _dataContext.Update(programToUpdate);
+            return await _dataContext.SaveChangesAsync() != 0;
         }
 
-
-        public IEnumerable<ClientModel> GetAllClients()
+        public async Task<bool> UpdateCTWIStipendAsync(CTWIStipendsModel stipendInfo)
         {
-            return _dataContext.ClientInfo;
+            _dataContext.Update(stipendInfo);
+            return await _dataContext.SaveChangesAsync() != 0;
         }
 
-        public ClientModel GetClientById(int userId)
+        public async Task<IEnumerable<ClientModel>> GetAllClientsAsync()
         {
-            return _dataContext.ClientInfo
+            return await _dataContext.ClientInfo.ToListAsync();
+        }
+
+        public async Task<ClientModel> GetClientByIdAsync(int userId)
+        {
+            return await _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
                 .Include(c => c.Meetings)
                     .ThenInclude(m => m.MeetingNotes)
-                .FirstOrDefault(item => item.Id == userId);
+                .FirstOrDefaultAsync(item => item.Id == userId);
         }
 
-        public IEnumerable<ClientModel> GetClientsByFirstNameAndLastname(string Firstname, string Lastname)
+        public async Task<IEnumerable<ClientModel>> GetClientsByFirstNameAndLastnameAsync(string Firstname, string Lastname)
         {
-            return _dataContext.ClientInfo
+            return await _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
                 .Include(c => c.Meetings)
-                    .ThenInclude(m => m.MeetingNotes).Where(item => item.Firstname == Firstname && item.Lastname == Lastname);
+                    .ThenInclude(m => m.MeetingNotes)
+                .Where(item => item.Firstname == Firstname && item.Lastname == Lastname)
+                .ToListAsync();
         }
-
-
-        // public SSNDTO HashSSN(int? SSN)
-        // {
-        //     string? newSSN = SSN.ToString();
-        //     SSNDTO newHashSSN = new();
-
-        //     byte[] saltByte = new byte[64];
-        //     using (var rng = RandomNumberGenerator.Create())
-        //     {
-        //         rng.GetBytes(saltByte);
-        //     }
-
-        //     var salt = Convert.ToBase64String(saltByte);
-
-        //     using (var deriveBytes = new Rfc2898DeriveBytes(newSSN, saltByte, 310000, HashAlgorithmName.SHA256))
-        //     {
-        //         var hash = Convert.ToBase64String(deriveBytes.GetBytes(32)); // 256 bits
-
-        //         newHashSSN.Salt = salt;
-        //         newHashSSN.Hash = hash;
-        //     }
-
-        //     return newHashSSN;
-        // }
     }
-
-
 }

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TradesWomanBE.Models
@@ -10,6 +9,5 @@ namespace TradesWomanBE.Models
         [ForeignKey("MeetingId")]
         public virtual MeetingsModel? Meeting { get; set; }
         public string? Notes { get; set; }
-
     }
 }

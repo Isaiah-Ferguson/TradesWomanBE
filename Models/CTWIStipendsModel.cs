@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace TradesWomanBE.Models
 {
     public class CTWIStipendsModel
@@ -14,5 +9,7 @@ namespace TradesWomanBE.Models
         public string? StipendDetails { get; set;}
         public int? StipendAmountRequested { get; set;}
         public string? StipendPaymentMethod { get; set;}
+        public string? IssuedDate{ get; set;}
+        public string? RequestedDate { get; set;}
     }
 }

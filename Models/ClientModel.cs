@@ -13,8 +13,6 @@ namespace TradesWomanBE.Models
         public int? ChildrenUnderSix { get; set; }
         public int? ChildrenOverSix { get; set; }
         public int? SSNLastFour { get; set; }
-        public string? Salt { get; set; }
-        public string? Hash { get; set; }
         public string? ValidSSNAuthToWrk { get; set; }
         public string? CriminalHistory { get; set;}
         public string? Disabled { get; set;}
@@ -22,10 +20,13 @@ namespace TradesWomanBE.Models
         public string? DateJoinedEAW { get; set;}
         public string? CTWIStipends { get; set;}
         public string? Address  { get; set;}
-        
+        public string? Gender { get; set;}
+        public string? Employed { get; set;}
+        public string? RecruiterName { get; set; }
+
         [ForeignKey("ProgramInfoId")]
         public virtual ProgramModel? ProgramInfo { get; set; }
-        public virtual ICollection<MeetingsModel> Meetings { get; set; } = new List<MeetingsModel>();
-        public bool IsDeleted { get; set; } 
+        public virtual ICollection<MeetingsModel>? Meetings { get; set; } = new List<MeetingsModel>();
+        public bool IsDeleted { get; set; } = false;
     }
 }

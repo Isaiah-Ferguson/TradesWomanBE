@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace TradesWomanBE.Models
 {
     public class RecruiterModel
@@ -15,6 +10,7 @@ namespace TradesWomanBE.Models
         public Char? MiddleInnitial { get; set; }
         public string? Email { get; set; }
         public string? Department { get; set; }
+        public string? Location { get; set; }
         public string? SuperviserName { get; set; }
         public int? PhoneNumber { get; set; }
         public string? CreatedBy { get; set; }
