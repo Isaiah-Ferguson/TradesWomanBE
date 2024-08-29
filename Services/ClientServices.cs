@@ -1,8 +1,8 @@
 using TradesWomanBE.Models;
 using TradesWomanBE.Services.Context;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using System.Text;
+
 
 namespace TradesWomanBE.Services
 {
@@ -81,5 +81,19 @@ namespace TradesWomanBE.Services
                 .Where(item => item.Firstname == Firstname && item.Lastname == Lastname)
                 .ToListAsync();
         }
+        public string GetClientsAsCsv()
+        {
+            var clients = _dataContext.ClientInfo.ToList();
+            var sb = new StringBuilder();
+            sb.AppendLine("Id,FirstName,LastName,SSNLastFour"); // Add appropriate headers
+
+            foreach (var client in clients)
+            {
+                sb.AppendLine($"{client.Id},{client.Firstname},{client.Lastname},{client.SSNLastFour}");
+            }
+
+            return sb.ToString();
+        }
+
     }
 }

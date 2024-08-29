@@ -30,6 +30,7 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.Meetings.FindAsync(id);
         }
+
         public async Task<IEnumerable<MeetingNotesModel>> GetMeetingNotesByMeetingIdAsync(int meetingId)
         {
             return await _dataContext.MeetingNotes
