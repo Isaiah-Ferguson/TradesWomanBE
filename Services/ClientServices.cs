@@ -83,13 +83,16 @@ namespace TradesWomanBE.Services
         }
         public string GetClientsAsCsv()
         {
-            var clients = _dataContext.ClientInfo.ToList();
+            var clients = _dataContext.ClientInfo.Include(c => c.ProgramInfo)
+        .ToList();
             var sb = new StringBuilder();
-            sb.AppendLine("Id,FirstName,LastName,SSNLastFour"); // Add appropriate headers
+            sb.AppendLine("FirstName,LastName,Email,ValidSSNAuthToWrk,CriminalHistory,Disabled,FoundUsOn,DateJoinedEAW,Stipends,Address,Gender,Employed,ProgramEnrolled,ProgramEndDate,CurrentStatus,GrantName");
 
             foreach (var client in clients)
             {
-                sb.AppendLine($"{client.Id},{client.Firstname},{client.Lastname},{client.SSNLastFour}");
+                var program = client.ProgramInfo;
+                sb.AppendLine($"{client.Id},{client.Firstname},{client.Lastname},{client.SSNLastFour},{client.MiddleInnitial},{client.Email},{client.ValidSSNAuthToWrk},{client.CriminalHistory},{client.FoundUsOn},{client.DateJoinedEAW},{client.Stipends},{client.Address},{client.Gender},{client.Employed}" +
+                      $"{program?.ProgramEnrolled},{program?.EnrollDate},{program?.ProgramEndDate}");
             }
 
             return sb.ToString();

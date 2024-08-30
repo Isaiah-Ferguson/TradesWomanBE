@@ -3,7 +3,6 @@ namespace TradesWomanBE.Models
     public class RecruiterModel
     {
         public int Id { get; set; }
-        public int? UserID { get; set; }
         public int? EmployeeID { get; set; }
         public string? Firstname { get; set; }
         public string? Lastname { get; set; }

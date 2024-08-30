@@ -32,6 +32,17 @@ namespace TradesWomanBE.Controllers
         {
             return _userService.AddUser(newAccount);
         }
-        
+
+
+        [HttpPost("ChangeUserPassword")]
+        public bool ChangeUserPassword(CreateAccountDTO newAccount)
+        {
+            return _userService.AddUser(newAccount);
+        }
+        [HttpPost("AddRecruiter")]
+        public bool AddRecruiter(CreateAccountDTO newAccount)
+        {
+            return _userService.AddUser(newAccount);
+        }
     }
 }

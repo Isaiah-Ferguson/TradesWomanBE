@@ -16,7 +16,6 @@ namespace TradesWomanBE.Controllers
             _clientServices = clientServices;
         }
 
-        // POST: /Client/AddClient
         [HttpPost("AddClient")]
         public async Task<IActionResult> AddClient(ClientModel newClient)
         {
@@ -28,7 +27,6 @@ namespace TradesWomanBE.Controllers
             return Ok("Client added successfully.");
         }
 
-        // PUT: /Client/EditClient
         [HttpPut("EditClient")]
         public async Task<IActionResult> EditClient(ClientModel clientToEdit)
         {

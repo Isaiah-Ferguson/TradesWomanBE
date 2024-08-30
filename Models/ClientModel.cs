@@ -18,7 +18,7 @@ namespace TradesWomanBE.Models
         public string? Disabled { get; set;}
         public string? FoundUsOn { get; set;}
         public string? DateJoinedEAW { get; set;}
-        public string? CTWIStipends { get; set;}
+        public string? Stipends { get; set;}
         public string? Address  { get; set;}
         public string? Gender { get; set;}
         public string? Employed { get; set;}
