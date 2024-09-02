@@ -20,6 +20,14 @@ namespace TradesWomanBE.Services
                 .SingleOrDefaultAsync(client => client.SSNLastFour == SSNLastFour && client.Firstname == Firstname) != null;
         }
 
+        public async Task<IEnumerable<ClientModel>> GetLast30ClientsAsync()
+        {
+            return await _dataContext.ClientInfo
+                .OrderByDescending(client => client.DateRegistered)
+                .Take(30)
+                .ToListAsync();
+        }
+
         public async Task<bool> AddClientAsync(ClientModel clientModel)
         {
             if (!await DoesClientExistAsync(clientModel.SSNLastFour, clientModel.Firstname))
@@ -72,6 +80,15 @@ namespace TradesWomanBE.Services
                 .FirstOrDefaultAsync(item => item.Id == userId);
         }
 
+        public async Task<ClientModel> GetClientByEmailAsync(string email)
+        {
+            return await _dataContext.ClientInfo
+                .Include(c => c.ProgramInfo)
+                    .Include(c => c.Meetings)
+                        .ThenInclude(m => m.MeetingNotes)
+                            .FirstOrDefaultAsync(item => item.Email == email);
+        }
+
         public async Task<IEnumerable<ClientModel>> GetClientsByFirstNameAndLastnameAsync(string Firstname, string Lastname)
         {
             return await _dataContext.ClientInfo
@@ -83,8 +100,7 @@ namespace TradesWomanBE.Services
         }
         public string GetClientsAsCsv()
         {
-            var clients = _dataContext.ClientInfo.Include(c => c.ProgramInfo)
-        .ToList();
+            var clients = _dataContext.ClientInfo.Include(c => c.ProgramInfo).ToList();
             var sb = new StringBuilder();
             sb.AppendLine("FirstName,LastName,Email,ValidSSNAuthToWrk,CriminalHistory,Disabled,FoundUsOn,DateJoinedEAW,Stipends,Address,Gender,Employed,ProgramEnrolled,ProgramEndDate,CurrentStatus,GrantName");
 

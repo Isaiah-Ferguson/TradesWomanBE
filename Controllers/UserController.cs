@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TradesWomanBE.Models.DTO;
 using TradesWomanBE.Services;
@@ -20,7 +16,6 @@ namespace TradesWomanBE.Controllers
             _userService = userService;
         }
 
-
         [HttpPost("Login")]
         public IActionResult Login([FromBody]LoginDTO user)
         {
@@ -33,12 +28,12 @@ namespace TradesWomanBE.Controllers
             return _userService.AddUser(newAccount);
         }
 
-
         [HttpPost("ChangeUserPassword")]
         public bool ChangeUserPassword(CreateAccountDTO newAccount)
         {
             return _userService.AddUser(newAccount);
         }
+    
         [HttpPost("AddRecruiter")]
         public bool AddRecruiter(CreateAccountDTO newAccount)
         {

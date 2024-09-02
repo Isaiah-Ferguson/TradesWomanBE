@@ -23,6 +23,7 @@ namespace TradesWomanBE.Models
         public string? Gender { get; set;}
         public string? Employed { get; set;}
         public string? RecruiterName { get; set; }
+        public string? DateRegistered { get; set; }
 
         [ForeignKey("ProgramInfoId")]
         public virtual ProgramModel? ProgramInfo { get; set; }

@@ -45,6 +45,27 @@ namespace TradesWomanBE.Controllers
             return Ok(clients);
         }
 
+        [HttpGet("GetLast30Clients")]
+        public async Task<IActionResult> GetLast30Clients()
+        {
+            var clients = await _clientServices.GetLast30ClientsAsync();
+            return Ok(clients);
+        }
+
+        [HttpGet("GetClientByEmail/{email}")]
+        public async Task<IActionResult> GetClientByEmail(string email)
+        {
+            var clients = await _clientServices.GetClientByEmailAsync(email);
+            return Ok(clients);
+        }
+
+        [HttpGet("GetClientByEmail/{firstName}/{lastName}")]
+        public async Task<IActionResult> GetClientsByFirstNameAndLastname(string firstName, string lastName)
+        {
+            var clients = await _clientServices.GetClientsByFirstNameAndLastnameAsync(firstName, lastName);
+            return Ok(clients);
+        }
+
         [HttpGet("ExportClients")]
         public IActionResult ExportClients()
         {
