@@ -6,8 +6,10 @@ namespace TradesWomanBE.Models
     {
         public int Id { get; set;}
         public string? RecruiterInfo { get; set;}
+        public int MeetingId { get; set; }
+
         [ForeignKey("MeetingId")]
-        public virtual MeetingsModel? Meeting { get; set; }
+        public virtual MeetingsModel? Meeting { get; set; } 
         public string? Notes { get; set; }
     }
 }

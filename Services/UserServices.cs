@@ -113,7 +113,7 @@ namespace TradesWomanBE.Services
             return _context.AdminUsers.SingleOrDefault(user => user.Email == Email);
         }
 
-        public bool UpdateRecruiter(RecruiterModel userToUpdate)
+        public async Task<bool> UpdateRecruiterAsync(RecruiterModel userToUpdate)
         {
             _context.Update<RecruiterModel>(userToUpdate);
             return _context.SaveChanges() != 0;

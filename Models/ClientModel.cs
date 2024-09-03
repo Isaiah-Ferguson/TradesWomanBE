@@ -25,8 +25,11 @@ namespace TradesWomanBE.Models
         public string? RecruiterName { get; set; }
         public string? DateRegistered { get; set; }
 
+        public int? ProgramInfoId { get; set; }
+
         [ForeignKey("ProgramInfoId")]
         public virtual ProgramModel? ProgramInfo { get; set; }
+
         public virtual ICollection<MeetingsModel>? Meetings { get; set; } = new List<MeetingsModel>();
         public bool IsDeleted { get; set; } = false;
     }

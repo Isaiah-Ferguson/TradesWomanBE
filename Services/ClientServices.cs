@@ -14,7 +14,7 @@ namespace TradesWomanBE.Services
             _dataContext = dataContext;
         }
 
-        public async Task<bool> DoesClientExistAsync(int? SSNLastFour, string Firstname)
+        public async Task<bool> DoesClientExistAsync(int? SSNLastFour, string? Firstname)
         {
             return await _dataContext.ClientInfo
                 .SingleOrDefaultAsync(client => client.SSNLastFour == SSNLastFour && client.Firstname == Firstname) != null;
@@ -75,9 +75,9 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
-                .Include(c => c.Meetings)
-                    .ThenInclude(m => m.MeetingNotes)
-                .FirstOrDefaultAsync(item => item.Id == userId);
+                    .Include(c => c.Meetings)
+                        .ThenInclude(m => m.MeetingNotes)
+                            .FirstOrDefaultAsync(item => item.Id == userId);
         }
 
         public async Task<ClientModel> GetClientByEmailAsync(string email)
@@ -93,10 +93,10 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
-                .Include(c => c.Meetings)
-                    .ThenInclude(m => m.MeetingNotes)
-                .Where(item => item.Firstname == Firstname && item.Lastname == Lastname)
-                .ToListAsync();
+                    .Include(c => c.Meetings)
+                        .ThenInclude(m => m.MeetingNotes)
+                            .Where(item => item.Firstname == Firstname && item.Lastname == Lastname)
+                                .ToListAsync();
         }
         public string GetClientsAsCsv()
         {

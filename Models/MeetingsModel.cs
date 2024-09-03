@@ -13,7 +13,8 @@ namespace TradesWomanBE.Models
         public string? PreferedContact { get; set; }
         public string? GrantName { get; set; }
 
-        [ForeignKey("MeetingId")]
+        [ForeignKey("ClientID")]
+        public virtual ClientModel Client { get; set; }
         public virtual ICollection<MeetingNotesModel> MeetingNotes { get; set; } = new List<MeetingNotesModel>();
     }
 }

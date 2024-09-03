@@ -52,5 +52,15 @@ namespace TradesWomanBE.Controllers
             var recruiters = await _userService.GetRecruiterByEmailAsync(email);
             return Ok(recruiters);
         }
+        [HttpPut("EditRecruiter")]
+        public async Task<IActionResult> UpdateRecruiter(RecruiterModel recruiterinfo)
+        {
+            var success = await _userService.UpdateRecruiterAsync(recruiterinfo);
+                if (!success)
+            {
+                return BadRequest("Unable to edit Recruiter. Please check the provided data.");
+            }
+            return Ok("Recruiter edited successfully.");
+        }
     }
 }
