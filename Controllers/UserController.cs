@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TradesWomanBE.Models;
 using TradesWomanBE.Models.DTO;
 using TradesWomanBE.Services;
 
@@ -22,22 +23,34 @@ namespace TradesWomanBE.Controllers
             return _userService.AdminLogin(user);
         }
 
-        [HttpPost("AddUser")]
+        [HttpPost("CreateAdmin")]
         public bool CreateAdmin(CreateAccountDTO newAccount)
         {
-            return _userService.AddUser(newAccount);
+            return _userService.CreateAdmin(newAccount);
         }
 
         [HttpPost("ChangeUserPassword")]
-        public bool ChangeUserPassword(CreateAccountDTO newAccount)
+        public bool ChangeUserPassword(RecruiterModel account)
         {
-            return _userService.AddUser(newAccount);
+            return _userService.ChangePassword(account);
         }
     
         [HttpPost("AddRecruiter")]
-        public bool AddRecruiter(CreateAccountDTO newAccount)
+        public bool AddRecruiter(RecruiterModel newAccount)
         {
-            return _userService.AddUser(newAccount);
+            return _userService.AddRecruiter(newAccount);
+        }
+        [HttpGet("GetAllRecruiters")]
+        public async Task<IActionResult> GetAllRecruiters()
+        {
+            var recruiters = await _userService.GetAllRecruitersAsync();
+            return Ok(recruiters);
+        }
+        [HttpGet("GetRecruiterByEmail/{email}")]
+        public async Task<IActionResult> GetRecruiterbyEmail(string email)
+        {
+            var recruiters = await _userService.GetRecruiterByEmailAsync(email);
+            return Ok(recruiters);
         }
     }
 }
