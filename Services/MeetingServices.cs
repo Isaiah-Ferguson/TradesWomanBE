@@ -58,7 +58,7 @@ namespace TradesWomanBE.Services
         public async Task<IEnumerable<MeetingNotesModel>> GetMeetingNotesByMeetingIdAsync(int meetingId)
         {
             return await _dataContext.MeetingNotes
-                .Where(mn => mn.Meeting.Id == meetingId)
+                .Where(meetingnotes => meetingnotes.Meeting.Id == meetingId)
                 .ToListAsync();
         }
     }

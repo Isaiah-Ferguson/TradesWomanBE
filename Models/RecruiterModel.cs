@@ -12,8 +12,9 @@ namespace TradesWomanBE.Models
         public string? SuperviserName { get; set; }
         public int? PhoneNumber { get; set; }
         public string? Status { get; set;}
+        public bool FirstTimeLogIn { get; set; }
         public string? Salt {get; set;}
         public string? Hash { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

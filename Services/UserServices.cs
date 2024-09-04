@@ -20,9 +20,13 @@ namespace TradesWomanBE.Services
             _context = dataContext;
         }
 
-        public bool DoesUserExist(string? Email)
+        public bool DoesUserExist(string? email)
         {
-            return _context.AdminUsers.SingleOrDefault(client => client.Email == Email) != null;
+            return _context.AdminUsers.SingleOrDefault(client => client.Email == email) != null;
+        }
+        public bool DoesRecruiterExist(string? email)
+        {
+            return _context.RecruiterInfo.SingleOrDefault(recruiter => recruiter.Email == email) != null;
         }
 
         public bool CreateAdmin(CreateAccountDTO userToAdd)
@@ -74,7 +78,7 @@ namespace TradesWomanBE.Services
             var saltBytes = Convert.FromBase64String(storedSalt);
 
             using var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 310000, HashAlgorithmName.SHA256);
-            var newHash = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(32)); // 256 bits
+            var newHash = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(32));
             return newHash == storedHash;
         }
 
@@ -103,6 +107,25 @@ namespace TradesWomanBE.Services
                     result = Ok(new { Token = tokenString });
                 }
 
+            }else if(DoesRecruiterExist(user.Email))
+            {
+                RecruiterModel foundUser = GetRecruiterByEmail(user.Email);
+                if (VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
+                {
+
+                    var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+                    var signinCredntials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                    var tokenOptions = new JwtSecurityToken(
+                        issuer: "http://localhost:5000",
+                        audience: "http://localhost:5000",
+                        claims: new List<Claim>(),
+                        expires: DateTime.Now.AddMinutes(30),
+                        signingCredentials: signinCredntials
+                    );
+
+                    var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                    result = Ok(new { Token = tokenString });
+                }
             }
 
             return result;
@@ -111,6 +134,11 @@ namespace TradesWomanBE.Services
         public AdminUser GetUserByEmail(string Email)
         {
             return _context.AdminUsers.SingleOrDefault(user => user.Email == Email);
+        }
+
+        public RecruiterModel GetRecruiterByEmail(string Email)
+        {
+            return _context.RecruiterInfo.SingleOrDefault(user => user.Email == Email);
         }
 
         public async Task<bool> UpdateRecruiterAsync(RecruiterModel userToUpdate)
@@ -124,16 +152,47 @@ namespace TradesWomanBE.Services
             return _context.RecruiterInfo.SingleOrDefault(user => user.Id == id);
         }
 
-        public bool AddRecruiter(RecruiterModel userToUpdate)
+        public bool AddRecruiter(RecruiterModel userToAdd)
         {
-            _context.Add<RecruiterModel>(userToUpdate);
-            return _context.SaveChanges() != 0;
+
+            bool result = false;
+            if (!DoesUserExist(userToAdd.Email))
+            {
+                RecruiterModel newRecruiter = new();
+
+                var hashPassword = HashPassword("Password123!");
+                newRecruiter.Id = userToAdd.Id;
+                newRecruiter.Email = userToAdd.Email;
+                newRecruiter.Salt = hashPassword.Salt;
+                newRecruiter.Hash = hashPassword.Hash;
+
+                _context.Add(newRecruiter);
+                result = _context.SaveChanges() != 0;
+            }
+
+            return result;
         }
 
-        public bool ChangePassword(RecruiterModel userToUpdate)
+
+        public bool ChangePassword(CreateAccountDTO userToUpdate)
         {
-            _context.Update<RecruiterModel>(userToUpdate);
-            return _context.SaveChanges() != 0;
+
+            bool result = false;
+            if (DoesUserExist(userToUpdate.Email))
+            {
+                RecruiterModel updateRecruiter = GetRecruiterByEmail(userToUpdate.Email);
+
+                var hashPassword = HashPassword(userToUpdate.Password);
+                updateRecruiter.Id = userToUpdate.Id;
+                updateRecruiter.Email = userToUpdate.Email;
+                updateRecruiter.Salt = hashPassword.Salt;
+                updateRecruiter.Hash = hashPassword.Hash;
+
+                _context.Update(updateRecruiter);
+                result = _context.SaveChanges() != 0;
+            }
+
+            return result;
         }
 
         public async Task<IEnumerable<RecruiterModel>> GetAllRecruitersAsync()

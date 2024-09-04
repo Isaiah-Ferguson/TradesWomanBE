@@ -6,6 +6,6 @@ namespace TradesWomanBE.Models
         public string? Email { get; set; }
         public string? Salt {get; set;}
         public string? Hash { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

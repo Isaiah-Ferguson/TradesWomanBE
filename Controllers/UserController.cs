@@ -29,7 +29,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("ChangeUserPassword")]
-        public bool ChangeUserPassword(RecruiterModel account)
+        public bool ChangeUserPassword(CreateAccountDTO account)
         {
             return _userService.ChangePassword(account);
         }
