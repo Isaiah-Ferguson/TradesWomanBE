@@ -59,7 +59,7 @@ namespace TradesWomanBE.Controllers
             return Ok(clients);
         }
 
-        [HttpGet("GetClientByEmail/{firstName}/{lastName}")]
+        [HttpGet("GetClientsByFirstNameAndLastname/{firstName}/{lastName}")]
         public async Task<IActionResult> GetClientsByFirstNameAndLastname(string firstName, string lastName)
         {
             var clients = await _clientServices.GetClientsByFirstNameAndLastnameAsync(firstName, lastName);

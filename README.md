@@ -18,6 +18,8 @@ Next Js.
 ### UserCotnroller
 - `POST /Client/AddUser`: Adds a new client.
 - `POST /Client/AddRecruiter`: Adds a New Recruiter.
+- `GET /Client/GetAllRecruiters`: Get all Recruiters.
+- `GET /Client/GetRecruiterByEmail/{email}`: Get Recruiters by email
 - `POST /Client/Login`: Login for Recrutier & Admin.
 - `PUT /Client/ChangePassword`: Admin Changes Password.
 
@@ -26,11 +28,15 @@ Next Js.
 - `PUT /Client/EditClient`: Edits an existing client.
 - `GET /Client/GetAllClients`: Retrieves all clients.
 - `GET /Client/GetLast30Clients`: Retrieves last 30 clients.
+- `GET /Client/GetClientsByFirstAndLastName`: Retrieves Clients by Firstname or Lastname.
+- `GET /Client/GetClientsByEmail`: Retrieves Clients by Firstname or Lastname.
 - `GET /Client/ExportClients`: Exports all clients to a CSV file.
 
 ### MeetingsController
 - `POST /Meetings/AddMeeting`: Adds a new meeting.
+- `PUT /Meetings/EditMeeting`: Edits a meeting.
 - `GET /Meetings/GetMeeting/{id}`: Retrieves meeting information by ID.
+- `POST /Meetings/AddMeetingNotes/{meetingId}.`: Adds a new meeting notes
 - `GET /Meetings/GetMeetingNotes/{meetingId}.`: Retrieves meeting notes by ID.
 
 ### Why Use Async Methods / Task<IActionResult>?

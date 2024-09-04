@@ -27,7 +27,18 @@ namespace TradesWomanBE.Controllers
 
             return CreatedAtAction(nameof(GetMeeting), new { id = newMeeting.Id }, newMeeting);
         }
+        [HttpPost("EditMeeting/{id}")]
+        public async Task<IActionResult> EditMeeting(MeetingsModel meetingToEdit)
+        {
+            var success = await _meetingsService.EditMeetingAsync(meetingToEdit);
+            
+            if (!success)
+            {
+                return BadRequest("Meeting data is null or invalid.");
+            }
 
+            return CreatedAtAction(nameof(GetMeeting), new { id = meetingToEdit.Id }, meetingToEdit);
+        }
         [HttpGet("GetMeeting/{id}")]
         public async Task<IActionResult> GetMeeting(int id)
         {
@@ -50,6 +61,17 @@ namespace TradesWomanBE.Controllers
                 return NotFound();
             }
             return Ok(notes);
+        }
+        [HttpPost("AddMeetingNotes")]
+        public async Task<IActionResult> AddMeetingNotes(MeetingNotesModel newMeetingNotes)
+        {
+            var success = await _meetingsService.AddMeetingNotesAsync(newMeetingNotes);             
+            if (!success)
+            {
+                return BadRequest("Meeting data is null or invalid.");
+            }
+
+            return CreatedAtAction(nameof(GetMeeting), new { id = newMeetingNotes.Id }, newMeetingNotes);
         }
     }
 }

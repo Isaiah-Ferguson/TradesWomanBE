@@ -25,6 +25,30 @@ namespace TradesWomanBE.Services
 
             return true;
         }
+        public async Task<bool> AddMeetingNotesAsync(MeetingNotesModel newMeeting)
+        {
+            if (newMeeting == null)
+            {
+                return false;
+            }
+
+            _dataContext.MeetingNotes.Add(newMeeting);
+            await _dataContext.SaveChangesAsync();
+
+            return true;
+        }
+        public async Task<bool> EditMeetingAsync(MeetingsModel newMeeting)
+        {
+            if (newMeeting == null)
+            {
+                return false;
+            }
+
+            _dataContext.Meetings.Add(newMeeting);
+            await _dataContext.SaveChangesAsync();
+
+            return true;
+        }
 
         public async Task<MeetingsModel?> GetMeetingByIdAsync(int id)
         {

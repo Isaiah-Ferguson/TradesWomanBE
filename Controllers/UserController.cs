@@ -9,7 +9,6 @@ namespace TradesWomanBE.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-
         private readonly UserServices _userService;
 
         public UserController(UserServices userService)
