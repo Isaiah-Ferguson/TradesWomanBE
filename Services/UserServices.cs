@@ -15,9 +15,11 @@ namespace TradesWomanBE.Services
     public class UserServices : ControllerBase
     {
         private readonly DataContext _context;
-        public UserServices(DataContext dataContext)
+        private readonly EmailServices _emailService;
+        public UserServices(DataContext dataContext, EmailServices emailServices)
         {
             _context = dataContext;
+            _emailService = emailServices;
         }
 
         public bool DoesUserExist(string? email)
@@ -48,7 +50,6 @@ namespace TradesWomanBE.Services
 
             return result;
         }
-
         public PasswordDTO HashPassword(string password)
         {
             string? newpassword = password.ToString();
@@ -64,7 +65,7 @@ namespace TradesWomanBE.Services
 
             using (var deriveBytes = new Rfc2898DeriveBytes(newpassword, saltByte, 310000, HashAlgorithmName.SHA256))
             {
-                var hash = Convert.ToBase64String(deriveBytes.GetBytes(32)); // 256 bits
+                var hash = Convert.ToBase64String(deriveBytes.GetBytes(32));
 
                 newHashpassword.Salt = salt;
                 newHashpassword.Hash = hash;
@@ -82,7 +83,7 @@ namespace TradesWomanBE.Services
             return newHash == storedHash;
         }
 
-        public IActionResult AdminLogin(LoginDTO user)
+        public IActionResult Login(LoginDTO user)
         {
             IActionResult result = Unauthorized();
 
@@ -152,26 +153,47 @@ namespace TradesWomanBE.Services
             return _context.RecruiterInfo.SingleOrDefault(user => user.Id == id);
         }
 
-        public bool AddRecruiter(RecruiterModel userToAdd)
+    public bool AddRecruiter(RecruiterModel userToAdd)
+    {
+        bool result = false;
+        if (!DoesUserExist(userToAdd.Email))
         {
+            RecruiterModel newRecruiter = new();
 
-            bool result = false;
-            if (!DoesUserExist(userToAdd.Email))
+            // Generate a random password
+            string newPassword = GenerateRandomPassword();
+            var hashPassword = HashPassword(newPassword);
+
+            newRecruiter.Id = userToAdd.Id;
+            newRecruiter.Email = userToAdd.Email;
+            newRecruiter.Salt = hashPassword.Salt;
+            newRecruiter.Hash = hashPassword.Hash;
+
+            _context.Add(newRecruiter);
+            result = _context.SaveChanges() != 0;
+
+            if (result)
             {
-                RecruiterModel newRecruiter = new();
-
-                var hashPassword = HashPassword("Password123!");
-                newRecruiter.Id = userToAdd.Id;
-                newRecruiter.Email = userToAdd.Email;
-                newRecruiter.Salt = hashPassword.Salt;
-                newRecruiter.Hash = hashPassword.Hash;
-
-                _context.Add(newRecruiter);
-                result = _context.SaveChanges() != 0;
+                string subject = "Your New Password";
+                string body = $"Your new password is: {newPassword}";
+                _emailService.SendEmailAsync(newRecruiter.Email, subject, body).Wait();
             }
-
-            return result;
         }
+
+        return result;
+    }
+
+    private string GenerateRandomPassword(int length = 12)
+    {
+        const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
+        var random = new Random();
+        var password = new char[length];
+        for (int i = 0; i < length; i++)
+        {
+            password[i] = validChars[random.Next(validChars.Length)];
+        }
+        return new string(password);
+    }
 
 
         public bool ChangePassword(CreateAccountDTO userToUpdate)

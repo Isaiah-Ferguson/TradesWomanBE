@@ -9,7 +9,8 @@ namespace TradesWomanBE.Services
     public class ClientServices
     {
         private readonly DataContext _dataContext;
-        public ClientServices(DataContext dataContext)
+
+        public ClientServices(DataContext dataContext, EmailServices emailService)
         {
             _dataContext = dataContext;
         }
@@ -42,6 +43,8 @@ namespace TradesWomanBE.Services
         {
             if (!await DoesClientExistAsync(clientModel.SSNLastFour, clientModel.Firstname))
             {
+                ClientModel client = await GetClientByEmailAsync(clientModel.Email);
+
                 _dataContext.Update(clientModel);
                 return await _dataContext.SaveChangesAsync() > 0;
             }

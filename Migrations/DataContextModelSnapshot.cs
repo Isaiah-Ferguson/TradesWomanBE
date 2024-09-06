@@ -264,6 +264,9 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("FirstTimeLogIn")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Firstname")
                         .HasColumnType("nvarchar(max)");
 

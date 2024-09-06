@@ -19,7 +19,7 @@ namespace TradesWomanBE.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody]LoginDTO user)
         {
-            return _userService.AdminLogin(user);
+            return _userService.Login(user);
         }
 
         [HttpPost("CreateAdmin")]

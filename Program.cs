@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ClientServices>();
 builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<MeetingsServices>();
+builder.Services.AddScoped<EmailServices>();
 
 var connectionString = builder.Configuration.GetConnectionString("TEString");
 
