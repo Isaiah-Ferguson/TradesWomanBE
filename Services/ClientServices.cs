@@ -110,7 +110,7 @@ namespace TradesWomanBE.Services
             foreach (var client in clients)
             {
                 var program = client.ProgramInfo;
-                sb.AppendLine($"{client.Id},{client.Firstname},{client.Lastname},{client.SSNLastFour},{client.MiddleInnitial},{client.Email},{client.ValidSSNAuthToWrk},{client.CriminalHistory},{client.FoundUsOn},{client.DateJoinedEAW},{client.Stipends},{client.Address},{client.Gender},{client.Employed}" +
+                sb.AppendLine($"{client.Id},{client.Firstname},{client.Lastname},{client.SSNLastFour},{client.MiddleInitial},{client.Email},{client.ValidSSNAuthToWrk},{client.CriminalHistory},{client.FoundUsOn},{client.DateJoinedEAW},{client.Stipends},{client.Address},{client.Gender},{client.Employed}" +
                       $"{program?.ProgramEnrolled},{program?.EnrollDate},{program?.ProgramEndDate}");
             }
 

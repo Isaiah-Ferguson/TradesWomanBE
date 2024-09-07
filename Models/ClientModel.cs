@@ -8,7 +8,7 @@ namespace TradesWomanBE.Models
         public int Age { get; set; }
         public string? Firstname { get; set; }
         public string? Lastname { get; set; }
-        public Char? MiddleInnitial { get; set; }
+        public Char? MiddleInitial { get; set; }
         public string? Email { get; set; }
         public int? ChildrenUnderSix { get; set; }
         public int? ChildrenOverSix { get; set; }
@@ -26,7 +26,9 @@ namespace TradesWomanBE.Models
         public string? RecruiterName { get; set; }
         public string? DateRegistered { get; set; }
         public string? DateOfBirth { get; set; }
-
+        public string? ActiveOrFormerMilitary { get; set; }
+        public int? TotalMonthlyIncome { get; set; }
+        public int PhoneNumber { get; set; }
         public int? ProgramInfoId { get; set; }
 
         [ForeignKey("ProgramInfoId")]

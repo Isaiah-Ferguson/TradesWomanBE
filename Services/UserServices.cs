@@ -156,7 +156,7 @@ namespace TradesWomanBE.Services
     public bool AddRecruiter(RecruiterModel userToAdd)
     {
         bool result = false;
-        if (!DoesUserExist(userToAdd.Email))
+        if (!DoesRecruiterExist(userToAdd.Email))
         {
             RecruiterModel newRecruiter = new();
 

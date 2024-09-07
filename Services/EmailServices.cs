@@ -8,8 +8,8 @@ namespace TradesWomanBE.Services
     {
         private readonly string _smtpServer = "smtp.gmail.com";
         private readonly int _smtpPort = 587;
-        private readonly string _smtpUsername = "jacob.dekok01@gmail.com";
-        private readonly string _smtpPassword = "your-app-password";
+        private readonly string _smtpUsername = "isaiahkferguson89@gmail.com";
+        private readonly string _smtpPassword = "otam xtct mjdh vlll";
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
@@ -31,4 +31,3 @@ namespace TradesWomanBE.Services
         }
     }
 }
-    
