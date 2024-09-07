@@ -12,6 +12,7 @@ namespace TradesWomanBE.Models
         public string? Email { get; set; }
         public int? ChildrenUnderSix { get; set; }
         public int? ChildrenOverSix { get; set; }
+        public int? TotalHouseholdFamily { get; set; }
         public int? SSNLastFour { get; set; }
         public string? ValidSSNAuthToWrk { get; set; }
         public string? CriminalHistory { get; set;}
@@ -24,6 +25,7 @@ namespace TradesWomanBE.Models
         public string? Employed { get; set;}
         public string? RecruiterName { get; set; }
         public string? DateRegistered { get; set; }
+        public string? DateOfBirth { get; set; }
 
         public int? ProgramInfoId { get; set; }
 
