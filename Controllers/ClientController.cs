@@ -19,6 +19,7 @@ namespace TradesWomanBE.Controllers
         [HttpPost("AddClient")]
         public async Task<IActionResult> AddClient(ClientModel newClient)
         {
+            newClient.IsDeleted = false;
             var success = await _clientServices.AddClientAsync(newClient);
             if (!success)
             {

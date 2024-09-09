@@ -52,3 +52,15 @@ Next Js.
 -Asynchronous Programming: Using Task<IActionResult> and async/await is best practice for handling potentially long-running tasks in web APIs.
 
 -Consistent Response Handling: Returning IActionResult allows for clear and appropriate HTTP responses, improving client-side error handling and user experience.
+
+### SMTP (Simple Mail Transfer Protocol)
+
+- SMTP is a standard protocol used to send and route emails across networks. It acts as a communication channel between the email client and the mail server to deliver emails to the recipient's mail server.
+
+### How SMTP Was Implemented:
+
+1. Mail Server Configuration: Configured the application to use an SMTP server, specifying the server address, port, and authentication credentials.
+
+2. Sending Email: The application uses the SmtpClient class from the .NET System.Net.Mail namespace to connect to the SMTP server and send emails. The email message is created using MailMessage, with fields like the recipient, subject, and body being populated.
+
+3. Security: To authenticate with the SMTP server, credentials are provided (username and password). However, since Google requires 2-step verification, an app-specific password was generated for secure access.

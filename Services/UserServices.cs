@@ -183,7 +183,7 @@ namespace TradesWomanBE.Services
         return result;
     }
 
-    private string GenerateRandomPassword(int length = 12)
+    private static string GenerateRandomPassword(int length = 12)
     {
         const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
         var random = new Random();

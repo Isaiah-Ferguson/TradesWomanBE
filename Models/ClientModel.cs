@@ -21,8 +21,11 @@ namespace TradesWomanBE.Models
         public string? DateJoinedEAW { get; set;}
         public string? Stipends { get; set;}
         public string? Address  { get; set;}
-        public string? Gender { get; set;}
-        public string? Employed { get; set;}
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public int? ZipCode { get; set; }
+        public string? Gender { get; set; }
+        public string? Employed { get; set; }
         public string? RecruiterName { get; set; }
         public string? DateRegistered { get; set; }
         public string? DateOfBirth { get; set; }

@@ -107,6 +107,9 @@ namespace TradesWomanBE.Migrations
                     b.Property<int?>("ChildrenUnderSix")
                         .HasColumnType("int");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CriminalHistory")
                         .HasColumnType("nvarchar(max)");
 
@@ -158,6 +161,9 @@ namespace TradesWomanBE.Migrations
                     b.Property<int?>("SSNLastFour")
                         .HasColumnType("int");
 
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Stipends")
                         .HasColumnType("nvarchar(max)");
 
@@ -169,6 +175,9 @@ namespace TradesWomanBE.Migrations
 
                     b.Property<string>("ValidSSNAuthToWrk")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ZipCode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
