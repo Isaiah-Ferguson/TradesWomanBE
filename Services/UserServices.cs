@@ -22,11 +22,11 @@ namespace TradesWomanBE.Services
             _emailService = emailServices;
         }
 
-        public bool DoesUserExist(string? email)
+        private bool DoesUserExist(string? email)
         {
             return _context.AdminUsers.SingleOrDefault(client => client.Email == email) != null;
         }
-        public bool DoesRecruiterExist(string? email)
+        private bool DoesRecruiterExist(string? email)
         {
             return _context.RecruiterInfo.SingleOrDefault(recruiter => recruiter.Email == email) != null;
         }
@@ -50,7 +50,7 @@ namespace TradesWomanBE.Services
 
             return result;
         }
-        public PasswordDTO HashPassword(string password)
+        private static PasswordDTO HashPassword(string password)
         {
             string? newpassword = password.ToString();
             PasswordDTO newHashpassword = new();
@@ -74,7 +74,7 @@ namespace TradesWomanBE.Services
             return newHashpassword;
         }
 
-        public bool VerifyUserPassword(string? password, string storedHash, string storedSalt)
+        private bool VerifyUserPassword(string? password, string storedHash, string storedSalt)
         {
             var saltBytes = Convert.FromBase64String(storedSalt);
 

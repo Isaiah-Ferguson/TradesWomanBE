@@ -15,7 +15,7 @@ namespace TradesWomanBE.Services
             _dataContext = dataContext;
         }
 
-        public async Task<bool> DoesClientExistAsync(int? SSNLastFour, string? Firstname)
+        private async Task<bool> DoesClientExistAsync(int? SSNLastFour, string? Firstname)
         {
             return await _dataContext.ClientInfo
                 .SingleOrDefaultAsync(client => client.SSNLastFour == SSNLastFour && client.Firstname == Firstname) != null;
