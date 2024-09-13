@@ -10,7 +10,7 @@ namespace TradesWomanBE.Services
     {
         private readonly DataContext _dataContext;
 
-        public ClientServices(DataContext dataContext, EmailServices emailService)
+        public ClientServices(DataContext dataContext)
         {
             _dataContext = dataContext;
         }

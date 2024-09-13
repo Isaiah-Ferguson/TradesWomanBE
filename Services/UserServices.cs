@@ -74,7 +74,7 @@ namespace TradesWomanBE.Services
             return newHashpassword;
         }
 
-        private bool VerifyUserPassword(string? password, string storedHash, string storedSalt)
+        private static bool VerifyUserPassword(string? password, string storedHash, string storedSalt)
         {
             var saltBytes = Convert.FromBase64String(storedSalt);
 
@@ -175,7 +175,7 @@ namespace TradesWomanBE.Services
             if (result)
             {
                 string subject = "Your New Password";
-                string body = $"Your new password is: {newPassword}";
+                string body = $"Your new password is: {newPassword} \n Please Follow the Link below to Change your password \n This will be the link ";
                 _emailService.SendEmailAsync(newRecruiter.Email, subject, body).Wait();
             }
         }
