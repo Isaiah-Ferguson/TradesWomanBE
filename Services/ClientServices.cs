@@ -43,9 +43,41 @@ namespace TradesWomanBE.Services
         {
             if (!await DoesClientExistAsync(clientModel.SSNLastFour, clientModel.Firstname))
             {
-                ClientModel client = await GetClientByEmailAsync(clientModel.Email);
+                ClientModel existingClient = await GetClientByEmailAsync(clientModel.Email);
+                existingClient.Age = clientModel.Age;
+                existingClient.Firstname = clientModel.Firstname;
+                existingClient.Lastname = clientModel.Lastname;
+                existingClient.MiddleInitial = clientModel.MiddleInitial;
+                existingClient.Email = clientModel.Email;
+                existingClient.ChildrenUnderSix = clientModel.ChildrenUnderSix;
+                existingClient.ChildrenOverSix = clientModel.ChildrenOverSix;
+                existingClient.TotalHouseholdFamily = clientModel.TotalHouseholdFamily;
+                existingClient.SSNLastFour = clientModel.SSNLastFour;
+                existingClient.ValidSSNAuthToWrk = clientModel.ValidSSNAuthToWrk;
+                existingClient.CriminalHistory = clientModel.CriminalHistory;
+                existingClient.Disabled = clientModel.Disabled;
+                existingClient.FoundUsOn = clientModel.FoundUsOn;
+                existingClient.DateJoinedEAW = clientModel.DateJoinedEAW;
+                existingClient.Stipends = clientModel.Stipends;
+                existingClient.Address = clientModel.Address;
+                existingClient.City = clientModel.City;
+                existingClient.State = clientModel.State;
+                existingClient.ZipCode = clientModel.ZipCode;
+                existingClient.Gender = clientModel.Gender;
+                existingClient.Employed = clientModel.Employed;
+                existingClient.RecruiterName = clientModel.RecruiterName;
+                existingClient.DateRegistered = clientModel.DateRegistered;
+                existingClient.DateOfBirth = clientModel.DateOfBirth;
+                existingClient.ActiveOrFormerMilitary = clientModel.ActiveOrFormerMilitary;
+                existingClient.TotalMonthlyIncome = clientModel.TotalMonthlyIncome;
+                existingClient.PhoneNumber = clientModel.PhoneNumber;
+                existingClient.ProgramInfoId = clientModel.ProgramInfoId;
+                existingClient.IsDeleted = clientModel.IsDeleted;
 
-                _dataContext.Update(clientModel);
+                existingClient.ProgramInfo = clientModel.ProgramInfo;
+                existingClient.Meetings = clientModel.Meetings;
+
+                _dataContext.Update(existingClient);
                 return await _dataContext.SaveChangesAsync() > 0;
             }
             return false;

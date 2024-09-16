@@ -15,12 +15,11 @@ namespace TradesWomanBE.Models
         public int? TotalHouseholdFamily { get; set; }
         public int? SSNLastFour { get; set; }
         public string? ValidSSNAuthToWrk { get; set; }
-        public string? CriminalHistory { get; set;}
-        public string? Disabled { get; set;}
-        public string? FoundUsOn { get; set;}
-        public string? DateJoinedEAW { get; set;}
-        public string? Stipends { get; set;}
-        public string? Address  { get; set;}
+        public string? CriminalHistory { get; set; }
+        public string? Disabled { get; set; }
+        public string? FoundUsOn { get; set; }
+        public string? DateJoinedEAW { get; set; }
+        public string? Address  { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
         public int? ZipCode { get; set; }
@@ -31,13 +30,18 @@ namespace TradesWomanBE.Models
         public string? DateOfBirth { get; set; }
         public string? ActiveOrFormerMilitary { get; set; }
         public int? TotalMonthlyIncome { get; set; }
-        public int PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         public int? ProgramInfoId { get; set; }
 
         [ForeignKey("ProgramInfoId")]
         public virtual ProgramModel? ProgramInfo { get; set; }
 
-        public virtual ICollection<MeetingsModel>? Meetings { get; set; } = new List<MeetingsModel>();
+        // Relationship with MeetingsModel
+        public virtual MeetingsModel? Meetings { get; set; }
+
+        // Relationship with CTWIStipendsModel
+        public virtual CTWIStipendsModel? Stipends { get; set; }
+
         public bool IsDeleted { get; set; } = false;
     }
 }

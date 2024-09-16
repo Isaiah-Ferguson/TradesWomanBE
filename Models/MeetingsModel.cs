@@ -12,9 +12,6 @@ namespace TradesWomanBE.Models
         public string? LastContactMethod { get; set; }
         public string? PreferedContact { get; set; }
         public string? GrantName { get; set; }
-
-        [ForeignKey("ClientID")]
-        public virtual ClientModel Client { get; set; }
-        public virtual ICollection<MeetingNotesModel> MeetingNotes { get; set; } = new List<MeetingNotesModel>();
+        public virtual ICollection<MeetingNotesModel>? MeetingNotes { get; set; } = new List<MeetingNotesModel>();
     }
 }

@@ -12,7 +12,7 @@ using TradesWomanBE.Services.Context;
 namespace TradesWomanBE.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240907212428_init")]
+    [Migration("20240916044053_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -58,6 +58,9 @@ namespace TradesWomanBE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<string>("IssuedDate")
                         .HasColumnType("nvarchar(max)");
 
@@ -78,9 +81,6 @@ namespace TradesWomanBE.Migrations
 
                     b.Property<string>("TypeOfStipend")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -149,11 +149,14 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("Lastname")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MeetingsId")
+                        .HasColumnType("int");
+
                     b.Property<string>("MiddleInitial")
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProgramInfoId")
                         .HasColumnType("int");
@@ -167,8 +170,8 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Stipends")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("StipendsId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("TotalHouseholdFamily")
                         .HasColumnType("int");
@@ -184,7 +187,11 @@ namespace TradesWomanBE.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MeetingsId");
+
                     b.HasIndex("ProgramInfoId");
+
+                    b.HasIndex("StipendsId");
 
                     b.ToTable("ClientInfo");
                 });
@@ -243,8 +250,6 @@ namespace TradesWomanBE.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientID");
 
                     b.ToTable("Meetings");
                 });
@@ -331,11 +336,23 @@ namespace TradesWomanBE.Migrations
 
             modelBuilder.Entity("TradesWomanBE.Models.ClientModel", b =>
                 {
+                    b.HasOne("TradesWomanBE.Models.MeetingsModel", "Meetings")
+                        .WithMany()
+                        .HasForeignKey("MeetingsId");
+
                     b.HasOne("TradesWomanBE.Models.ProgramModel", "ProgramInfo")
                         .WithMany()
                         .HasForeignKey("ProgramInfoId");
 
+                    b.HasOne("TradesWomanBE.Models.CTWIStipendsModel", "Stipends")
+                        .WithMany()
+                        .HasForeignKey("StipendsId");
+
+                    b.Navigation("Meetings");
+
                     b.Navigation("ProgramInfo");
+
+                    b.Navigation("Stipends");
                 });
 
             modelBuilder.Entity("TradesWomanBE.Models.MeetingNotesModel", b =>
@@ -347,22 +364,6 @@ namespace TradesWomanBE.Migrations
                         .IsRequired();
 
                     b.Navigation("Meeting");
-                });
-
-            modelBuilder.Entity("TradesWomanBE.Models.MeetingsModel", b =>
-                {
-                    b.HasOne("TradesWomanBE.Models.ClientModel", "Client")
-                        .WithMany("Meetings")
-                        .HasForeignKey("ClientID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("TradesWomanBE.Models.ClientModel", b =>
-                {
-                    b.Navigation("Meetings");
                 });
 
             modelBuilder.Entity("TradesWomanBE.Models.MeetingsModel", b =>
