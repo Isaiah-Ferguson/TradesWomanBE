@@ -25,7 +25,7 @@ namespace TradesWomanBE.Services
 
             return true;
         }
-        public async Task<bool> AddMeetingNotesAsync(int meetingId, MeetingNotesModel newMeetingNotes)
+        public async Task<bool> AddMeetingNotesAsync(MeetingNotesModel newMeetingNotes)
         {
             if (newMeetingNotes == null)
             {
@@ -35,7 +35,7 @@ namespace TradesWomanBE.Services
             // Retrieve the meeting by ID
             var meeting = await _dataContext.Meetings
                 .Include(m => m.MeetingNotes)
-                .FirstOrDefaultAsync(m => m.Id == meetingId);
+                .FirstOrDefaultAsync(m => m.Id == newMeetingNotes.MeetingId);
 
             if (meeting == null)
             {
@@ -72,13 +72,13 @@ namespace TradesWomanBE.Services
 
         public async Task<MeetingsModel?> GetMeetingByIdAsync(int id)
         {
-            return await _dataContext.Meetings.FirstOrDefaultAsync(meetings => meetings.Id == id);
+            return await _dataContext.Meetings.Include(m => m.MeetingNotes).FirstOrDefaultAsync(meetings => meetings.Id == id);
         }
 
         public async Task<IEnumerable<MeetingNotesModel>> GetMeetingNotesByMeetingIdAsync(int meetingId)
         {
             return await _dataContext.MeetingNotes
-                .Where(meetingnotes => meetingnotes.Meeting.Id == meetingId)
+                .Where(meetingnotes => meetingnotes.MeetingId == meetingId)
                 .ToListAsync();
         }
     }

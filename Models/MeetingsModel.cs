@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace TradesWomanBE.Models
 {
     public class MeetingsModel

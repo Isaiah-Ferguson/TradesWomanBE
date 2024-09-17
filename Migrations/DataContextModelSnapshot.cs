@@ -204,6 +204,9 @@ namespace TradesWomanBE.Migrations
                     b.Property<int>("MeetingId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("MeetingsModelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
@@ -212,7 +215,7 @@ namespace TradesWomanBE.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MeetingId");
+                    b.HasIndex("MeetingsModelId");
 
                     b.ToTable("MeetingNotes");
                 });
@@ -354,13 +357,9 @@ namespace TradesWomanBE.Migrations
 
             modelBuilder.Entity("TradesWomanBE.Models.MeetingNotesModel", b =>
                 {
-                    b.HasOne("TradesWomanBE.Models.MeetingsModel", "Meeting")
+                    b.HasOne("TradesWomanBE.Models.MeetingsModel", null)
                         .WithMany("MeetingNotes")
-                        .HasForeignKey("MeetingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Meeting");
+                        .HasForeignKey("MeetingsModelId");
                 });
 
             modelBuilder.Entity("TradesWomanBE.Models.MeetingsModel", b =>

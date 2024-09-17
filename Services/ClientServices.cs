@@ -15,10 +15,10 @@ namespace TradesWomanBE.Services
             _dataContext = dataContext;
         }
 
-        private async Task<bool> DoesClientExistAsync(int? SSNLastFour, string? Firstname)
+        private async Task<bool> DoesClientExistAsync(int? SSNLastFour)
         {
             return await _dataContext.ClientInfo
-                .SingleOrDefaultAsync(client => client.SSNLastFour == SSNLastFour && client.Firstname == Firstname) != null;
+                .SingleOrDefaultAsync(client => client.SSNLastFour == SSNLastFour) != null;
         }
 
         public async Task<IEnumerable<ClientModel>> GetLast30ClientsAsync()
@@ -31,7 +31,7 @@ namespace TradesWomanBE.Services
 
         public async Task<bool> AddClientAsync(ClientModel clientModel)
         {
-            if (!await DoesClientExistAsync(clientModel.SSNLastFour, clientModel.Firstname))
+            if (!await DoesClientExistAsync(clientModel.SSNLastFour))
             {
                 await _dataContext.AddAsync(clientModel);
                 return await _dataContext.SaveChangesAsync() > 0;
@@ -41,7 +41,7 @@ namespace TradesWomanBE.Services
 
         public async Task<bool> EditClientAsync(ClientModel clientModel)
         {
-            if (!await DoesClientExistAsync(clientModel.SSNLastFour, clientModel.Firstname))
+            if (await DoesClientExistAsync(clientModel.SSNLastFour))
             {
                 ClientModel existingClient = await GetClientByEmailAsync(clientModel.Email);
                 existingClient.Age = clientModel.Age;
@@ -83,18 +83,6 @@ namespace TradesWomanBE.Services
             return false;
         }
 
-        public async Task<bool> UpdateClientAsync(ClientModel clientToUpdate)
-        {
-            _dataContext.Update(clientToUpdate);
-            return await _dataContext.SaveChangesAsync() != 0;
-        }
-
-        public async Task<bool> UpdateProgramAsync(ProgramModel programToUpdate)
-        {
-            _dataContext.Update(programToUpdate);
-            return await _dataContext.SaveChangesAsync() != 0;
-        }
-
         public async Task<bool> UpdateCTWIStipendAsync(CTWIStipendsModel stipendInfo)
         {
             _dataContext.Update(stipendInfo);
@@ -103,7 +91,10 @@ namespace TradesWomanBE.Services
 
         public async Task<IEnumerable<ClientModel>> GetAllClientsAsync()
         {
-            return await _dataContext.ClientInfo.ToListAsync();
+            return await _dataContext.ClientInfo
+            .Include(c => c.ProgramInfo)
+                    .Include(c => c.Meetings)
+                        .ThenInclude(m => m.MeetingNotes).ToListAsync();
         }
 
         public async Task<ClientModel> GetClientByIdAsync(int userId)

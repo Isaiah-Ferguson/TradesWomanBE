@@ -115,17 +115,17 @@ namespace TradesWomanBE.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RecruiterInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MeetingId = table.Column<int>(type: "int", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MeetingsModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MeetingNotes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MeetingNotes_Meetings_MeetingId",
-                        column: x => x.MeetingId,
+                        name: "FK_MeetingNotes_Meetings_MeetingsModelId",
+                        column: x => x.MeetingsModelId,
                         principalTable: "Meetings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -201,9 +201,9 @@ namespace TradesWomanBE.Migrations
                 column: "StipendsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MeetingNotes_MeetingId",
+                name: "IX_MeetingNotes_MeetingsModelId",
                 table: "MeetingNotes",
-                column: "MeetingId");
+                column: "MeetingsModelId");
         }
 
         /// <inheritdoc />
