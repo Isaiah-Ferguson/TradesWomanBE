@@ -19,13 +19,19 @@ namespace TradesWomanBE.Services
             {
                 return false;
             }
-
-            _dataContext.Meetings.Add(newMeeting);
-            await _dataContext.SaveChangesAsync();
+            if (await DoesMeetingExistAsync(newMeeting.Id))
+            {
+                await EditMeetingAsync(newMeeting);
+            }
+            else
+            {
+                _dataContext.Meetings.Add(newMeeting);
+                await _dataContext.SaveChangesAsync();
+            }
 
             return true;
         }
-        
+
         public async Task<bool> AddMeetingNotesAsync(MeetingNotesModel newMeetingNotes)
         {
             if (newMeetingNotes == null)
@@ -33,20 +39,17 @@ namespace TradesWomanBE.Services
                 return false;
             }
 
-            // Retrieve the meeting by ID
             var meeting = await _dataContext.Meetings
                 .Include(m => m.MeetingNotes)
                 .FirstOrDefaultAsync(m => m.Id == newMeetingNotes.MeetingId);
 
             if (meeting == null)
             {
-                return false; // If the meeting doesn't exist, return false
+                return false;
             }
 
-            // Add the new notes to the meeting's notes collection
             meeting.MeetingNotes.Add(newMeetingNotes);
 
-            // Save changes to the database
             await _dataContext.SaveChangesAsync();
 
             return true;
@@ -76,11 +79,18 @@ namespace TradesWomanBE.Services
             return await _dataContext.Meetings.Include(m => m.MeetingNotes).FirstOrDefaultAsync(meetings => meetings.Id == id);
         }
 
+        public async Task<bool> DoesMeetingExistAsync(int id)
+        {
+            return await _dataContext.Meetings
+                .Include(m => m.MeetingNotes)
+                    .AnyAsync(meetings => meetings.Id == id);
+        }
+
         public async Task<IEnumerable<MeetingNotesModel>> GetMeetingNotesByMeetingIdAsync(int meetingId)
         {
             return await _dataContext.MeetingNotes
                 .Where(meetingnotes => meetingnotes.MeetingId == meetingId)
-                .ToListAsync();
+                    .ToListAsync();
         }
     }
 }

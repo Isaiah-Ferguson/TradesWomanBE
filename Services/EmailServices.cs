@@ -24,7 +24,7 @@ namespace TradesWomanBE.Services
                 using (var client = new SmtpClient(_smtpServer, _smtpPort))
                 {
                     client.Credentials = new NetworkCredential(_smtpUsername, _smtpPassword);
-                    client.EnableSsl = true; // Ensure SSL is enabled
+                    client.EnableSsl = true;
                     await client.SendMailAsync(message);
                 }
             }

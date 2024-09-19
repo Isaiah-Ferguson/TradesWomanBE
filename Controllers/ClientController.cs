@@ -46,7 +46,7 @@ namespace TradesWomanBE.Controllers
             return Ok(clients);
         }
 
-        [HttpGet("GetLast30Clients/{recruiterName}")]
+        [HttpGet("GetLast30Clients")]
         public async Task<IActionResult> GetLast30Clients()
         {
             var clients = await _clientServices.GetLast30ClientsAsync();
