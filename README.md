@@ -39,6 +39,14 @@ Next Js.
 - `POST /Meetings/AddMeetingNotes/{meetingId}.`: Adds a new meeting notes
 - `GET /Meetings/GetMeetingNotes/{meetingId}.`: Retrieves meeting notes by ID.
 
+### ProgramController
+- `POST /Program/AddProgram`: Adds a new Program.
+- `PUT /Program/EditProgram`: Edits a Program.
+- `GET /Program/GetProgram/{id}`: Retrieves Program information by ID.
+- `POST /Program/AddStipend.`: Adds a new Stipend.
+- `PUT /Program/EditStipend/{clientId}`: Edits a Stipend.
+- `GET /Program/GetStipend/{id}.`: Retrieves Stipend notes by ID.
+
 ### Why Use Async Methods / Task<IActionResult>?
 
 - Async Methods Improves Scalibility and responsiviness of your application.
@@ -64,3 +72,4 @@ Next Js.
 2. Sending Email: The application uses the SmtpClient class from the .NET System.Net.Mail namespace to connect to the SMTP server and send emails. The email message is created using MailMessage, with fields like the recipient, subject, and body being populated.
 
 3. Security: To authenticate with the SMTP server, credentials are provided (username and password). However, since Google requires 2-step verification, an app-specific password was generated for secure access.
+
