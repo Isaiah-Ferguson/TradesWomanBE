@@ -36,10 +36,8 @@ namespace TradesWomanBE.Models
         [ForeignKey("ProgramInfoId")]
         public virtual ProgramModel? ProgramInfo { get; set; }
 
-        // Relationship with MeetingsModel
         public virtual MeetingsModel? Meetings { get; set; }
 
-        // Relationship with CTWIStipendsModel
         public virtual StipendsModel? Stipends { get; set; }
 
         public bool IsDeleted { get; set; } = false;

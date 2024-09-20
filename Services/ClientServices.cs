@@ -74,8 +74,9 @@ namespace TradesWomanBE.Services
                 existingClient.ProgramInfoId = clientModel.ProgramInfoId;
                 existingClient.IsDeleted = clientModel.IsDeleted;
 
-                existingClient.ProgramInfo = clientModel.ProgramInfo;
-                existingClient.Meetings = clientModel.Meetings;
+                // existingClient.ProgramInfo = clientModel.ProgramInfo;
+                // existingClient.Meetings = clientModel.Meetings;
+                // existingClient.Stipends = clientModel.Stipends;
 
                 _dataContext.Update(existingClient);
                 return await _dataContext.SaveChangesAsync() > 0;
@@ -83,18 +84,15 @@ namespace TradesWomanBE.Services
             return false;
         }
 
-        public async Task<bool> UpdateCTWIStipendAsync(StipendsModel stipendInfo)
-        {
-            _dataContext.Update(stipendInfo);
-            return await _dataContext.SaveChangesAsync() != 0;
-        }
+
 
         public async Task<IEnumerable<ClientModel>> GetAllClientsAsync()
         {
             return await _dataContext.ClientInfo
             .Include(c => c.ProgramInfo)
-                    .Include(c => c.Meetings)
-                        .ThenInclude(m => m.MeetingNotes).ToListAsync();
+                    .Include(c => c.Stipends)
+                        .Include(c => c.Meetings)
+                            .ThenInclude(m => m.MeetingNotes).ToListAsync();
         }
 
         public async Task<ClientModel> GetClientByIdAsync(int userId)

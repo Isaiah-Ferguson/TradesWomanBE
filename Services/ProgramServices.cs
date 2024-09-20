@@ -28,12 +28,12 @@ namespace TradesWomanBE.Services
             {
                 var client = await _dataContext.ClientInfo
                     .Include(c => c.ProgramInfo)
-                    .Include(c => c.Meetings) // Single Meeting
+                    .Include(c => c.Meetings) 
                     .FirstOrDefaultAsync(item => item.Id == newProgram.ClientID);
 
                 if (client != null)
                 {
-                    client.ProgramInfo = newProgram; // Assign newProgram to the single `Meetings` property
+                    client.ProgramInfo = newProgram; 
                     _dataContext.ClientInfo.Update(client);
                     await _dataContext.SaveChangesAsync();
                 }
@@ -82,7 +82,7 @@ namespace TradesWomanBE.Services
         }
         //Stipends Begings
 
-                public async Task<bool> AddStipendAsync(StipendsModel newStipend)
+        public async Task<bool> AddStipendAsync(StipendsModel newStipend)
         {
             if (newStipend == null)
             {
@@ -99,7 +99,7 @@ namespace TradesWomanBE.Services
 
                 if (client != null)
                 {
-                    client.Stipends = newStipend; 
+                    client.Stipends = newStipend;
                     _dataContext.ClientInfo.Update(client);
                     await _dataContext.SaveChangesAsync();
                 }

@@ -28,7 +28,7 @@ namespace TradesWomanBE.Controllers
 
             return CreatedAtAction(nameof(GetProgram), new { id = newStipend.Id }, newStipend);
         }
-        [HttpPost("EditProgram/{id}")]
+        [HttpPut("EditProgram/{id}")]
         public async Task<IActionResult> EditMeeting(ProgramModel programToEdit)
         {
             var success = await _programServices.EditProgramAsync(programToEdit);
@@ -60,19 +60,20 @@ namespace TradesWomanBE.Controllers
 
             if (!success)
             {
-                return BadRequest("Program data is null or invalid.");
+                return BadRequest("Stipend data is null or invalid.");
             }
 
-            return CreatedAtAction(nameof(GetProgram), new { id = newStipend.Id }, newStipend);
+            return CreatedAtAction(nameof(GetStipend), new { id = newStipend.Id }, newStipend);
         }
-        [HttpPost("EditStipend/{id}")]
+        
+        [HttpPut("EditStipend/{id}")]
         public async Task<IActionResult> EditStipend(StipendsModel stipendToEdit)
         {
             var success = await _programServices.EditStipendAsync(stipendToEdit);
 
             if (!success)
             {
-                return BadRequest("Program data is null or invalid.");
+                return BadRequest("Stipend data is null or invalid.");
             }
 
             return CreatedAtAction(nameof(GetStipend), new { id = stipendToEdit.Id }, stipendToEdit);
