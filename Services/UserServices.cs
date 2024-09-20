@@ -108,7 +108,8 @@ namespace TradesWomanBE.Services
                     result = Ok(new { Token = tokenString });
                 }
 
-            }else if(DoesRecruiterExist(user.Email))
+            }
+            else if (DoesRecruiterExist(user.Email))
             {
                 RecruiterModel foundUser = GetRecruiterByEmail(user.Email);
                 if (VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
@@ -144,8 +145,32 @@ namespace TradesWomanBE.Services
 
         public async Task<bool> UpdateRecruiterAsync(RecruiterModel userToUpdate)
         {
-            _context.Update<RecruiterModel>(userToUpdate);
-            return _context.SaveChanges() != 0;
+            // Get the existing recruiter by ID
+            var existingRecruiter = GetUserById(userToUpdate.Id);
+
+            // Check if the recruiter exists
+            if (existingRecruiter == null)
+            {
+                return false; // Recruiter not found
+            }
+
+            // Update the fields you want to change
+            existingRecruiter.Firstname = userToUpdate.Firstname;
+            existingRecruiter.Lastname = userToUpdate.Lastname;
+            existingRecruiter.Email = userToUpdate.Email;
+            existingRecruiter.PhoneNumber = userToUpdate.PhoneNumber;
+            existingRecruiter.Department = userToUpdate.Department;
+            existingRecruiter.FirstTimeLogIn = false;
+            existingRecruiter.MiddleInnitial = userToUpdate.MiddleInnitial;
+            existingRecruiter.Status = userToUpdate.Status;
+            existingRecruiter.SuperviserName = userToUpdate.SuperviserName;
+            existingRecruiter.Location = userToUpdate.Location;
+
+            // Update the entity in the context
+            _context.RecruiterInfo.Update(existingRecruiter);
+
+            // Save changes to the database
+            return await _context.SaveChangesAsync() != 0;
         }
 
         public RecruiterModel GetUserById(int id)
@@ -153,47 +178,49 @@ namespace TradesWomanBE.Services
             return _context.RecruiterInfo.SingleOrDefault(user => user.Id == id);
         }
 
-    public bool AddRecruiter(RecruiterModel userToAdd)
-    {
-        bool result = false;
-        if (!DoesRecruiterExist(userToAdd.Email))
+
+
+        public bool AddRecruiter(RecruiterModel userToAdd)
         {
-            RecruiterModel newRecruiter = new();
-
-            // Generate a random password
-            string newPassword = GenerateRandomPassword();
-            var hashPassword = HashPassword(newPassword);
-
-            newRecruiter.Id = userToAdd.Id;
-            newRecruiter.Email = userToAdd.Email;
-            newRecruiter.Salt = hashPassword.Salt;
-            newRecruiter.Hash = hashPassword.Hash;
-
-            _context.Add(newRecruiter);
-            result = _context.SaveChanges() != 0;
-
-            if (result)
+            bool result = false;
+            if (!DoesRecruiterExist(userToAdd.Email))
             {
-                string subject = "Your New Password";
-                string body = $"Your new password is: {newPassword} \n Please Follow the Link below to Change your password \n This will be the link ";
-                _emailService.SendEmailAsync(newRecruiter.Email, subject, body).Wait();
+                RecruiterModel newRecruiter = new();
+
+                // Generate a random password
+                string newPassword = GenerateRandomPassword();
+                var hashPassword = HashPassword(newPassword);
+
+                newRecruiter.Id = userToAdd.Id;
+                newRecruiter.Email = userToAdd.Email;
+                newRecruiter.Salt = hashPassword.Salt;
+                newRecruiter.Hash = hashPassword.Hash;
+
+                _context.Add(newRecruiter);
+                result = _context.SaveChanges() != 0;
+
+                if (result)
+                {
+                    string subject = "Your New Password";
+                    string body = $"Your new password is: {newPassword} \n Please Follow the Link below to Change your password \n This will be the link ";
+                    _emailService.SendEmailAsync(newRecruiter.Email, subject, body).Wait();
+                }
             }
+
+            return result;
         }
 
-        return result;
-    }
-
-    private static string GenerateRandomPassword(int length = 12)
-    {
-        const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
-        var random = new Random();
-        var password = new char[length];
-        for (int i = 0; i < length; i++)
+        private static string GenerateRandomPassword(int length = 12)
         {
-            password[i] = validChars[random.Next(validChars.Length)];
+            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
+            var random = new Random();
+            var password = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                password[i] = validChars[random.Next(validChars.Length)];
+            }
+            return new string(password);
         }
-        return new string(password);
-    }
 
 
         public bool ChangePassword(CreateAccountDTO userToUpdate)

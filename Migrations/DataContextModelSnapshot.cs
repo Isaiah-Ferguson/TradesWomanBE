@@ -47,43 +47,6 @@ namespace TradesWomanBE.Migrations
                     b.ToTable("AdminUsers");
                 });
 
-            modelBuilder.Entity("TradesWomanBE.Models.CTWIStipendsModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IssuedDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreApprenticeshipProgram")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequestedDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("StipendAmountRequested")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StipendDetails")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StipendPaymentMethod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypeOfStipend")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Stipends");
-                });
-
             modelBuilder.Entity("TradesWomanBE.Models.ClientModel", b =>
                 {
                     b.Property<int>("Id")
@@ -334,6 +297,43 @@ namespace TradesWomanBE.Migrations
                     b.ToTable("RecruiterInfo");
                 });
 
+            modelBuilder.Entity("TradesWomanBE.Models.StipendsModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IssuedDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PreApprenticeshipProgram")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestedDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StipendAmountRequested")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StipendDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StipendPaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeOfStipend")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Stipends");
+                });
+
             modelBuilder.Entity("TradesWomanBE.Models.ClientModel", b =>
                 {
                     b.HasOne("TradesWomanBE.Models.MeetingsModel", "Meetings")
@@ -344,7 +344,7 @@ namespace TradesWomanBE.Migrations
                         .WithMany()
                         .HasForeignKey("ProgramInfoId");
 
-                    b.HasOne("TradesWomanBE.Models.CTWIStipendsModel", "Stipends")
+                    b.HasOne("TradesWomanBE.Models.StipendsModel", "Stipends")
                         .WithMany()
                         .HasForeignKey("StipendsId");
 

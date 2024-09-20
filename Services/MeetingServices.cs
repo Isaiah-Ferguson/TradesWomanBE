@@ -19,18 +19,34 @@ namespace TradesWomanBE.Services
             {
                 return false;
             }
+
             if (await DoesMeetingExistAsync(newMeeting.Id))
             {
                 await EditMeetingAsync(newMeeting);
             }
             else
             {
-                _dataContext.Meetings.Add(newMeeting);
-                await _dataContext.SaveChangesAsync();
+                var client = await _dataContext.ClientInfo
+                    .Include(c => c.ProgramInfo)
+                    .Include(c => c.Meetings) // Single Meeting
+                    .FirstOrDefaultAsync(item => item.Id == newMeeting.ClientID);
+
+                if (client != null)
+                {
+                    client.Meetings = newMeeting; // Assign newMeeting to the single `Meetings` property
+                    _dataContext.ClientInfo.Update(client);
+                    await _dataContext.SaveChangesAsync();
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             return true;
         }
+
+
 
         public async Task<bool> AddMeetingNotesAsync(MeetingNotesModel newMeetingNotes)
         {
@@ -61,18 +77,31 @@ namespace TradesWomanBE.Services
             {
                 return false;
             }
+
+            // Get existing meeting by id
             MeetingsModel exisintMeeting = await GetMeetingByIdAsync(newMeeting.Id);
+
+            // Check if the existing meeting was found
+            if (exisintMeeting == null)
+            {
+                return false;  // Handle case when meeting doesn't exist
+            }
+
+            // Update properties
             exisintMeeting.LastContactMethod = newMeeting.LastContactMethod;
             exisintMeeting.PreferedContact = newMeeting.PreferedContact;
             exisintMeeting.LastDateContacted = newMeeting.LastDateContacted;
             exisintMeeting.GrantName = newMeeting.GrantName;
             exisintMeeting.RecruiterName = newMeeting.RecruiterName;
             exisintMeeting.NumOfContacts = newMeeting.NumOfContacts;
+
+            // Update the entity in the data context
             _dataContext.Meetings.Update(exisintMeeting);
             await _dataContext.SaveChangesAsync();
 
             return true;
         }
+
 
         public async Task<MeetingsModel?> GetMeetingByIdAsync(int id)
         {

@@ -40,7 +40,7 @@ namespace TradesWomanBE.Models
         public virtual MeetingsModel? Meetings { get; set; }
 
         // Relationship with CTWIStipendsModel
-        public virtual CTWIStipendsModel? Stipends { get; set; }
+        public virtual StipendsModel? Stipends { get; set; }
 
         public bool IsDeleted { get; set; } = false;
     }

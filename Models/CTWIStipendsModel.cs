@@ -1,6 +1,6 @@
 namespace TradesWomanBE.Models
 {
-    public class CTWIStipendsModel
+    public class StipendsModel
     {
         public int Id { get; set; }
         public int ClientId { get; set; }

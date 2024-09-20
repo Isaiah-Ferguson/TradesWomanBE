@@ -83,7 +83,7 @@ namespace TradesWomanBE.Services
             return false;
         }
 
-        public async Task<bool> UpdateCTWIStipendAsync(CTWIStipendsModel stipendInfo)
+        public async Task<bool> UpdateCTWIStipendAsync(StipendsModel stipendInfo)
         {
             _dataContext.Update(stipendInfo);
             return await _dataContext.SaveChangesAsync() != 0;
