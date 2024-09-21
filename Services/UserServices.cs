@@ -24,7 +24,7 @@ namespace TradesWomanBE.Services
 
         private bool DoesUserExist(string? email)
         {
-            return _context.AdminUsers.SingleOrDefault(client => client.Email == email) != null;
+            return _context.AdminUsers.SingleOrDefault(admin => admin.Email == email) != null;
         }
         private bool DoesRecruiterExist(string? email)
         {
@@ -145,16 +145,13 @@ namespace TradesWomanBE.Services
 
         public async Task<bool> UpdateRecruiterAsync(RecruiterModel userToUpdate)
         {
-            // Get the existing recruiter by ID
             var existingRecruiter = GetUserById(userToUpdate.Id);
 
-            // Check if the recruiter exists
             if (existingRecruiter == null)
             {
                 return false; // Recruiter not found
             }
 
-            // Update the fields you want to change
             existingRecruiter.Firstname = userToUpdate.Firstname;
             existingRecruiter.Lastname = userToUpdate.Lastname;
             existingRecruiter.Email = userToUpdate.Email;
@@ -166,10 +163,8 @@ namespace TradesWomanBE.Services
             existingRecruiter.SuperviserName = userToUpdate.SuperviserName;
             existingRecruiter.Location = userToUpdate.Location;
 
-            // Update the entity in the context
             _context.RecruiterInfo.Update(existingRecruiter);
 
-            // Save changes to the database
             return await _context.SaveChangesAsync() != 0;
         }
 

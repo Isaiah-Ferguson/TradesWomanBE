@@ -46,8 +46,6 @@ namespace TradesWomanBE.Services
             return true;
         }
 
-
-
         public async Task<bool> AddMeetingNotesAsync(MeetingNotesModel newMeetingNotes)
         {
             if (newMeetingNotes == null)

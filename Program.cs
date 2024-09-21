@@ -9,6 +9,7 @@ builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<MeetingsServices>();
 builder.Services.AddScoped<EmailServices>();
 builder.Services.AddScoped<ProgramServices>();
+builder.Services.AddScoped<CSVServices>();
 
 var connectionString = builder.Configuration.GetConnectionString("TEString");
 

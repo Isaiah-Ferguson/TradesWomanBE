@@ -53,16 +53,14 @@ namespace TradesWomanBE.Services
                 return false;
             }
 
-            // Get existing meeting by id
-            ProgramModel existingProgram = await GetProgramByIdAsync(newProgram.Id);
+            // Expecting Type ProgramModel
+            var existingProgram = await GetProgramByIdAsync(newProgram.Id);
 
             // Check if the existing meeting was found
             if (existingProgram == null)
             {
-                return false;  // Handle case when meeting doesn't exist
+                return false;  
             }
-
-            // Update properties
 
             // Update the entity in the data context
             _dataContext.Programs.Update(existingProgram);
@@ -119,16 +117,14 @@ namespace TradesWomanBE.Services
                 return false;
             }
 
-            // Get existing meeting by id
-            StipendsModel existingStipend = await GetStipendByIdAsync(newStipend.Id);
+            // var Type is StipendsModel
+            var existingStipend = await GetStipendByIdAsync(newStipend.Id);
 
             // Check if the existing meeting was found
             if (existingStipend == null)
             {
-                return false;  // Handle case when meeting doesn't exist
+                return false;  
             }
-
-            // Update properties
 
             // Update the entity in the data context
             _dataContext.Stipends.Update(existingStipend);

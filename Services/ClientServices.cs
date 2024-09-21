@@ -1,7 +1,6 @@
 using TradesWomanBE.Models;
 using TradesWomanBE.Services.Context;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 
 
 namespace TradesWomanBE.Services
@@ -74,10 +73,6 @@ namespace TradesWomanBE.Services
                 existingClient.ProgramInfoId = clientModel.ProgramInfoId;
                 existingClient.IsDeleted = clientModel.IsDeleted;
 
-                // existingClient.ProgramInfo = clientModel.ProgramInfo;
-                // existingClient.Meetings = clientModel.Meetings;
-                // existingClient.Stipends = clientModel.Stipends;
-
                 _dataContext.Update(existingClient);
                 return await _dataContext.SaveChangesAsync() > 0;
             }
@@ -122,21 +117,5 @@ namespace TradesWomanBE.Services
                             .Where(item => item.Firstname == Firstname && item.Lastname == Lastname)
                                 .ToListAsync();
         }
-        public string GetClientsAsCsv()
-        {
-            var clients = _dataContext.ClientInfo.Include(c => c.ProgramInfo).ToList();
-            var sb = new StringBuilder();
-            sb.AppendLine("FirstName,LastName,Email,ValidSSNAuthToWrk,CriminalHistory,Disabled,FoundUsOn,DateJoinedEAW,Stipends,Address,Gender,Employed,ProgramEnrolled,ProgramEndDate,CurrentStatus,GrantName");
-
-            foreach (var client in clients)
-            {
-                var program = client.ProgramInfo;
-                sb.AppendLine($"{client.Id},{client.Firstname},{client.Lastname},{client.SSNLastFour},{client.MiddleInitial},{client.Email},{client.ValidSSNAuthToWrk},{client.CriminalHistory},{client.FoundUsOn},{client.DateJoinedEAW},{client.Stipends},{client.Address},{client.Gender},{client.Employed}" +
-                      $"{program?.ProgramEnrolled},{program?.EnrollDate},{program?.ProgramEndDate}");
-            }
-
-            return sb.ToString();
-        }
-
     }
 }

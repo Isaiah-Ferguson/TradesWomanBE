@@ -36,7 +36,7 @@ Next Js.
 - `POST /Meetings/AddMeeting`: Adds a new meeting.
 - `PUT /Meetings/EditMeeting`: Edits a meeting.
 - `GET /Meetings/GetMeeting/{id}`: Retrieves meeting information by ID.
-- `POST /Meetings/AddMeetingNotes/{meetingId}.`: Adds a new meeting notes
+- `POST /Meetings/AddMeetingNotes/{meetingId}.`: Adds a new meeting notes.
 - `GET /Meetings/GetMeetingNotes/{meetingId}.`: Retrieves meeting notes by ID.
 
 ### ProgramController
@@ -46,6 +46,14 @@ Next Js.
 - `POST /Program/AddStipend.`: Adds a new Stipend.
 - `PUT /Program/EditStipend/{clientId}`: Edits a Stipend.
 - `GET /Program/GetStipend/{id}.`: Retrieves Stipend notes by ID.
+
+### CSVController
+- `GET /CSV/ExportClients.`: Exports Clients into a CSV File.
+- `GET /CSV/ExportClientsByProgram/{Program}.`: Exports Clients into a CSV File Filtered By Program.
+- `GET /CSV/ExportClientsByDate./{StartDate}/{EndDate}`: Exports Clients into a CSV File filtered By Date.
+- `GET /CSV/ExportClientsByDate.{StartDate}/{EndDate}/{Program}`: Exports Clients into a CSV File filtered By Date and Program.
+
+
 
 ### Why Use Async Methods / Task<IActionResult>?
 
@@ -73,3 +81,23 @@ Next Js.
 
 3. Security: To authenticate with the SMTP server, credentials are provided (username and password). However, since Google requires 2-step verification, an app-specific password was generated for secure access.
 
+### Generating CSV Files from Database Queries
+
+## Data Context & Querying:
+The application uses Entity Framework to interact with the database. Data is fetched by querying the ClientInfo table and its related ProgramInfo using the .Include() method, ensuring that the related program data is eagerly loaded.
+
+## CSVHelper Method for Reusability:
+Instead of repeating code, a helper method, CSVHelper, is used to take a list of clients and generate the corresponding CSV data.
+The HelperMethod constructs a CSV file using a StringBuilder, which efficiently appends string data line by line.
+
+## Returning CSV as String:
+The result of the helper method is a string that represents the full CSV content, which can be further used for downloading or storing the data.
+
+### What using Does
+
+1. Manages Resources Automatically: When you open a connection to something external (like a database or email service), that connection needs to be closed to free up system resources.
+
+2. Simplifies Cleanup: Instead of having to manually close or dispose of the connection, using automatically handles that when you're done, even if there's an error.
+
+## Example of using
+In our HashPassword method, we are creating two disposable objects: RandomNumberGenerator and Rfc2898DeriveBytes. Both of these implement the IDisposable interface, which means they use resources like unmanaged memory that need to be released when you're done with them. The using statement helps ensure these resources are cleaned up properly and as soon as they are no longer needed, even if an exception is thrown.

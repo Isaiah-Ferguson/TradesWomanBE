@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TradesWomanBE.Models;
 using TradesWomanBE.Services;
-using System.Text;
 
 namespace TradesWomanBE.Controllers
 {
@@ -67,14 +66,6 @@ namespace TradesWomanBE.Controllers
             return Ok(clients);
         }
 
-        [HttpGet("ExportClients")]
-        public IActionResult ExportClients()
-        {
-            var csv = _clientServices.GetClientsAsCsv();
-            var bytes = Encoding.UTF8.GetBytes(csv);
-            var stream = new MemoryStream(bytes);
 
-            return File(stream, "text/csv", "clients.csv");
-        }
     }
 }
