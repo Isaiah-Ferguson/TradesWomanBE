@@ -37,20 +37,24 @@ namespace TradesWomanBE.Controllers
         [HttpPost("AddRecruiter")]
         public bool AddRecruiter(RecruiterModel newAccount)
         {
+            newAccount.IsDeleted = false;
             return _userService.AddRecruiter(newAccount);
         }
+        
         [HttpGet("GetAllRecruiters")]
         public async Task<IActionResult> GetAllRecruiters()
         {
             var recruiters = await _userService.GetAllRecruitersAsync();
             return Ok(recruiters);
         }
+
         [HttpGet("GetRecruiterByEmail/{email}")]
         public async Task<IActionResult> GetRecruiterbyEmail(string email)
         {
             var recruiters = await _userService.GetRecruiterByEmailAsync(email);
             return Ok(recruiters);
         }
+
         [HttpPut("EditRecruiter")]
         public async Task<IActionResult> UpdateRecruiter(RecruiterModel recruiterinfo)
         {

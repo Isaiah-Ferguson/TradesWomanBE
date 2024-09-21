@@ -14,10 +14,10 @@ namespace TradesWomanBE.Services
             _dataContext = dataContext;
         }
 
-        private async Task<bool> DoesClientExistAsync(int? SSNLastFour)
+        private async Task<bool> DoesClientExistAsync(int? id)
         {
             return await _dataContext.ClientInfo
-                .SingleOrDefaultAsync(client => client.SSNLastFour == SSNLastFour) != null;
+                .SingleOrDefaultAsync(client => client.Id == id) != null;
         }
 
         public async Task<IEnumerable<ClientModel>> GetLast30ClientsAsync()
@@ -40,9 +40,9 @@ namespace TradesWomanBE.Services
 
         public async Task<bool> EditClientAsync(ClientModel clientModel)
         {
-            if (await DoesClientExistAsync(clientModel.SSNLastFour))
+            if (await DoesClientExistAsync(clientModel.Id))
             {
-                ClientModel existingClient = await GetClientByEmailAsync(clientModel.Email);
+                ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
                 existingClient.Age = clientModel.Age;
                 existingClient.Firstname = clientModel.Firstname;
                 existingClient.Lastname = clientModel.Lastname;
@@ -79,42 +79,89 @@ namespace TradesWomanBE.Services
             return false;
         }
 
+        public async Task<bool> DeleteClientAsync(ClientModel clientModel)
+        {
+            if (await DoesClientExistAsync(clientModel.Id))
+            {
+                ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
+
+                existingClient.IsDeleted = clientModel.IsDeleted;
+
+                _dataContext.Update(existingClient);
+                return await _dataContext.SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+
 
 
         public async Task<IEnumerable<ClientModel>> GetAllClientsAsync()
         {
             return await _dataContext.ClientInfo
-            .Include(c => c.ProgramInfo)
+            .Where(c => c.IsDeleted == false)
+                .Include(c => c.ProgramInfo)
                     .Include(c => c.Stipends)
                         .Include(c => c.Meetings)
                             .ThenInclude(m => m.MeetingNotes).ToListAsync();
         }
+        public async Task<IEnumerable<object>> GetAllClientsOnLoadAsync()
+        {
+            return await _dataContext.ClientInfo
+                .Where(c => c.IsDeleted == false)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Firstname,
+                    c.Lastname,
+                    c.RecruiterName
+                })
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<object>> GetClientsSummaryByRecruiterNameAsync(string recruitername)
+        {
+            return await _dataContext.ClientInfo
+                .Where(c => c.IsDeleted == false && c.RecruiterName == recruitername)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Firstname,
+                    c.Lastname,
+                    c.RecruiterName
+                })
+                .ToListAsync();
+        }
+
+
+
 
         public async Task<ClientModel> GetClientByIdAsync(int userId)
         {
             return await _dataContext.ClientInfo
+            .Include(c => c.IsDeleted == false)
                 .Include(c => c.ProgramInfo)
-                    .Include(c => c.Meetings)
-                        .ThenInclude(m => m.MeetingNotes)
-                            .FirstOrDefaultAsync(item => item.Id == userId);
+                    .Include(c => c.Stipends)
+                        .Include(c => c.Meetings)
+                            .ThenInclude(m => m.MeetingNotes)
+                                .FirstOrDefaultAsync(item => item.Id == userId);
         }
 
         public async Task<ClientModel> GetClientByEmailAsync(string email)
         {
             return await _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
-                    .Include(c => c.Meetings)
-                        .ThenInclude(m => m.MeetingNotes)
-                            .FirstOrDefaultAsync(item => item.Email == email);
+                    .Include(c => c.Stipends)
+                        .Include(c => c.Meetings)
+                            .ThenInclude(m => m.MeetingNotes)
+                                .FirstOrDefaultAsync(c => c.Email == email && c.IsDeleted == false);
         }
 
         public async Task<IEnumerable<ClientModel>> GetClientsByFirstNameAndLastnameAsync(string Firstname, string Lastname)
         {
             return await _dataContext.ClientInfo
+            .Where(c => c.IsDeleted == false && c.Firstname == Firstname && c.Lastname == Lastname)
                 .Include(c => c.ProgramInfo)
                     .Include(c => c.Meetings)
                         .ThenInclude(m => m.MeetingNotes)
-                            .Where(item => item.Firstname == Firstname && item.Lastname == Lastname)
                                 .ToListAsync();
         }
     }

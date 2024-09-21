@@ -22,7 +22,7 @@ namespace TradesWomanBE.Controllers
             var success = await _clientServices.AddClientAsync(newClient);
             if (!success)
             {
-                return BadRequest("Unable to add client. Please check the provided data.");
+                return BadRequest("Unable to add client. Please check the provided data. SSN might exist in Database");
             }
             return Ok("Client added successfully.");
         }
@@ -36,6 +36,17 @@ namespace TradesWomanBE.Controllers
                 return BadRequest("Unable to edit client. Please check the provided data.");
             }
             return Ok("Client edited successfully.");
+        }
+
+        [HttpPut("DeleteClient")]
+        public async Task<IActionResult> DeleteClient(ClientModel clientToDelete)
+        {
+            var success = await _clientServices.DeleteClientAsync(clientToDelete);
+            if (!success)
+            {
+                return BadRequest("Unable to delete client. Please check the provided data.");
+            }
+            return Ok("Client Deleted successfully.");
         }
 
         [HttpGet("GetAllClients")]
@@ -66,6 +77,32 @@ namespace TradesWomanBE.Controllers
             return Ok(clients);
         }
 
+        [HttpGet("GetClientSummary")]
+        public async Task<IActionResult> GetClientSummaries()
+        {
+            var clients = await _clientServices.GetAllClientsOnLoadAsync();
+
+            if (clients == null || !clients.Any())
+            {
+                return NotFound("No clients found");
+            }
+
+            return Ok(clients);
+        }
+        [HttpGet("GetClientSummaryByRecruiter/{firstName}/{lastName}")]
+        public async Task<IActionResult> GetClientSummarieByRecruiter(string firstName, string lastName)
+        {
+            string recruiterName = firstName + " " + lastName;
+            
+            var clients = await _clientServices.GetClientsSummaryByRecruiterNameAsync(recruiterName);
+
+            if (clients == null || !clients.Any())
+            {
+                return NotFound("No clients found");
+            }
+
+            return Ok(clients);
+        }
 
     }
 }

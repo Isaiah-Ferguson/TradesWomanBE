@@ -174,7 +174,6 @@ namespace TradesWomanBE.Services
         }
 
 
-
         public bool AddRecruiter(RecruiterModel userToAdd)
         {
             bool result = false;
