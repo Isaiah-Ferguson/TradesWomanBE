@@ -25,7 +25,7 @@ namespace TradesWomanBE.Controllers
             return File(stream, "text/csv", "clients.csv");
         }
 
-        [HttpGet("ExportClientsByDate?{startDate}/{EndDate}")]
+        [HttpGet("ExportClientsByDate/{startDate}/{endDate}")]
         public IActionResult ExportClientsByDate(string startDate, string endDate)
         {
             var csv = _csvServices.GetClientsAsCsvByDate(startDate, endDate);
@@ -35,10 +35,20 @@ namespace TradesWomanBE.Controllers
             return File(stream, "text/csv", "clients.csv");
         }
 
-        [HttpGet("ExportClientsByProgram?{program}")]
+        [HttpGet("ExportClientsByProgram/{program}")]
         public IActionResult ExportClientsByProgram(string program)
         {
             var csv = _csvServices.GetClientsAsCsvByProgram(program);
+            var bytes = Encoding.UTF8.GetBytes(csv);
+            var stream = new MemoryStream(bytes);
+
+            return File(stream, "text/csv", "clients.csv");
+        }
+
+        [HttpGet("ExportClientsByProgram/{program}/{startDate}/{endDate}")]
+        public IActionResult ExportClientsByProgramAndDate(string program, string startDate, string endDate)
+        {
+            var csv = _csvServices.GetClientsAsCsvByProgramAndDate(program, startDate, endDate);
             var bytes = Encoding.UTF8.GetBytes(csv);
             var stream = new MemoryStream(bytes);
 

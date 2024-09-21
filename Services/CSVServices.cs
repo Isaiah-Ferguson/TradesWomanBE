@@ -18,26 +18,45 @@ namespace TradesWomanBE.Services
             var clients = _dataContext.ClientInfo.Include(c => c.ProgramInfo).ToList();
             return CSVHelper(clients);
         }
-
         public string GetClientsAsCsvByDate(string startDate, string endDate)
         {
-            DateTime start = DateTime.Parse(startDate);
-            DateTime end = DateTime.Parse(endDate);
+            DateTime start;
+            DateTime end;
+
+            // Try parsing the input start and end dates
+            if (!DateTime.TryParse(startDate, out start) || !DateTime.TryParse(endDate, out end))
+            {
+                throw new FormatException("Start or End date is not in a valid DateTime format.");
+            }
 
             var clients = _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
-                .Where(c => DateTime.Parse(c.DateRegistered) >= start && DateTime.Parse(c.DateRegistered) <= end)
+                .ToList() // Move the data into memory before filtering the date.
+                .Where(c => DateTime.TryParse(c.DateRegistered, out var dateRegistered) &&
+                            dateRegistered >= start && dateRegistered <= end)
                 .ToList();
 
             return CSVHelper(clients);
         }
-        public string GetClientsAsCsvByProgramAndDate(string programName, DateTime startDate, DateTime endDate)
+
+
+        public string GetClientsAsCsvByProgramAndDate(string programName, string startDate, string endDate)
         {
+            DateTime start;
+            DateTime end;
+
+            // Try parsing the input start and end dates
+            if (!DateTime.TryParse(startDate, out start) || !DateTime.TryParse(endDate, out end))
+            {
+                throw new FormatException("Start or End date is not in a valid DateTime format.");
+            }
+
             var clients = _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
-                .Where(c => c.ProgramInfo != null && c.ProgramInfo.ProgramEnrolled == programName
-                            && DateTime.Parse(c.DateRegistered) >= startDate
-                            && DateTime.Parse(c.DateRegistered) <= endDate)
+                .Where(c => c.ProgramInfo != null && c.ProgramInfo.ProgramEnrolled == programName)
+                .ToList() // Move the data into memory before filtering the date.
+                .Where(c => DateTime.TryParse(c.DateRegistered, out var dateRegistered) &&
+                            dateRegistered >= start && dateRegistered <= end)
                 .ToList();
 
             return CSVHelper(clients);
