@@ -16,21 +16,23 @@ Next Js.
 ## API Endpoints
 
 ### UserCotnroller
-- `POST /Client/AddUser`: Adds a new client.
-- `POST /Client/AddRecruiter`: Adds a New Recruiter.
-- `GET /Client/GetAllRecruiters`: Get all Recruiters.
-- `GET /Client/GetRecruiterByEmail/{email}`: Get Recruiters by email
-- `POST /Client/Login`: Login for Recrutier & Admin.
-- `PUT /Client/ChangePassword`: Admin Changes Password.
+- `POST /User/AddUser`: Adds a new client.
+- `POST /User/AddRecruiter`: Adds a New Recruiter.
+- `GET /User/GetAllRecruiters`: Get all Recruiters.
+- `GET /User/GetRecruiterByEmail/{email}`: Get Recruiters by email
+- `POST /User/Login`: Login for Recrutier & Admin.
+- `PUT /User/ChangePassword`: Admin Changes Password.
 
 ### ClientController
 - `POST /Client/AddClient`: Adds a new client.
 - `PUT /Client/EditClient`: Edits an existing client.
+- `PUT /Client/DeleteClient`: Edits an existing client.
 - `GET /Client/GetAllClients`: Retrieves all clients.
 - `GET /Client/GetLast30Clients`: Retrieves last 30 clients.
 - `GET /Client/GetClientsByFirstAndLastName`: Retrieves Clients by Firstname or Lastname.
-- `GET /Client/GetClientsByEmail`: Retrieves Clients by Firstname or Lastname.
-- `GET /Client/ExportClients`: Exports all clients to a CSV file.
+- `GET /Client/GetClientSummary`: Retrieves Clients by Firstname or Lastname.
+- `GET /Client/GetClientSummaryByRecruiter/{firstName/{lastName}}`: Retrieves Clients by Firstname or Lastname.
+
 
 ### MeetingsController
 - `POST /Meetings/AddMeeting`: Adds a new meeting.
@@ -50,8 +52,8 @@ Next Js.
 ### CSVController
 - `GET /CSV/ExportClients.`: Exports Clients into a CSV File.
 - `GET /CSV/ExportClientsByProgram/{Program}.`: Exports Clients into a CSV File Filtered By Program.
-- `GET /CSV/ExportClientsByDate./{StartDate}/{EndDate}`: Exports Clients into a CSV File filtered By Date.
-- `GET /CSV/ExportClientsByDate.{StartDate}/{EndDate}/{Program}`: Exports Clients into a CSV File filtered By Date and Program.
+- `GET /CSV/ExportClientsByDate/{StartDate}/{EndDate}`: Exports Clients into a CSV File filtered By Date.
+- `GET /CSV/ExportClientsByDate{StartDate}/{EndDate}/{Program}`: Exports Clients into a CSV File filtered By Date and Program.
 
 
 

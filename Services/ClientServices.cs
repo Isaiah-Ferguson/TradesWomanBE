@@ -126,6 +126,7 @@ namespace TradesWomanBE.Services
                     c.Id,
                     c.Firstname,
                     c.Lastname,
+                    c.Email,
                     c.RecruiterName
                 })
                 .ToListAsync();
