@@ -30,6 +30,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("ChangeUserPassword")]
+        [Authorize]
         public bool ChangeUserPassword(CreateAccountDTO account)
         {
             return _userService.ChangePassword(account);
@@ -44,6 +45,7 @@ namespace TradesWomanBE.Controllers
         }
         
         [HttpGet("GetAllRecruiters")]
+        [Authorize]
         public async Task<IActionResult> GetAllRecruiters()
         {
             var recruiters = await _userService.GetAllRecruitersAsync();
@@ -51,6 +53,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpGet("GetRecruiterByEmail/{email}")]
+        [Authorize]
         public async Task<IActionResult> GetRecruiterbyEmail(string email)
         {
             var recruiters = await _userService.GetRecruiterByEmailAsync(email);
@@ -58,6 +61,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPut("EditRecruiter")]
+        [Authorize]
         public async Task<IActionResult> UpdateRecruiter(RecruiterModel recruiterinfo)
         {
             var success = await _userService.UpdateRecruiterAsync(recruiterinfo);
