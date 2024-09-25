@@ -94,7 +94,6 @@ namespace TradesWomanBE.Services
         }
 
 
-
         public async Task<IEnumerable<ClientModel>> GetAllClientsAsync()
         {
             return await _dataContext.ClientInfo
@@ -113,6 +112,7 @@ namespace TradesWomanBE.Services
                     c.Id,
                     c.Firstname,
                     c.Lastname,
+                    c.Email,
                     c.RecruiterName
                 })
                 .ToListAsync();

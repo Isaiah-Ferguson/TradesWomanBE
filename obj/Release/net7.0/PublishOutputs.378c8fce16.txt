@@ -6,6 +6,7 @@ C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\TradesW
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\TradesWomanBE.pdb
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\Azure.Core.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\Azure.Identity.dll
+C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\Microsoft.Data.SqlClient.dll

@@ -74,3 +74,4 @@ C:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Release\net7.0\refint\TradesWo
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Release\net7.0\TradesWomanBE.pdb
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Release\net7.0\TradesWomanBE.genruntimeconfig.cache
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Release\net7.0\ref\TradesWomanBE.dll
+C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
