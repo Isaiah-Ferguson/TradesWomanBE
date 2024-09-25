@@ -87,7 +87,7 @@ namespace TradesWomanBE.Services
         {
             IActionResult result = Unauthorized();
 
-            List<Claim> claims = new List<Claim>();
+            List<Claim> claims = new();
 
             if (DoesUserExist(user.Email))
             {
@@ -99,7 +99,7 @@ namespace TradesWomanBE.Services
                     claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString });
+                    result = Ok(new { Token = tokenString, foundUser.Firstname, foundUser.Lastname, foundUser.Email });
                 }
             }
             else if (DoesRecruiterExist(user.Email))

@@ -37,7 +37,7 @@ namespace TradesWomanBE.Controllers
         }
     
         [HttpPost("AddRecruiter")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public bool AddRecruiter(RecruiterModel newAccount)
         {
             newAccount.IsDeleted = false;
