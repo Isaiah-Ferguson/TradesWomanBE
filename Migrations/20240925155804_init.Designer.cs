@@ -12,7 +12,7 @@ using TradesWomanBE.Services.Context;
 namespace TradesWomanBE.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240920050640_init")]
+    [Migration("20240925155804_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -36,11 +36,17 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Firstname")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Hash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Lastname")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Salt")
                         .HasColumnType("nvarchar(max)");
@@ -271,8 +277,14 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("Hash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("HireDate")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("JobTitle")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Lastname")
                         .HasColumnType("nvarchar(max)");

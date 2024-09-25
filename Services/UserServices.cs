@@ -112,7 +112,7 @@ namespace TradesWomanBE.Services
                     claims.Add(new Claim(ClaimTypes.Role, "Recruiter"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString });
+                    result = Ok(new { Token = tokenString, foundUser.Firstname, foundUser.Lastname });
                 }
             }
 

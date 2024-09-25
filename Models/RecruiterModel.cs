@@ -14,6 +14,8 @@ namespace TradesWomanBE.Models
         public string? Status { get; set;}
         public bool FirstTimeLogIn { get; set; }
         public string? Salt {get; set;}
+        public string? JobTitle {get; set;}
+        public string? HireDate {get; set;}
         public string? Hash { get; set; }
         public bool IsDeleted { get; set; } = false;
     }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ntMfA+qDILaK3e0R9aFD0cFQv0jE0oT83nYNGTYnlUuIJy9R18fJ2y0BdyPJxjYVI6aGeudzJIgXbxUDPzuQpA==",
+  "dgSpecHash": "pVhvlzK5xwNbTWCHDQ2fhkM5U9pfFEy2m2XGT/b0xUE/4t9QmYfj+y98JCU1d8yxo0lxidiDqjO2IOFOQKwXtQ==",
   "success": true,
-  "projectFilePath": "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
+  "projectFilePath": "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\crest\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\crest\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
