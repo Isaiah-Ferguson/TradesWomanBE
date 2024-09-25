@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TradesWomanBE.Models;
 using TradesWomanBE.Models.DTO;
@@ -35,6 +36,7 @@ namespace TradesWomanBE.Controllers
         }
     
         [HttpPost("AddRecruiter")]
+        [Authorize]
         public bool AddRecruiter(RecruiterModel newAccount)
         {
             newAccount.IsDeleted = false;

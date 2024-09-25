@@ -1,4 +1,5 @@
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TradesWomanBE.Services;
 
@@ -6,6 +7,7 @@ namespace TradesWomanBE.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class CSVController : ControllerBase
     {
         private readonly CSVServices _csvServices;

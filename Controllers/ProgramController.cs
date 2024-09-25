@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TradesWomanBE.Models;
 using TradesWomanBE.Services;
@@ -6,6 +7,7 @@ namespace TradesWomanBE.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class ProgramController : ControllerBase
     {
 

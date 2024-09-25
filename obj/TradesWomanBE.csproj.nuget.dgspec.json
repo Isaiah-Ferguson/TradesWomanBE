@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj": {}
+    "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj": {}
   },
   "projects": {
-    "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj": {
+    "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
+        "projectUniqueName": "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
         "projectName": "TradesWomanBE",
-        "projectPath": "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
+        "projectPath": "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
         "packagesPath": "C:\\Users\\crest\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\obj\\",
+        "outputPath": "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\crest\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[7.0.10, )"

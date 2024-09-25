@@ -87,51 +87,55 @@ namespace TradesWomanBE.Services
         {
             IActionResult result = Unauthorized();
 
+            List<Claim> claims = new List<Claim>();
+
             if (DoesUserExist(user.Email))
             {
-
                 AdminUser foundUser = GetUserByEmail(user.Email);
                 if (VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
                 {
+                    // Add claims for the Admin User
+                    claims.Add(new Claim(ClaimTypes.Name, foundUser.Email));
+                    claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
-                    var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-                    var signinCredntials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                    var tokenOptions = new JwtSecurityToken(
-                        issuer: "http://localhost:5000",
-                        audience: "http://localhost:5000",
-                        claims: new List<Claim>(),
-                        expires: DateTime.Now.AddMinutes(30),
-                        signingCredentials: signinCredntials
-                    );
-
-                    var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                    var tokenString = GenerateJwtToken(claims);
                     result = Ok(new { Token = tokenString });
                 }
-
             }
             else if (DoesRecruiterExist(user.Email))
             {
                 RecruiterModel foundUser = GetRecruiterByEmail(user.Email);
                 if (VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
                 {
+                    // Add claims for the Recruiter User
+                    claims.Add(new Claim(ClaimTypes.Name, foundUser.Email));
+                    claims.Add(new Claim(ClaimTypes.Role, "Recruiter"));
 
-                    var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-                    var signinCredntials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                    var tokenOptions = new JwtSecurityToken(
-                        issuer: "http://localhost:5000",
-                        audience: "http://localhost:5000",
-                        claims: new List<Claim>(),
-                        expires: DateTime.Now.AddMinutes(30),
-                        signingCredentials: signinCredntials
-                    );
-
-                    var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                    var tokenString = GenerateJwtToken(claims);
                     result = Ok(new { Token = tokenString });
                 }
             }
 
             return result;
         }
+
+        // Helper method to generate JWT Token
+        private static string GenerateJwtToken(List<Claim> claims)
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+            var tokenOptions = new JwtSecurityToken(
+                issuer: "http://localhost:5000",
+                audience: "http://localhost:5000",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: signinCredentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        }
+
 
         public AdminUser GetUserByEmail(string Email)
         {
