@@ -104,7 +104,7 @@ namespace TradesWomanBE.Services
                     claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email });
+                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin });
                 }
             }
             else if (DoesRecruiterExist(user.Email))
@@ -117,7 +117,7 @@ namespace TradesWomanBE.Services
                     claims.Add(new Claim(ClaimTypes.Role, "Recruiter"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName });
+                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin });
                 }
             }
 
@@ -167,7 +167,7 @@ namespace TradesWomanBE.Services
             existingRecruiter.PhoneNumber = userToUpdate.PhoneNumber;
             existingRecruiter.Department = userToUpdate.Department;
             existingRecruiter.FirstTimeLogin = false;
-            existingRecruiter.MiddleInnitial = userToUpdate.MiddleInnitial;
+            existingRecruiter.MiddleInitial = userToUpdate.MiddleInitial;
             existingRecruiter.Status = userToUpdate.Status;
             existingRecruiter.SupervisorName = userToUpdate.SupervisorName;
             existingRecruiter.Location = userToUpdate.Location;

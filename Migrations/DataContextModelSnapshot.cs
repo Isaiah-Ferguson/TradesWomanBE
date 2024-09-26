@@ -36,6 +36,9 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("FirstTimeLogin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Hash")
                         .HasColumnType("nvarchar(max)");
 
@@ -307,7 +310,7 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MiddleInnitial")
+                    b.Property<string>("MiddleInitial")
                         .HasColumnType("nvarchar(1)");
 
                     b.Property<int?>("PhoneNumber")

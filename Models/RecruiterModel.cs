@@ -5,7 +5,7 @@ namespace TradesWomanBE.Models
         public int Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public Char? MiddleInnitial { get; set; }
+        public Char? MiddleInitial { get; set; }
         public string? Email { get; set; }
         public string? Department { get; set; }
         public string? Location { get; set; }
@@ -17,7 +17,7 @@ namespace TradesWomanBE.Models
         public string? JobTitle { get; set; }
         public string? HireDate { get; set; }
         public string? Hash { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public bool IsAdmin { get; set; } = false;
+        public bool IsDeleted { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

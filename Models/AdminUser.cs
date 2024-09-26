@@ -9,6 +9,7 @@ namespace TradesWomanBE.Models
         public string? Salt {get; set;}
         public string? Hash { get; set; }
         public bool IsAdmin { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool FirstTimeLogin { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
