@@ -31,23 +31,28 @@ namespace TradesWomanBE.Services
             return _context.RecruiterInfo.SingleOrDefault(recruiter => recruiter.Email == email) != null;
         }
 
-        public bool CreateAdmin(CreateAccountDTO userToAdd)
+        public bool CreateAdmin(AdminUser userToAdd)
         {
             bool result = false;
             if (!DoesUserExist(userToAdd.Email))
             {
-                AdminUser newUser = new();
+                string newPassword = GenerateRandomPassword();
+                var hashPassword = HashPassword(newPassword);
 
-                var hashPassword = HashPassword(userToAdd.Password);
-                newUser.Id = userToAdd.Id;
-                newUser.Email = userToAdd.Email;
-                newUser.Salt = hashPassword.Salt;
-                newUser.Hash = hashPassword.Hash;
+                userToAdd.Salt = hashPassword.Salt;
+                userToAdd.Hash = hashPassword.Hash;
 
-                _context.Add(newUser);
+
+                _context.Add(userToAdd);
                 result = _context.SaveChanges() != 0;
-            }
 
+                if (result)
+                {
+                    string subject = "Your New Password";
+                    string body = $"Your new password is: {newPassword} \n Please Follow the Link below to Change your password \n This will be the link ";
+                    _emailService.SendEmailAsync(userToAdd.Email, subject, body).Wait();
+                }
+            }
             return result;
         }
         private static PasswordDTO HashPassword(string password)
@@ -99,7 +104,7 @@ namespace TradesWomanBE.Services
                     claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString, foundUser.Firstname, foundUser.Lastname, foundUser.Email });
+                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email });
                 }
             }
             else if (DoesRecruiterExist(user.Email))
@@ -112,7 +117,7 @@ namespace TradesWomanBE.Services
                     claims.Add(new Claim(ClaimTypes.Role, "Recruiter"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString, foundUser.Firstname, foundUser.Lastname });
+                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName });
                 }
             }
 
@@ -156,16 +161,18 @@ namespace TradesWomanBE.Services
                 return false; // Recruiter not found
             }
 
-            existingRecruiter.Firstname = userToUpdate.Firstname;
-            existingRecruiter.Lastname = userToUpdate.Lastname;
+            existingRecruiter.FirstName = userToUpdate.FirstName;
+            existingRecruiter.LastName = userToUpdate.LastName;
             existingRecruiter.Email = userToUpdate.Email;
             existingRecruiter.PhoneNumber = userToUpdate.PhoneNumber;
             existingRecruiter.Department = userToUpdate.Department;
-            existingRecruiter.FirstTimeLogIn = false;
+            existingRecruiter.FirstTimeLogin = false;
             existingRecruiter.MiddleInnitial = userToUpdate.MiddleInnitial;
             existingRecruiter.Status = userToUpdate.Status;
-            existingRecruiter.SuperviserName = userToUpdate.SuperviserName;
+            existingRecruiter.SupervisorName = userToUpdate.SupervisorName;
             existingRecruiter.Location = userToUpdate.Location;
+            existingRecruiter.JobTitle = userToUpdate.JobTitle;
+            existingRecruiter.HireDate = userToUpdate.HireDate;
 
             _context.RecruiterInfo.Update(existingRecruiter);
 
@@ -183,25 +190,23 @@ namespace TradesWomanBE.Services
             bool result = false;
             if (!DoesRecruiterExist(userToAdd.Email))
             {
-                RecruiterModel newRecruiter = new();
 
                 // Generate a random password
                 string newPassword = GenerateRandomPassword();
                 var hashPassword = HashPassword(newPassword);
 
-                newRecruiter.Id = userToAdd.Id;
-                newRecruiter.Email = userToAdd.Email;
-                newRecruiter.Salt = hashPassword.Salt;
-                newRecruiter.Hash = hashPassword.Hash;
+                userToAdd.Salt = hashPassword.Salt;
+                userToAdd.Hash = hashPassword.Hash;
 
-                _context.Add(newRecruiter);
+
+                _context.Add(userToAdd);
                 result = _context.SaveChanges() != 0;
 
                 if (result)
                 {
                     string subject = "Your New Password";
                     string body = $"Your new password is: {newPassword} \n Please Follow the Link below to Change your password \n This will be the link ";
-                    _emailService.SendEmailAsync(newRecruiter.Email, subject, body).Wait();
+                    _emailService.SendEmailAsync(userToAdd.Email, subject, body).Wait();
                 }
             }
 
@@ -221,11 +226,11 @@ namespace TradesWomanBE.Services
         }
 
 
-        public bool ChangePassword(CreateAccountDTO userToUpdate)
+        public bool ChangeRecruiterPassword(CreateAccountDTO userToUpdate)
         {
 
             bool result = false;
-            if (DoesUserExist(userToUpdate.Email))
+            if (DoesRecruiterExist(userToUpdate.Email))
             {
                 RecruiterModel updateRecruiter = GetRecruiterByEmail(userToUpdate.Email);
 
@@ -236,6 +241,27 @@ namespace TradesWomanBE.Services
                 updateRecruiter.Hash = hashPassword.Hash;
 
                 _context.Update(updateRecruiter);
+                result = _context.SaveChanges() != 0;
+            }
+
+            return result;
+        }
+
+        public bool ChangeAdminPassword(CreateAccountDTO userToUpdate)
+        {
+
+            bool result = false;
+            if (DoesUserExist(userToUpdate.Email))
+            {
+                AdminUser updateAdmin = GetUserByEmail(userToUpdate.Email);
+
+                var hashPassword = HashPassword(userToUpdate.Password);
+                updateAdmin.Id = userToUpdate.Id;
+                updateAdmin.Email = userToUpdate.Email;
+                updateAdmin.Salt = hashPassword.Salt;
+                updateAdmin.Hash = hashPassword.Hash;
+
+                _context.Update(updateAdmin);
                 result = _context.SaveChanges() != 0;
             }
 

@@ -138,7 +138,7 @@ namespace TradesWomanBE.Services
         public async Task<ClientModel> GetClientByIdAsync(int userId)
         {
             return await _dataContext.ClientInfo
-            .Include(c => c.IsDeleted == false)
+            .Where(c => c.IsDeleted == false)
                 .Include(c => c.ProgramInfo)
                     .Include(c => c.Stipends)
                         .Include(c => c.Meetings)
@@ -149,6 +149,7 @@ namespace TradesWomanBE.Services
         public async Task<ClientModel> GetClientByEmailAsync(string email)
         {
             return await _dataContext.ClientInfo
+            .Where(c => c.IsDeleted == false)
                 .Include(c => c.ProgramInfo)
                     .Include(c => c.Stipends)
                         .Include(c => c.Meetings)

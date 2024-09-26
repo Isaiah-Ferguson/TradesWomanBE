@@ -16,11 +16,12 @@ namespace TradesWomanBE.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Salt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Hash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -70,21 +71,22 @@ namespace TradesWomanBE.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MiddleInnitial = table.Column<string>(type: "nvarchar(1)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Department = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SuperviserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SupervisorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FirstTimeLogIn = table.Column<bool>(type: "bit", nullable: false),
+                    FirstTimeLogin = table.Column<bool>(type: "bit", nullable: false),
                     Salt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HireDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Hash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -165,6 +167,10 @@ namespace TradesWomanBE.Migrations
                     TotalMonthlyIncome = table.Column<int>(type: "int", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProgramInfoId = table.Column<int>(type: "int", nullable: true),
+                    HighestEducation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ValidCALicense = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    County = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ethnicity = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MeetingsId = table.Column<int>(type: "int", nullable: true),
                     StipendsId = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)

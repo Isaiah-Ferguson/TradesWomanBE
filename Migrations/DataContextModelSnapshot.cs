@@ -33,16 +33,19 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Firstname")
+                    b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Hash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Lastname")
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Salt")
@@ -79,6 +82,9 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("County")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CriminalHistory")
                         .HasColumnType("nvarchar(max)");
 
@@ -100,6 +106,9 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("Employed")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Ethnicity")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Firstname")
                         .HasColumnType("nvarchar(max)");
 
@@ -107,6 +116,9 @@ namespace TradesWomanBE.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HighestEducation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -144,6 +156,9 @@ namespace TradesWomanBE.Migrations
 
                     b.Property<int?>("TotalMonthlyIncome")
                         .HasColumnType("int");
+
+                    b.Property<string>("ValidCALicense")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ValidSSNAuthToWrk")
                         .HasColumnType("nvarchar(max)");
@@ -265,11 +280,11 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("FirstTimeLogIn")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Firstname")
+                    b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("FirstTimeLogin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Hash")
                         .HasColumnType("nvarchar(max)");
@@ -277,13 +292,16 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("HireDate")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("JobTitle")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Lastname")
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
@@ -301,7 +319,7 @@ namespace TradesWomanBE.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SuperviserName")
+                    b.Property<string>("SupervisorName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

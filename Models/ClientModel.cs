@@ -32,6 +32,10 @@ namespace TradesWomanBE.Models
         public int? TotalMonthlyIncome { get; set; }
         public string? PhoneNumber { get; set; }
         public int? ProgramInfoId { get; set; }
+        public string? HighestEducation { get; set; }
+        public string? ValidCALicense { get; set; }
+        public string? County { get; set; }
+        public string? Ethnicity { get; set; }
 
         [ForeignKey("ProgramInfoId")]
         public virtual ProgramModel? ProgramInfo { get; set; }

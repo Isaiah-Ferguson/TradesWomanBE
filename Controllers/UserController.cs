@@ -24,16 +24,22 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("CreateAdmin")]
-        public bool CreateAdmin(CreateAccountDTO newAccount)
+        public bool CreateAdmin(AdminUser newAccount)
         {
             return _userService.CreateAdmin(newAccount);
         }
 
-        [HttpPost("ChangeUserPassword")]
+        [HttpPost("ChangeAdminPassword")]
         [Authorize]
-        public bool ChangeUserPassword(CreateAccountDTO account)
+        public bool ChangeAdminPassword(CreateAccountDTO account)
         {
-            return _userService.ChangePassword(account);
+            return _userService.ChangeAdminPassword(account);
+        }
+        [HttpPost("ChangeRecruiterPassword")]
+        [Authorize]
+        public bool ChangeRecruiterPassword(CreateAccountDTO account)
+        {
+            return _userService.ChangeRecruiterPassword(account);
         }
     
         [HttpPost("AddRecruiter")]

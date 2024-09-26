@@ -1,3 +1,10 @@
+c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.csproj.AssemblyReference.cache
+c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.AssemblyInfoInputs.cache
+c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.AssemblyInfo.cs
+c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.csproj.CoreCompileInputs.cache
+c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.MvcApplicationPartsAssemblyInfo.cs
+c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.MvcApplicationPartsAssemblyInfo.cache
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Debug\net7.0\appsettings.Development.json
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Debug\net7.0\appsettings.json
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Debug\net7.0\TradesWomanBE.exe
@@ -54,13 +61,6 @@ c:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Debug\net7.0\runtimes\win\lib\
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Debug\net7.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Debug\net7.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Debug\net7.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
-c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.csproj.AssemblyReference.cache
-c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.GeneratedMSBuildEditorConfig.editorconfig
-c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.AssemblyInfoInputs.cache
-c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.AssemblyInfo.cs
-c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.csproj.CoreCompileInputs.cache
-c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.MvcApplicationPartsAssemblyInfo.cs
-c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.MvcApplicationPartsAssemblyInfo.cache
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\staticwebassets\msbuild.TradesWomanBE.Microsoft.AspNetCore.StaticWebAssets.props
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\staticwebassets\msbuild.build.TradesWomanBE.props
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.TradesWomanBE.props
