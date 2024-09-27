@@ -8,6 +8,7 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 
 namespace TradesWomanBE.Services
@@ -16,10 +17,12 @@ namespace TradesWomanBE.Services
     {
         private readonly DataContext _context;
         private readonly EmailServices _emailService;
-        public UserServices(DataContext dataContext, EmailServices emailServices)
+        private readonly IMapper _mapper;
+        public UserServices(DataContext dataContext, EmailServices emailServices, IMapper mapper)
         {
             _context = dataContext;
             _emailService = emailServices;
+            _mapper = mapper;
         }
 
         private bool DoesUserExist(string? email)
@@ -160,19 +163,7 @@ namespace TradesWomanBE.Services
             {
                 return false; // Recruiter not found
             }
-
-            existingRecruiter.FirstName = userToUpdate.FirstName;
-            existingRecruiter.LastName = userToUpdate.LastName;
-            existingRecruiter.Email = userToUpdate.Email;
-            existingRecruiter.PhoneNumber = userToUpdate.PhoneNumber;
-            existingRecruiter.Department = userToUpdate.Department;
-            existingRecruiter.FirstTimeLogin = false;
-            existingRecruiter.MiddleInitial = userToUpdate.MiddleInitial;
-            existingRecruiter.Status = userToUpdate.Status;
-            existingRecruiter.SupervisorName = userToUpdate.SupervisorName;
-            existingRecruiter.Location = userToUpdate.Location;
-            existingRecruiter.JobTitle = userToUpdate.JobTitle;
-            existingRecruiter.HireDate = userToUpdate.HireDate;
+            _mapper.Map(userToUpdate, existingRecruiter);
 
             _context.RecruiterInfo.Update(existingRecruiter);
 

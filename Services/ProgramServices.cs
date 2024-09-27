@@ -1,16 +1,18 @@
 using TradesWomanBE.Models;
 using Microsoft.EntityFrameworkCore;
 using TradesWomanBE.Services.Context;
+using AutoMapper;
 
 namespace TradesWomanBE.Services
 {
     public class ProgramServices
     {
         private readonly DataContext _dataContext;
-
-        public ProgramServices(DataContext dataContext)
+        private readonly IMapper _mapper;
+        public ProgramServices(DataContext dataContext, IMapper mapper)
         {
             _dataContext = dataContext;
+            _mapper = mapper;
         }
 
         public async Task<bool> AddProgramAsync(ProgramModel newProgram)
@@ -53,14 +55,13 @@ namespace TradesWomanBE.Services
                 return false;
             }
 
-            // Expecting Type ProgramModel
             var existingProgram = await GetProgramByIdAsync(newProgram.Id);
 
-            // Check if the existing meeting was found
             if (existingProgram == null)
             {
                 return false;  
             }
+            _mapper.Map(newProgram, existingProgram);
 
             // Update the entity in the data context
             _dataContext.Programs.Update(existingProgram);
@@ -125,7 +126,7 @@ namespace TradesWomanBE.Services
             {
                 return false;  
             }
-
+            _mapper.Map(newStipend, existingStipend);
             // Update the entity in the data context
             _dataContext.Stipends.Update(existingStipend);
             await _dataContext.SaveChangesAsync();

@@ -1,6 +1,7 @@
 using TradesWomanBE.Models;
 using TradesWomanBE.Services.Context;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 
 namespace TradesWomanBE.Services
@@ -8,10 +9,11 @@ namespace TradesWomanBE.Services
     public class ClientServices
     {
         private readonly DataContext _dataContext;
-
-        public ClientServices(DataContext dataContext)
+        private readonly IMapper _mapper;
+        public ClientServices(DataContext dataContext, IMapper mapper)
         {
             _dataContext = dataContext;
+            _mapper = mapper;
         }
 
         private async Task<bool> DoesClientExistAsync(int? id)
@@ -43,35 +45,9 @@ namespace TradesWomanBE.Services
             if (await DoesClientExistAsync(clientModel.Id))
             {
                 ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
-                existingClient.Age = clientModel.Age;
-                existingClient.Firstname = clientModel.Firstname;
-                existingClient.Lastname = clientModel.Lastname;
-                existingClient.MiddleInitial = clientModel.MiddleInitial;
-                existingClient.Email = clientModel.Email;
-                existingClient.ChildrenUnderSix = clientModel.ChildrenUnderSix;
-                existingClient.ChildrenOverSix = clientModel.ChildrenOverSix;
-                existingClient.TotalHouseholdFamily = clientModel.TotalHouseholdFamily;
-                existingClient.SSNLastFour = clientModel.SSNLastFour;
-                existingClient.ValidSSNAuthToWrk = clientModel.ValidSSNAuthToWrk;
-                existingClient.CriminalHistory = clientModel.CriminalHistory;
-                existingClient.Disabled = clientModel.Disabled;
-                existingClient.FoundUsOn = clientModel.FoundUsOn;
-                existingClient.DateJoinedEAW = clientModel.DateJoinedEAW;
-                existingClient.Stipends = clientModel.Stipends;
-                existingClient.Address = clientModel.Address;
-                existingClient.City = clientModel.City;
-                existingClient.State = clientModel.State;
-                existingClient.ZipCode = clientModel.ZipCode;
-                existingClient.Gender = clientModel.Gender;
-                existingClient.Employed = clientModel.Employed;
-                existingClient.RecruiterName = clientModel.RecruiterName;
-                existingClient.DateRegistered = clientModel.DateRegistered;
-                existingClient.DateOfBirth = clientModel.DateOfBirth;
-                existingClient.ActiveOrFormerMilitary = clientModel.ActiveOrFormerMilitary;
-                existingClient.TotalMonthlyIncome = clientModel.TotalMonthlyIncome;
-                existingClient.PhoneNumber = clientModel.PhoneNumber;
-                existingClient.ProgramInfoId = clientModel.ProgramInfoId;
-                existingClient.IsDeleted = clientModel.IsDeleted;
+
+                // Map only the updated fields from clientModel to existingClient
+                _mapper.Map(clientModel, existingClient);
 
                 _dataContext.Update(existingClient);
                 return await _dataContext.SaveChangesAsync() > 0;

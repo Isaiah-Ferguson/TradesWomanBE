@@ -31,7 +31,7 @@ namespace TradesWomanBE.Controllers
             return CreatedAtAction(nameof(GetProgram), new { id = newStipend.Id }, newStipend);
         }
         [HttpPut("EditProgram/{id}")]
-        public async Task<IActionResult> EditMeeting(ProgramModel programToEdit)
+        public async Task<IActionResult> EditProgram(ProgramModel programToEdit)
         {
             var success = await _programServices.EditProgramAsync(programToEdit);
 

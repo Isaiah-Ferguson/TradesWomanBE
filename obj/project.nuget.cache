@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "ntMfA+qDILaK3e0R9aFD0cFQv0jE0oT83nYNGTYnlUuIJy9R18fJ2y0BdyPJxjYVI6aGeudzJIgXbxUDPzuQpA==",
+  "dgSpecHash": "yUiq3IuUbnRlOPyMOK9oH71qPYz8FJr6ZNJ0IGWZD8c8nb96aGz9GhIeIoFQImFdzMW680pfw7AijcKPYccgLQ==",
   "success": true,
-  "projectFilePath": "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
+  "projectFilePath": "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\crest\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\crest\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\crest\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\crest\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

@@ -15,6 +15,7 @@ builder.Services.AddScoped<MeetingsServices>();
 builder.Services.AddScoped<EmailServices>();
 builder.Services.AddScoped<ProgramServices>();
 builder.Services.AddScoped<CSVServices>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Database connection
 var connectionString = builder.Configuration.GetConnectionString("TEString");

@@ -4,6 +4,7 @@ C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\appsett
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\TradesWomanBE.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\TradesWomanBE.runtimeconfig.json
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\TradesWomanBE.pdb
+C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\AutoMapper.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\Azure.Core.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\Azure.Identity.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\publish\Microsoft.AspNetCore.Authentication.JwtBearer.dll

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TradesWomanBE.Models;
 using TradesWomanBE.Services.Context;
@@ -7,10 +8,12 @@ namespace TradesWomanBE.Services
     public class MeetingsServices
     {
         private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
 
-        public MeetingsServices(DataContext context)
+        public MeetingsServices(DataContext context, IMapper mapper)
         {
             _dataContext = context;
+            _mapper = mapper;
         }
 
         public async Task<bool> AddMeetingAsync(MeetingsModel newMeeting)
@@ -86,12 +89,7 @@ namespace TradesWomanBE.Services
             }
 
             // Update properties
-            exisintMeeting.LastContactMethod = newMeeting.LastContactMethod;
-            exisintMeeting.PreferedContact = newMeeting.PreferedContact;
-            exisintMeeting.LastDateContacted = newMeeting.LastDateContacted;
-            exisintMeeting.GrantName = newMeeting.GrantName;
-            exisintMeeting.RecruiterName = newMeeting.RecruiterName;
-            exisintMeeting.NumOfContacts = newMeeting.NumOfContacts;
+            _mapper.Map(newMeeting, exisintMeeting);
 
             // Update the entity in the data context
             _dataContext.Meetings.Update(exisintMeeting);

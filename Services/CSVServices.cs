@@ -75,14 +75,14 @@ namespace TradesWomanBE.Services
         private static string CSVHelper(List<ClientModel> clients)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("Client Id,FirstName,LastName,Last SNN, Middle Innitial,Email,ValidSSNAuthToWrk,CriminalHistory,Disabled,FoundUsOn,DateJoinedEAW,Stipends,Address,Gender,Employed,ProgramEnrolled,ProgramEndDate,CurrentStatus");
+            sb.AppendLine("Client Id,FirstName,LastName,Last SNN, Middle Innitial,Email,ValidSSNAuthToWrk,CriminalHistory,Disabled,FoundUsOn,DateJoinedEAW,Stipends,Address,Gender,Employed,ProgramEnrolled,ProgramEnrolledDate,ProgramEndDate,CurrentStatus,PreApprenticeshipProgram,TypeOfStipend");
 
             foreach (var client in clients)
             {
                 var program = client.ProgramInfo;
                 var stipend = client.Stipends;
                 sb.AppendLine($"{client.Id},{client.Firstname},{client.Lastname},{client.SSNLastFour},{client.MiddleInitial},{client.Email},{client.ValidSSNAuthToWrk},{client.CriminalHistory},{client.Disabled},{client.FoundUsOn},{client.DateJoinedEAW},{client.Stipends},{client.Address},{client.Gender},{client.Employed}," +
-                              $"{program?.ProgramEnrolled},{program?.EnrollDate},{program?.ProgramEndDate},{program?.CurrentStatus}");
+                              $"{program?.ProgramEnrolled},{program?.EnrollDate},{program?.ProgramEndDate},{program?.CurrentStatus}" + $"{stipend?.PreApprenticeshipProgram}, {stipend?.TypeOfStipend}");
             }
 
             return sb.ToString(); // Return the final CSV string
