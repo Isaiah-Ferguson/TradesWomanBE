@@ -28,10 +28,7 @@ namespace TradesWomanBE.Services
             }
             else
             {
-                var client = await _dataContext.ClientInfo
-                    .Include(c => c.ProgramInfo)
-                    .Include(c => c.Meetings) 
-                    .FirstOrDefaultAsync(item => item.Id == newProgram.ClientID);
+                var client = await _dataContext.ClientInfo.FirstOrDefaultAsync(item => item.Id == newProgram.ClientID);
 
                 if (client != null)
                 {
@@ -63,7 +60,6 @@ namespace TradesWomanBE.Services
             }
             _mapper.Map(newProgram, existingProgram);
 
-            // Update the entity in the data context
             _dataContext.Programs.Update(existingProgram);
             await _dataContext.SaveChangesAsync();
 
@@ -79,7 +75,6 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.Programs.AnyAsync(program => program.Id == id);
         }
-        //Stipends Begings
 
         public async Task<bool> AddStipendAsync(StipendsModel newStipend)
         {
@@ -118,16 +113,14 @@ namespace TradesWomanBE.Services
                 return false;
             }
 
-            // var Type is StipendsModel
             var existingStipend = await GetStipendByIdAsync(newStipend.Id);
 
-            // Check if the existing meeting was found
             if (existingStipend == null)
             {
                 return false;  
             }
+            
             _mapper.Map(newStipend, existingStipend);
-            // Update the entity in the data context
             _dataContext.Stipends.Update(existingStipend);
             await _dataContext.SaveChangesAsync();
 
@@ -143,7 +136,5 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.Stipends.AnyAsync(stipend => stipend.Id == id);
         }
-
-
     }
 }

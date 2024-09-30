@@ -29,14 +29,11 @@ namespace TradesWomanBE.Services
             }
             else
             {
-                var client = await _dataContext.ClientInfo
-                    .Include(c => c.ProgramInfo)
-                    .Include(c => c.Meetings) // Single Meeting
-                    .FirstOrDefaultAsync(item => item.Id == newMeeting.ClientID);
+                var client = await _dataContext.ClientInfo.FirstOrDefaultAsync(item => item.Id == newMeeting.ClientID);
 
                 if (client != null)
                 {
-                    client.Meetings = newMeeting; // Assign newMeeting to the single `Meetings` property
+                    client.Meetings = newMeeting;
                     _dataContext.ClientInfo.Update(client);
                     await _dataContext.SaveChangesAsync();
                 }
@@ -56,9 +53,7 @@ namespace TradesWomanBE.Services
                 return false;
             }
 
-            var meeting = await _dataContext.Meetings
-                .Include(m => m.MeetingNotes)
-                .FirstOrDefaultAsync(m => m.Id == newMeetingNotes.MeetingId);
+            var meeting = await _dataContext.Meetings.FirstOrDefaultAsync(m => m.Id == newMeetingNotes.MeetingId);
 
             if (meeting == null)
             {
@@ -66,7 +61,6 @@ namespace TradesWomanBE.Services
             }
 
             meeting.MeetingNotes.Add(newMeetingNotes);
-
             await _dataContext.SaveChangesAsync();
 
             return true;
@@ -79,19 +73,14 @@ namespace TradesWomanBE.Services
                 return false;
             }
 
-            // Get existing meeting by id
             MeetingsModel exisintMeeting = await GetMeetingByIdAsync(newMeeting.Id);
 
-            // Check if the existing meeting was found
             if (exisintMeeting == null)
             {
-                return false;  // Handle case when meeting doesn't exist
+                return false; 
             }
 
-            // Update properties
             _mapper.Map(newMeeting, exisintMeeting);
-
-            // Update the entity in the data context
             _dataContext.Meetings.Update(exisintMeeting);
             await _dataContext.SaveChangesAsync();
 

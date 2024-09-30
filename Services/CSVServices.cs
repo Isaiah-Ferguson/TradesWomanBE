@@ -15,7 +15,7 @@ namespace TradesWomanBE.Services
         }
         public string GetClientsAsCsv()
         {
-            var clients = _dataContext.ClientInfo.Include(c => c.ProgramInfo).ToList();
+            var clients = _dataContext.ClientInfo.Include(c => c.ProgramInfo).Include(c => c.Stipends).ToList();
             return CSVHelper(clients);
         }
         public string GetClientsAsCsvByDate(string startDate, string endDate)
@@ -31,6 +31,7 @@ namespace TradesWomanBE.Services
 
             var clients = _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
+                .Include(c => c.Stipends)
                 .ToList() // Move the data into memory before filtering the date.
                 .Where(c => DateTime.TryParse(c.DateRegistered, out var dateRegistered) &&
                             dateRegistered >= start && dateRegistered <= end)
@@ -45,7 +46,6 @@ namespace TradesWomanBE.Services
             DateTime start;
             DateTime end;
 
-            // Try parsing the input start and end dates
             if (!DateTime.TryParse(startDate, out start) || !DateTime.TryParse(endDate, out end))
             {
                 throw new FormatException("Start or End date is not in a valid DateTime format.");
@@ -54,7 +54,7 @@ namespace TradesWomanBE.Services
             var clients = _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
                 .Where(c => c.ProgramInfo != null && c.ProgramInfo.ProgramEnrolled == programName)
-                .ToList() // Move the data into memory before filtering the date.
+                .ToList()
                 .Where(c => DateTime.TryParse(c.DateRegistered, out var dateRegistered) &&
                             dateRegistered >= start && dateRegistered <= end)
                 .ToList();
@@ -66,6 +66,7 @@ namespace TradesWomanBE.Services
         {
             var clients = _dataContext.ClientInfo
                 .Include(c => c.ProgramInfo)
+                .Include(c => c.Stipends)
                 .Where(c => c.ProgramInfo != null && c.ProgramInfo.ProgramEnrolled == programName)
                 .ToList();
 

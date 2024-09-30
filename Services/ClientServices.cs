@@ -46,7 +46,6 @@ namespace TradesWomanBE.Services
             {
                 ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
 
-                // Map only the updated fields from clientModel to existingClient
                 _mapper.Map(clientModel, existingClient);
 
                 _dataContext.Update(existingClient);
@@ -107,9 +106,6 @@ namespace TradesWomanBE.Services
                 })
                 .ToListAsync();
         }
-
-
-
 
         public async Task<ClientModel> GetClientByIdAsync(int userId)
         {
