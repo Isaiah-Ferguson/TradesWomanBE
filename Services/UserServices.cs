@@ -107,7 +107,7 @@ namespace TradesWomanBE.Services
                     claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin });
+                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin, foundUser.Id, foundUser.FirstTimeLogin});
                 }
             }
             else if (DoesRecruiterExist(user.Email))
@@ -120,7 +120,7 @@ namespace TradesWomanBE.Services
                     claims.Add(new Claim(ClaimTypes.Role, "Recruiter"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin });
+                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin, foundUser.Id, foundUser.FirstTimeLogin });
                 }
             }
 
@@ -226,7 +226,6 @@ namespace TradesWomanBE.Services
                 RecruiterModel updateRecruiter = GetRecruiterByEmail(userToUpdate.Email);
 
                 var hashPassword = HashPassword(userToUpdate.Password);
-                updateRecruiter.Id = userToUpdate.Id;
                 updateRecruiter.Email = userToUpdate.Email;
                 updateRecruiter.Salt = hashPassword.Salt;
                 updateRecruiter.Hash = hashPassword.Hash;
@@ -248,7 +247,6 @@ namespace TradesWomanBE.Services
                 AdminUser updateAdmin = GetUserByEmail(userToUpdate.Email);
 
                 var hashPassword = HashPassword(userToUpdate.Password);
-                updateAdmin.Id = userToUpdate.Id;
                 updateAdmin.Email = userToUpdate.Email;
                 updateAdmin.Salt = hashPassword.Salt;
                 updateAdmin.Hash = hashPassword.Hash;
