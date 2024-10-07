@@ -230,6 +230,7 @@ namespace TradesWomanBE.Services
                 updateRecruiter.Email = userToUpdate.Email;
                 updateRecruiter.Salt = hashPassword.Salt;
                 updateRecruiter.Hash = hashPassword.Hash;
+                updateRecruiter.FirstTimeLogin = false;
 
                 _context.Update(updateRecruiter);
                 result = _context.SaveChanges() != 0;
@@ -251,6 +252,7 @@ namespace TradesWomanBE.Services
                 updateAdmin.Email = userToUpdate.Email;
                 updateAdmin.Salt = hashPassword.Salt;
                 updateAdmin.Hash = hashPassword.Hash;
+                updateAdmin.FirstTimeLogin = false;
 
                 _context.Update(updateAdmin);
                 result = _context.SaveChanges() != 0;
