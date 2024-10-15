@@ -12,7 +12,7 @@ using TradesWomanBE.Services.Context;
 namespace TradesWomanBE.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240926232036_init")]
+    [Migration("20241015185114_init")]
     partial class init
     {
         /// <inheritdoc />

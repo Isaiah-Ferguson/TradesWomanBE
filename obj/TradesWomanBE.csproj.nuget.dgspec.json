@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj": {}
+    "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj": {}
   },
   "projects": {
-    "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj": {
+    "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
+        "projectUniqueName": "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
         "projectName": "TradesWomanBE",
-        "projectPath": "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
+        "projectPath": "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\TradesWomanBE.csproj",
         "packagesPath": "C:\\Users\\crest\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\obj\\",
+        "outputPath": "C:\\Users\\crest\\OneDrive\\Desktop\\TradesWomanBE\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\crest\\AppData\\Roaming\\NuGet\\NuGet.Config",
