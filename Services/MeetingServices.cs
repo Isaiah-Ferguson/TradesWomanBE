@@ -69,7 +69,7 @@ namespace TradesWomanBE.Services
         public async Task<bool> EditMeetingAsync(MeetingsModel newMeeting)
         {
             if (newMeeting == null)
-            {
+            {   
                 return false;
             }
 
@@ -79,7 +79,6 @@ namespace TradesWomanBE.Services
             {
                 return false; 
             }
-
             _mapper.Map(newMeeting, exisintMeeting);
             _dataContext.Meetings.Update(exisintMeeting);
             await _dataContext.SaveChangesAsync();
@@ -90,7 +89,8 @@ namespace TradesWomanBE.Services
 
         public async Task<MeetingsModel?> GetMeetingByIdAsync(int id)
         {
-            return await _dataContext.Meetings.Include(m => m.MeetingNotes).FirstOrDefaultAsync(meetings => meetings.Id == id);
+            return await _dataContext.Meetings.AsNoTracking().Include(m => m.MeetingNotes).FirstOrDefaultAsync(meetings => meetings.Id == id);
+            // return await _dataContext.Meetings.Include(m => m.MeetingNotes).FirstOrDefaultAsync(meetings => meetings.Id == id);
         }
 
         public async Task<bool> DoesMeetingExistAsync(int id)
