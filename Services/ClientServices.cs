@@ -40,19 +40,66 @@ namespace TradesWomanBE.Services
             return false;
         }
 
+        // public async Task<bool> EditClientAsync(ClientModel clientModel)
+        // {
+        //     if (await DoesClientExistAsync(clientModel.Id))
+        //     {
+        //         ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
+
+        //         _mapper.Map(clientModel, existingClient);
+
+        //         _dataContext.Update(existingClient);
+        //         return await _dataContext.SaveChangesAsync() > 0;
+        //     }
+        //     return false;
+        // }
+
         public async Task<bool> EditClientAsync(ClientModel clientModel)
         {
             if (await DoesClientExistAsync(clientModel.Id))
             {
+                // Get the existing client record from the database
                 ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
 
-                _mapper.Map(clientModel, existingClient);
+                // Update only the required fields (excluding ProgramInfo, Meetings, Stipends, and Id)
+                existingClient.Age = clientModel.Age;
+                existingClient.Firstname = clientModel.Firstname;
+                existingClient.Lastname = clientModel.Lastname;
+                existingClient.MiddleInitial = clientModel.MiddleInitial;
+                existingClient.Email = clientModel.Email;
+                existingClient.ChildrenUnderSix = clientModel.ChildrenUnderSix;
+                existingClient.ChildrenOverSix = clientModel.ChildrenOverSix;
+                existingClient.TotalHouseholdFamily = clientModel.TotalHouseholdFamily;
+                existingClient.SSNLastFour = clientModel.SSNLastFour;
+                existingClient.ValidSSNAuthToWrk = clientModel.ValidSSNAuthToWrk;
+                existingClient.CriminalHistory = clientModel.CriminalHistory;
+                existingClient.Disabled = clientModel.Disabled;
+                existingClient.FoundUsOn = clientModel.FoundUsOn;
+                existingClient.DateJoinedEAW = clientModel.DateJoinedEAW;
+                existingClient.Address = clientModel.Address;
+                existingClient.City = clientModel.City;
+                existingClient.State = clientModel.State;
+                existingClient.ZipCode = clientModel.ZipCode;
+                existingClient.Gender = clientModel.Gender;
+                existingClient.Employed = clientModel.Employed;
+                existingClient.RecruiterName = clientModel.RecruiterName;
+                existingClient.DateRegistered = clientModel.DateRegistered;
+                existingClient.DateOfBirth = clientModel.DateOfBirth;
+                existingClient.ActiveOrFormerMilitary = clientModel.ActiveOrFormerMilitary;
+                existingClient.TotalMonthlyIncome = clientModel.TotalMonthlyIncome;
+                existingClient.PhoneNumber = clientModel.PhoneNumber;
+                existingClient.HighestEducation = clientModel.HighestEducation;
+                existingClient.ValidCALicense = clientModel.ValidCALicense;
+                existingClient.County = clientModel.County;
+                existingClient.Ethnicity = clientModel.Ethnicity;
 
+                // Save changes to the database
                 _dataContext.Update(existingClient);
                 return await _dataContext.SaveChangesAsync() > 0;
             }
             return false;
         }
+
 
         public async Task<bool> DeleteClientAsync(ClientModel clientModel)
         {
