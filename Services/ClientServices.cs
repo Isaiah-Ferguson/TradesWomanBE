@@ -16,10 +16,10 @@ namespace TradesWomanBE.Services
             _mapper = mapper;
         }
 
-        private async Task<bool> DoesClientExistAsync(int? id)
+        private async Task<bool> DoesClientExistAsync(int? SSN)
         {
             return await _dataContext.ClientInfo
-                .SingleOrDefaultAsync(client => client.Id == id) != null;
+                .SingleOrDefaultAsync(client => client.SSNLastFour == SSN) != null;
         }
 
         public async Task<IEnumerable<ClientModel>> GetLast30ClientsAsync()

@@ -75,5 +75,16 @@ namespace TradesWomanBE.Controllers
 
             return CreatedAtAction(nameof(GetMeeting), new { id = newMeetingNotes.Id }, newMeetingNotes);
         }
+        [HttpPost("EditMeetingNotes")]
+        public async Task<IActionResult> EditMeetingNotes(MeetingNotesModel newMeetingNotes)
+        {
+            var success = await _meetingsService.EditMeetingNotesAsync(newMeetingNotes);             
+            if (!success)
+            {
+                return BadRequest("Meeting data is null or invalid.");
+            }
+
+            return CreatedAtAction(nameof(GetMeeting), new { id = newMeetingNotes.Id }, newMeetingNotes);
+        }
     }
 }

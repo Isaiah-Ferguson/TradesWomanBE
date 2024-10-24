@@ -66,10 +66,35 @@ namespace TradesWomanBE.Services
             return true;
         }
 
+        public async Task<bool> EditMeetingNotesAsync(MeetingNotesModel newMeetingNotes)
+        {
+            if (newMeetingNotes == null)
+            {
+                return false;
+            }
+
+            // Find the specific meeting note by its Id
+            var existingMeetingNote = await _dataContext.MeetingNotes
+                .FirstOrDefaultAsync(mn => mn.Id == newMeetingNotes.Id);
+
+            if (existingMeetingNote == null)
+            {
+                return false; // If the note doesn't exist, return false
+            }
+
+            // Update the existing meeting note with the new values
+            existingMeetingNote.Notes = newMeetingNotes.Notes;
+
+            // Save changes to the database
+            _dataContext.MeetingNotes.Update(existingMeetingNote);
+            return await _dataContext.SaveChangesAsync() > 0;
+        }
+
+
         public async Task<bool> EditMeetingAsync(MeetingsModel newMeeting)
         {
             if (newMeeting == null)
-            {   
+            {
                 return false;
             }
 
@@ -77,7 +102,7 @@ namespace TradesWomanBE.Services
 
             if (exisintMeeting == null)
             {
-                return false; 
+                return false;
             }
             _mapper.Map(newMeeting, exisintMeeting);
             _dataContext.Meetings.Update(exisintMeeting);

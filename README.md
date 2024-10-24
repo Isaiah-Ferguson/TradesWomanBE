@@ -95,7 +95,7 @@ The HelperMethod constructs a CSV file using a StringBuilder, which efficiently 
 ## Returning CSV as String:
 The result of the helper method is a string that represents the full CSV content, which can be further used for downloading or storing the data.
 
-### What using Does
+### What 'using' Does
 
 1. Manages Resources Automatically: When you open a connection to something external (like a database or email service), that connection needs to be closed to free up system resources.
 

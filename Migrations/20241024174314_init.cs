@@ -41,8 +41,9 @@ namespace TradesWomanBE.Migrations
                     NumOfContacts = table.Column<int>(type: "int", nullable: false),
                     LastDateContacted = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastContactMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PreferedContact = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GrantName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PreferredContact = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GrantName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeOfSupportRequested = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

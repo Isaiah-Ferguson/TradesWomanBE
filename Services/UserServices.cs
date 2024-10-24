@@ -107,7 +107,7 @@ namespace TradesWomanBE.Services
                     claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin, foundUser.Id, foundUser.FirstTimeLogin});
+                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin, foundUser.Id, foundUser.FirstTimeLogin });
                 }
             }
             else if (DoesRecruiterExist(user.Email))
@@ -150,9 +150,48 @@ namespace TradesWomanBE.Services
             return _context.AdminUsers.SingleOrDefault(user => user.Email == Email);
         }
 
-        public RecruiterModel GetRecruiterByEmail(string Email)
+        public RecruiterModel GetRecruiterByEmail(string email)
         {
-            return _context.RecruiterInfo.SingleOrDefault(user => user.Email == Email);
+            return _context.RecruiterInfo
+                .Where(user => user.Email == email)
+                .Select(user => new RecruiterModel
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    MiddleInitial = user.MiddleInitial,
+                    Department = user.Department,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    FirstTimeLogin = user.FirstTimeLogin,
+                    Status = user.Status,
+                    Location = user.Location,
+                    IsAdmin = user.IsAdmin,
+                    SupervisorName = user.SupervisorName,
+                    JobTitle = user.JobTitle,
+                })
+                .SingleOrDefault();
+        }
+
+        public RecruiterDTO GetRecruiterByEmailEP(string email)
+        {
+            return _context.RecruiterInfo
+                .Where(user => user.Email == email)
+                .Select(user => new RecruiterDTO
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    MiddleInitial = user.MiddleInitial,
+                    Department = user.Department,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    FirstTimeLogin = user.FirstTimeLogin,
+                    Status = user.Status,
+                    Location = user.Location,
+                    IsAdmin = user.IsAdmin,
+                    SupervisorName = user.SupervisorName,
+                    JobTitle = user.JobTitle
+                })
+                .SingleOrDefault();
         }
 
         public async Task<bool> UpdateRecruiterAsync(RecruiterModel userToUpdate)
@@ -259,13 +298,38 @@ namespace TradesWomanBE.Services
             return result;
         }
 
-        public async Task<IEnumerable<RecruiterModel>> GetAllRecruitersAsync()
+        public async Task<IEnumerable<object>> GetAllRecruitersAsync()
         {
-            return await _context.RecruiterInfo.ToListAsync();
+            return await _context.RecruiterInfo.Where(c => c.IsDeleted == false)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.FirstName,
+                    c.LastName,
+                    c.Email
+                })
+                .ToListAsync();
         }
-        public async Task<RecruiterModel> GetRecruiterByEmailAsync(string email)
+        public async Task<RecruiterDTO> GetRecruiterByEmailAsync(string email)
         {
-            return await _context.RecruiterInfo.FirstOrDefaultAsync(item => item.Email == email);
+            return await _context.RecruiterInfo
+                .Where(user => user.Email == email)
+                .Select(user => new RecruiterDTO
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    MiddleInitial = user.MiddleInitial,
+                    Department = user.Department,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    FirstTimeLogin = user.FirstTimeLogin,
+                    Status = user.Status,
+                    Location = user.Location,
+                    IsAdmin = user.IsAdmin,
+                    SupervisorName = user.SupervisorName,
+                    JobTitle = user.JobTitle
+                })
+                .SingleOrDefaultAsync();
         }
     }
 }

@@ -12,7 +12,7 @@ using TradesWomanBE.Services.Context;
 namespace TradesWomanBE.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241015185114_init")]
+    [Migration("20241024174314_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -233,10 +233,13 @@ namespace TradesWomanBE.Migrations
                     b.Property<int>("NumOfContacts")
                         .HasColumnType("int");
 
-                    b.Property<string>("PreferedContact")
+                    b.Property<string>("PreferredContact")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RecruiterName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeOfSupportRequested")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

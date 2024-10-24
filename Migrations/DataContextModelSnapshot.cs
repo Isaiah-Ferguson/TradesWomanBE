@@ -230,10 +230,13 @@ namespace TradesWomanBE.Migrations
                     b.Property<int>("NumOfContacts")
                         .HasColumnType("int");
 
-                    b.Property<string>("PreferedContact")
+                    b.Property<string>("PreferredContact")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RecruiterName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeOfSupportRequested")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
