@@ -40,23 +40,9 @@ namespace TradesWomanBE.Services
             return false;
         }
 
-        // public async Task<bool> EditClientAsync(ClientModel clientModel)
-        // {
-        //     if (await DoesClientExistAsync(clientModel.Id))
-        //     {
-        //         ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
-
-        //         _mapper.Map(clientModel, existingClient);
-
-        //         _dataContext.Update(existingClient);
-        //         return await _dataContext.SaveChangesAsync() > 0;
-        //     }
-        //     return false;
-        // }
-
         public async Task<bool> EditClientAsync(ClientModel clientModel)
         {
-            if (await DoesClientExistAsync(clientModel.Id))
+            if (await DoesClientExistAsync(clientModel.SSNLastFour))
             {
                 // Get the existing client record from the database
                 ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
