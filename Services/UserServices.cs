@@ -112,7 +112,7 @@ namespace TradesWomanBE.Services
             }
             else if (DoesRecruiterExist(user.Email))
             {
-                RecruiterModel foundUser = GetRecruiterByEmail(user.Email);
+                RecruiterModel foundUser = GetRecruiterByEmailHelper(user.Email);
                 if (VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
                 {
                     // Add claims for the Recruiter User
@@ -148,6 +148,11 @@ namespace TradesWomanBE.Services
         public AdminUser GetUserByEmail(string Email)
         {
             return _context.AdminUsers.SingleOrDefault(user => user.Email == Email);
+        }
+
+        private RecruiterModel GetRecruiterByEmailHelper(string email)
+        {
+           return _context.RecruiterInfo.SingleOrDefault(recruiter => recruiter.Email == email);
         }
 
         public RecruiterModel GetRecruiterByEmail(string email)
