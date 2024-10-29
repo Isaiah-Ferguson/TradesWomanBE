@@ -173,6 +173,8 @@ namespace TradesWomanBE.Services
                     IsAdmin = user.IsAdmin,
                     SupervisorName = user.SupervisorName,
                     JobTitle = user.JobTitle,
+                    PhoneNumber = user.PhoneNumber,
+                    HireDate = user.HireDate
                 })
                 .SingleOrDefault();
         }
@@ -202,12 +204,15 @@ namespace TradesWomanBE.Services
         public async Task<bool> UpdateRecruiterAsync(RecruiterModel userToUpdate)
         {
             var existingRecruiter = GetUserById(userToUpdate.Id);
+            var mapingRecruiter = existingRecruiter;
 
             if (existingRecruiter == null)
             {
                 return false; // Recruiter not found
             }
             _mapper.Map(userToUpdate, existingRecruiter);
+            existingRecruiter.Hash = mapingRecruiter.Hash;
+            existingRecruiter.Salt = mapingRecruiter.Salt;
 
             _context.RecruiterInfo.Update(existingRecruiter);
 
@@ -311,7 +316,8 @@ namespace TradesWomanBE.Services
                     c.Id,
                     c.FirstName,
                     c.LastName,
-                    c.Email
+                    c.Email,
+                    c.SupervisorName
                 })
                 .ToListAsync();
         }
@@ -332,7 +338,9 @@ namespace TradesWomanBE.Services
                     Location = user.Location,
                     IsAdmin = user.IsAdmin,
                     SupervisorName = user.SupervisorName,
-                    JobTitle = user.JobTitle
+                    JobTitle = user.JobTitle,
+                    PhoneNumber = user.PhoneNumber,
+                    HireDate = user.HireDate
                 })
                 .SingleOrDefaultAsync();
         }
