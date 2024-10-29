@@ -267,7 +267,7 @@ namespace TradesWomanBE.Services
             bool result = false;
             if (DoesRecruiterExist(userToUpdate.Email))
             {
-                RecruiterModel updateRecruiter = GetRecruiterByEmail(userToUpdate.Email);
+                RecruiterModel updateRecruiter = GetRecruiterByEmailHelper(userToUpdate.Email);
 
                 var hashPassword = HashPassword(userToUpdate.Password);
                 updateRecruiter.Email = userToUpdate.Email;
