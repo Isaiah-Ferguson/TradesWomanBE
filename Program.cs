@@ -25,7 +25,7 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(conne
 builder.Services.AddCors(options => {
     options.AddPolicy("TEPolicy", 
     builder => {
-        builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://thankful-coast-03112031e.5.azurestaticapps.net/")
+        builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://thankful-coast-03112031e.5.azurestaticapps.net")
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
