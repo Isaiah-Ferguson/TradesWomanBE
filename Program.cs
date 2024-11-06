@@ -25,7 +25,7 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(conne
 builder.Services.AddCors(options => {
     options.AddPolicy("TEPolicy", 
     builder => {
-        builder.WithOrigins("http://localhost:3000", "http://localhost:3001")
+        builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://thankful-coast-03112031e.5.azurestaticapps.net/")
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
@@ -47,11 +47,20 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "http://localhost:5000",  // Issuer
-        ValidAudience = "http://localhost:5000", // Audience
+        ValidIssuers = new[] 
+        { 
+            "https://thankful-coast-03112031e.5.azurestaticapps.net", // Hosted site
+            "http://localhost:5000"  // Local testing
+        },
+        ValidAudiences = new[] 
+        { 
+            "https://thankful-coast-03112031e.5.azurestaticapps.net", // Hosted site
+            "http://localhost:5000"  // Local testing
+        },
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)) // Secret key
     };
 });
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
