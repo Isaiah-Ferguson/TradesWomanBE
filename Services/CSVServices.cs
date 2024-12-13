@@ -2,6 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using TradesWomanBE.Services.Context;
 using System.Text;
 using TradesWomanBE.Models;
+using CsvHelper;
+using System.Globalization;
+using CsvHelper.Configuration;
+using System.IO;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TradesWomanBE.Services
 {
@@ -89,6 +95,35 @@ namespace TradesWomanBE.Services
             return sb.ToString(); // Return the final CSV string
         }
 
+        public async Task<List<ClientModel>> ImportClientsFromCsvAsync(Stream csvStream)
+        {
+            var clients = new List<ClientModel>();
 
+            using (var reader = new StreamReader(csvStream))
+            using (var csv = new CsvHelper.CsvReader(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = true // Indicates the first row contains headers
+            }))
+            {
+                var records = csv.GetRecords<ClientModel>();
+                clients.AddRange(records);
+            }
+
+            return await Task.FromResult(clients);
+        }
+
+        public async Task SaveClientsToDatabaseAsync(List<ClientModel> clients)
+        {
+            if (clients == null || !clients.Any())
+            {
+                throw new ArgumentException("The client list is empty or null.");
+            }
+
+            // Add clients to the database
+            await _dataContext.ClientInfo.AddRangeAsync(clients);
+
+            // Save changes
+            await _dataContext.SaveChangesAsync();
+        }
     }
 }

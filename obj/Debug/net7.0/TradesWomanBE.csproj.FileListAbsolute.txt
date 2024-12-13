@@ -76,3 +76,4 @@ c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\refint\TradesWoma
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.pdb
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\TradesWomanBE.genruntimeconfig.cache
 c:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Debug\net7.0\ref\TradesWomanBE.dll
+c:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Debug\net7.0\CsvHelper.dll
