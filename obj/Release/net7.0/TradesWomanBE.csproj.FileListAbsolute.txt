@@ -76,3 +76,4 @@ C:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Release\net7.0\TradesWomanBE.g
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\obj\Release\net7.0\ref\TradesWomanBE.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\AutoMapper.dll
+C:\Users\crest\OneDrive\Desktop\TradesWomanBE\bin\Release\net7.0\CsvHelper.dll

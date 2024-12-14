@@ -88,7 +88,7 @@ namespace TradesWomanBE.Controllers
         catch (Exception ex)
         {
             // Log the error (not shown here)
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            return StatusCode(500, $"Internal server error: {ex.Message} This is the File Name {file.FileName}, Size: {file.Length}");
         }
     }
 
