@@ -50,12 +50,14 @@ builder.Services.AddAuthentication(options =>
         ValidIssuers = new[] 
         { 
             "https://thankful-coast-03112031e.5.azurestaticapps.net", // Hosted site
-            "http://localhost:5000"  // Local testing
+            "http://localhost:5000",
+            "https://localhost:5281"  // Local testing
         },
         ValidAudiences = new[] 
         { 
             "https://thankful-coast-03112031e.5.azurestaticapps.net", // Hosted site
-            "http://localhost:5000"  // Local testing
+            "http://localhost:5000",
+            "https://localhost:5281"
         },
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)) // Secret key
     };

@@ -5,9 +5,7 @@ using TradesWomanBE.Models;
 using CsvHelper;
 using System.Globalization;
 using CsvHelper.Configuration;
-using System.IO;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 
 namespace TradesWomanBE.Services
 {
@@ -99,18 +97,32 @@ namespace TradesWomanBE.Services
         {
             var clients = new List<ClientModel>();
 
+            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HeaderValidated = null, // Skip validation for missing headers
+                MissingFieldFound = null // Ignore missing fields
+            };
+
             using (var reader = new StreamReader(csvStream))
-            using (var csv = new CsvHelper.CsvReader(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+            using (var csv = new CsvReader(reader, csvConfig))
             {
-                HasHeaderRecord = true // Indicates the first row contains headers
-            }))
-            {
-                var records = csv.GetRecords<ClientModel>();
-                clients.AddRange(records);
+
+                try
+                {
+                    var records = csv.GetRecords<ClientModel>();
+                    clients.AddRange(records);
+                    Console.WriteLine("Clients Data" + clients);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error while parsing CSV: {ex.Message}");
+                    throw;
+                }
             }
 
-            return await Task.FromResult(clients);
+            return clients;
         }
+
 
         public async Task SaveClientsToDatabaseAsync(List<ClientModel> clients)
         {
@@ -119,10 +131,8 @@ namespace TradesWomanBE.Services
                 throw new ArgumentException("The client list is empty or null.");
             }
 
-            // Add clients to the database
             await _dataContext.ClientInfo.AddRangeAsync(clients);
 
-            // Save changes
             await _dataContext.SaveChangesAsync();
         }
     }

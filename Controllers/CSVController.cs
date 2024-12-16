@@ -59,38 +59,36 @@ namespace TradesWomanBE.Controllers
             return File(stream, "text/csv", "clients.csv");
         }
         [HttpPost("ImportClientsFromCsv")]
-    public async Task<IActionResult> ImportClientsFromCsv([FromForm] IFormFile file)
-    {
-        if (file == null || file.Length == 0)
+        public async Task<IActionResult> ImportClientsFromCsv([FromForm] IFormFile file)
         {
-            return BadRequest("Please upload a valid CSV file.");
-        }
-
-        try
-        {
-            using (var stream = new MemoryStream())
+            if (file == null || file.Length == 0)
             {
-                await file.CopyToAsync(stream);
-                stream.Position = 0; // Reset the stream position for reading
+                return BadRequest("Please upload a valid CSV file.");
+            }
 
-                var clients = await _csvServices.ImportClientsFromCsvAsync(stream);
-
-                // If you want to save clients to the database, do it here
-                await _csvServices.SaveClientsToDatabaseAsync(clients);
-
-                return Ok(new
+            try
+            {
+                using (var stream = new MemoryStream())
                 {
-                    Message = "Clients imported successfully.",
-                    ClientCount = clients.Count
-                });
+                    await file.CopyToAsync(stream);
+                    stream.Position = 0; // Reset the stream position for reading
+
+                    var clients = await _csvServices.ImportClientsFromCsvAsync(stream);
+
+                    await _csvServices.SaveClientsToDatabaseAsync(clients);
+
+                    return Ok(new
+                    {
+                        Message = "Clients imported successfully.",
+                        ClientCount = clients.Count
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message} This is the File Name {file.FileName}, Size: {file.Length}");
             }
         }
-        catch (Exception ex)
-        {
-            // Log the error (not shown here)
-            return StatusCode(500, $"Internal server error: {ex.Message} This is the File Name {file.FileName}, Size: {file.Length}");
-        }
-    }
 
     }
 }

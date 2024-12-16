@@ -54,6 +54,7 @@ Next Js.
 - `GET /CSV/ExportClientsByProgram/{Program}.`: Exports Clients into a CSV File Filtered By Program.
 - `GET /CSV/ExportClientsByDate/{StartDate}/{EndDate}`: Exports Clients into a CSV File filtered By Date.
 - `GET /CSV/ExportClientsByDate{StartDate}/{EndDate}/{Program}`: Exports Clients into a CSV File filtered By Date and Program.
+- `POST /CSV/ImportClientsFromCsv`: Imports Clients Info from a CSV File.
 
 
 
