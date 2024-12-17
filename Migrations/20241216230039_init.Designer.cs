@@ -12,7 +12,7 @@ using TradesWomanBE.Services.Context;
 namespace TradesWomanBE.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241121162522_init")]
+    [Migration("20241216230039_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -245,6 +245,25 @@ namespace TradesWomanBE.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Meetings");
+                });
+
+            modelBuilder.Entity("TradesWomanBE.Models.ProgramLookUpModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProgramName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProgramLookUps");
                 });
 
             modelBuilder.Entity("TradesWomanBE.Models.ProgramModel", b =>

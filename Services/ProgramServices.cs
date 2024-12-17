@@ -14,7 +14,7 @@ namespace TradesWomanBE.Services
             _dataContext = dataContext;
             _mapper = mapper;
         }
-
+        // ************************* Program Methods and Logic ***********************
         public async Task<bool> AddProgramAsync(ProgramModel newProgram)
         {
             if (newProgram == null)
@@ -32,7 +32,7 @@ namespace TradesWomanBE.Services
 
                 if (client != null)
                 {
-                    client.ProgramInfo = newProgram; 
+                    client.ProgramInfo = newProgram;
                     _dataContext.ClientInfo.Update(client);
                     await _dataContext.SaveChangesAsync();
                 }
@@ -56,7 +56,7 @@ namespace TradesWomanBE.Services
 
             if (existingProgram == null)
             {
-                return false;  
+                return false;
             }
             _mapper.Map(newProgram, existingProgram);
 
@@ -76,6 +76,7 @@ namespace TradesWomanBE.Services
             return await _dataContext.Programs.AnyAsync(program => program.Id == id);
         }
 
+        //************************ Stipends Methods and Logic ********************************
         public async Task<bool> AddStipendAsync(StipendsModel newStipend)
         {
             if (newStipend == null)
@@ -117,9 +118,9 @@ namespace TradesWomanBE.Services
 
             if (existingStipend == null)
             {
-                return false;  
+                return false;
             }
-            
+
             _mapper.Map(newStipend, existingStipend);
             _dataContext.Stipends.Update(existingStipend);
             await _dataContext.SaveChangesAsync();
@@ -136,5 +137,44 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.Stipends.AnyAsync(stipend => stipend.Id == id);
         }
+
+        // *************Program Look Up Table Logic and Functions***************
+
+        public async Task<bool> AddProgramLookUpAsync(ProgramLookUpModel programLookUp)
+        {
+            if (!await DoesProgramNameExistAsync(programLookUp.ProgramName))
+            {
+                await _dataContext.AddAsync(programLookUp);
+                return await _dataContext.SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+        public async Task<bool> EditProgramLookUpAsync(ProgramLookUpModel programLookUp)
+        {
+            if (await DoesProgramNameExistAsync(programLookUp.ProgramName))
+            {
+                var existingProgramName = await GetProgramByIdAsync(programLookUp);
+                existingProgramName.ProgramName = programLookUp.ProgramName;
+
+                _dataContext.Update(existingProgramName);
+                return await _dataContext.SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+
+        public async Task<IEnumerable<ProgramLookUpModel>> GetProgramLookUpAsync()
+        {
+            return await _dataContext.ProgramLookUps.ToListAsync();
+        }
+
+        public async Task<bool> DoesProgramNameExistAsync(string programName)
+        {
+            return await _dataContext.ProgramLookUps.AnyAsync(p => p.ProgramName == programName);
+        }
+        public async Task<ProgramLookUpModel> GetProgramByIdAsync(ProgramLookUpModel programLookUp)
+        {
+            return await _dataContext.ProgramLookUps.FirstOrDefaultAsync(p => p.Id == programLookUp.Id);
+        }
+
     }
 }

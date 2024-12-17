@@ -12,6 +12,7 @@ namespace TradesWomanBE.Services.Context
         public DbSet<MeetingsModel> Meetings { get; set; }
         public DbSet<MeetingNotesModel> MeetingNotes { get; set; }
         public DbSet<StipendsModel> Stipends { get; set; }
+        public DbSet<ProgramLookUpModel> ProgramLookUps { get; set;}
        public DataContext(DbContextOptions options) : base (options){}
 
         protected override void OnModelCreating(ModelBuilder builder)

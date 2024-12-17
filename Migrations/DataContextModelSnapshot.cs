@@ -244,6 +244,25 @@ namespace TradesWomanBE.Migrations
                     b.ToTable("Meetings");
                 });
 
+            modelBuilder.Entity("TradesWomanBE.Models.ProgramLookUpModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProgramName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProgramLookUps");
+                });
+
             modelBuilder.Entity("TradesWomanBE.Models.ProgramModel", b =>
                 {
                     b.Property<int>("Id")

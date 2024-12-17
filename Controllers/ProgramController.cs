@@ -92,5 +92,34 @@ namespace TradesWomanBE.Controllers
 
             return Ok(stipend);
         }
+
+        [HttpGet("GetProgramLookUp")]
+        public async Task<IActionResult> GetProgramLookUp(){
+            var programs = await _programServices.GetProgramLookUpAsync();
+            return Ok(programs);
+        }
+
+        [HttpPost("AddProgramLookUpName")]
+        public async Task<IActionResult> AddProgramLookUpName(ProgramLookUpModel newProgramName)
+        {
+            var success = await _programServices.AddProgramLookUpAsync(newProgramName);
+            if (!success)
+            {
+                return BadRequest("Unable to add Program Name. Please check the provided data. Program might exist in Database");
+            }
+            return Ok("Program added successfully.");
+        }
+
+        [HttpPut("EditProgramLookUpName")]
+        public async Task<IActionResult> EditProgramLookUpName(ProgramLookUpModel newProgramName)
+        {
+            var success = await _programServices.EditProgramLookUpAsync(newProgramName);
+            if (!success)
+            {
+                return BadRequest("Unable to Edit Program Name. Please check the provided data.");
+            }
+            return Ok("Program added successfully.");
+        }
+
     }
 }

@@ -51,6 +51,20 @@ namespace TradesWomanBE.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProgramLookUps",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProgramLookUps", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Programs",
                 columns: table => new
                 {
@@ -229,6 +243,9 @@ namespace TradesWomanBE.Migrations
 
             migrationBuilder.DropTable(
                 name: "MeetingNotes");
+
+            migrationBuilder.DropTable(
+                name: "ProgramLookUps");
 
             migrationBuilder.DropTable(
                 name: "RecruiterInfo");
