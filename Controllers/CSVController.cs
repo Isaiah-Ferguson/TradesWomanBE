@@ -58,6 +58,7 @@ namespace TradesWomanBE.Controllers
 
             return File(stream, "text/csv", "clients.csv");
         }
+
         [HttpPost("ImportClientsFromCsv")]
         public async Task<IActionResult> ImportClientsFromCsv([FromForm] IFormFile file)
         {
@@ -87,6 +88,66 @@ namespace TradesWomanBE.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message} This is the File Name {file.FileName}, Size: {file.Length}");
+            }
+        }
+
+    
+
+    [HttpPost("ImportProgramsFromCsv")]
+        public async Task<IActionResult> ImportProgramsFromCsv([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Please upload a valid CSV file.");
+            }
+
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    await file.CopyToAsync(stream);
+                    stream.Position = 0;
+
+                    await _csvServices.ImportProgramsFromCsvAsync(stream);
+
+                    return Ok(new
+                    {
+                        Message = "Programs imported successfully.",
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("ImportStipendsFromCsv")]
+        public async Task<IActionResult> ImportStipendsFromCsv([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Please upload a valid CSV file.");
+            }
+
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    await file.CopyToAsync(stream);
+                    stream.Position = 0;
+
+                    await _csvServices.ImportStipendsFromCsvAsync(stream);
+
+                    return Ok(new
+                    {
+                        Message = "Programs imported successfully.",
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 

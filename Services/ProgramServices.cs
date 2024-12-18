@@ -28,7 +28,7 @@ namespace TradesWomanBE.Services
             }
             else
             {
-                var client = await _dataContext.ClientInfo.FirstOrDefaultAsync(item => item.Id == newProgram.ClientID);
+                var client = await _dataContext.ClientInfo.FirstOrDefaultAsync(client => client.Id == newProgram.ClientID);
 
                 if (client != null)
                 {

@@ -12,10 +12,12 @@ namespace TradesWomanBE.Services
     public class CSVServices
     {
         private readonly DataContext _dataContext;
+        private readonly ProgramServices _programServices;
 
-        public CSVServices(DataContext dataContext)
+        public CSVServices(DataContext dataContext, ProgramServices programServices)
         {
             _dataContext = dataContext;
+            _programServices = programServices;
         }
         public string GetClientsAsCsv()
         {
@@ -122,6 +124,32 @@ namespace TradesWomanBE.Services
 
             return clients;
         }
+
+        public async Task ImportProgramsFromCsvAsync(Stream filePath)
+        {
+            using var reader = new StreamReader(filePath);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            var programRecords = csv.GetRecords<ProgramModel>().ToList();
+
+            foreach (var program in programRecords)
+            {
+                await _programServices.AddProgramAsync(program);
+            }
+        }
+        public async Task ImportStipendsFromCsvAsync(Stream filePath)
+        {
+            using var reader = new StreamReader(filePath);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            var stipendsRecords = csv.GetRecords<StipendsModel>().ToList();
+
+            foreach (var stipend in stipendsRecords)
+            {
+                await _programServices.AddStipendAsync(stipend);
+            }
+        }
+
 
 
         public async Task SaveClientsToDatabaseAsync(List<ClientModel> clients)
