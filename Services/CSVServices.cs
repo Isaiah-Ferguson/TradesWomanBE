@@ -5,6 +5,7 @@ using TradesWomanBE.Models;
 using CsvHelper;
 using System.Globalization;
 using CsvHelper.Configuration;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace TradesWomanBE.Services
@@ -13,11 +14,13 @@ namespace TradesWomanBE.Services
     {
         private readonly DataContext _dataContext;
         private readonly ProgramServices _programServices;
+        private readonly MeetingsServices _meetingServices;
 
-        public CSVServices(DataContext dataContext, ProgramServices programServices)
+        public CSVServices(DataContext dataContext, ProgramServices programServices, MeetingsServices meetingServices)
         {
             _dataContext = dataContext;
             _programServices = programServices;
+            _meetingServices = meetingServices;
         }
         public string GetClientsAsCsv()
         {
@@ -101,7 +104,7 @@ namespace TradesWomanBE.Services
 
             var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                HeaderValidated = null, // Skip validation for missing headers
+                HeaderValidated = null, 
                 MissingFieldFound = null // Ignore missing fields
             };
 
@@ -113,7 +116,7 @@ namespace TradesWomanBE.Services
                 {
                     var records = csv.GetRecords<ClientModel>();
                     clients.AddRange(records);
-                    Console.WriteLine("Clients Data" + clients);
+                    
                 }
                 catch (Exception ex)
                 {
@@ -147,6 +150,32 @@ namespace TradesWomanBE.Services
             foreach (var stipend in stipendsRecords)
             {
                 await _programServices.AddStipendAsync(stipend);
+            }
+        }
+
+        public async Task ImportMeetingsFromCsvAsync(Stream filePath)
+        {
+            using var reader = new StreamReader(filePath);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            var meetingRecords = csv.GetRecords<MeetingsModel>().ToList();
+
+            foreach (var meeting in meetingRecords)
+            {
+                await _meetingServices.AddMeetingAsync(meeting);
+            }
+        }
+
+        public async Task ImportMeetingsNotesFromCsvAsync(Stream filePath)
+        {
+            using var reader = new StreamReader(filePath);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            var meetingNotesRecords = csv.GetRecords<MeetingNotesModel>().ToList();
+
+            foreach (var meetingNote in meetingNotesRecords)
+            {
+                await _meetingServices.AddMeetingNotesAsync(meetingNote);
             }
         }
 

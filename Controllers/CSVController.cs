@@ -59,42 +59,9 @@ namespace TradesWomanBE.Controllers
             return File(stream, "text/csv", "clients.csv");
         }
 
-        [HttpPost("ImportClientsFromCsv")]
-        public async Task<IActionResult> ImportClientsFromCsv([FromForm] IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest("Please upload a valid CSV file.");
-            }
 
-            try
-            {
-                using (var stream = new MemoryStream())
-                {
-                    await file.CopyToAsync(stream);
-                    stream.Position = 0; // Reset the stream position for reading
-
-                    var clients = await _csvServices.ImportClientsFromCsvAsync(stream);
-
-                    await _csvServices.SaveClientsToDatabaseAsync(clients);
-
-                    return Ok(new
-                    {
-                        Message = "Clients imported successfully.",
-                        ClientCount = clients.Count
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message} This is the File Name {file.FileName}, Size: {file.Length}");
-            }
-        }
-
-    
-
-    [HttpPost("ImportProgramsFromCsv")]
-        public async Task<IActionResult> ImportProgramsFromCsv([FromForm] IFormFile file)
+        [HttpPost("ImportFromCsv")]
+        public async Task<IActionResult> ImportFromCsv([FromForm] IFormFile file, [FromQuery] string entityType)
         {
             if (file == null || file.Length == 0)
             {
@@ -108,12 +75,32 @@ namespace TradesWomanBE.Controllers
                     await file.CopyToAsync(stream);
                     stream.Position = 0;
 
-                    await _csvServices.ImportProgramsFromCsvAsync(stream);
-
-                    return Ok(new
+                    switch (entityType.ToLower())
                     {
-                        Message = "Programs imported successfully.",
-                    });
+                        case "clients":
+                            var clients = await _csvServices.ImportClientsFromCsvAsync(stream);
+                            await _csvServices.SaveClientsToDatabaseAsync(clients);
+                            return Ok(new { Message = "Programs imported successfully.", ClientCount = clients.Count });
+
+                        case "programs":
+                            await _csvServices.ImportProgramsFromCsvAsync(stream);
+                            return Ok(new { Message = "Programs imported successfully." });
+
+                        case "stipends":
+                            await _csvServices.ImportStipendsFromCsvAsync(stream);
+                            return Ok(new { Message = "Stipends imported successfully." });
+
+                        case "meetings":
+                            await _csvServices.ImportMeetingsFromCsvAsync(stream);
+                            return Ok(new { Message = "Meetings imported successfully." });
+
+                        case "meetingnotes":
+                            await _csvServices.ImportMeetingsNotesFromCsvAsync(stream);
+                            return Ok(new { Message = "Meeting Notes imported successfully." });
+
+                        default:
+                            return BadRequest("Invalid entity type specified. Please use 'programs', 'stipends', 'meetings', 'meetingnotes', or 'clients'.");
+                    }
                 }
             }
             catch (Exception ex)
@@ -122,34 +109,6 @@ namespace TradesWomanBE.Controllers
             }
         }
 
-        [HttpPost("ImportStipendsFromCsv")]
-        public async Task<IActionResult> ImportStipendsFromCsv([FromForm] IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest("Please upload a valid CSV file.");
-            }
-
-            try
-            {
-                using (var stream = new MemoryStream())
-                {
-                    await file.CopyToAsync(stream);
-                    stream.Position = 0;
-
-                    await _csvServices.ImportStipendsFromCsvAsync(stream);
-
-                    return Ok(new
-                    {
-                        Message = "Programs imported successfully.",
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
 
     }
 }
