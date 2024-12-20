@@ -151,7 +151,7 @@ namespace TradesWomanBE.Services
         }
         public async Task<bool> EditProgramLookUpAsync(ProgramLookUpModel programLookUp)
         {
-            if (await DoesProgramNameExistAsync(programLookUp.ProgramName))
+            if (await DoesProgramNameExistIdAsync(programLookUp))
             {
                 var existingProgramName = await GetProgramByIdAsync(programLookUp);
                 existingProgramName.ProgramName = programLookUp.ProgramName;
@@ -170,6 +170,11 @@ namespace TradesWomanBE.Services
         public async Task<bool> DoesProgramNameExistAsync(string programName)
         {
             return await _dataContext.ProgramLookUps.AnyAsync(p => p.ProgramName == programName);
+        }
+
+        public async Task<bool> DoesProgramNameExistIdAsync(ProgramLookUpModel program)
+        {
+            return await _dataContext.ProgramLookUps.AnyAsync(p => p.Id == program.Id);
         }
         public async Task<ProgramLookUpModel> GetProgramByIdAsync(ProgramLookUpModel programLookUp)
         {
