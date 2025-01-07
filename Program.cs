@@ -32,7 +32,7 @@ builder.Services.AddCors(options => {
 });
 
 // JWT Authentication Configuration
-var secretKey = builder.Configuration["Jwt:Key"] ?? "superSecretKey@345"; // Fallback to hardcoded secret if not in configuration
+var secretKey = builder.Configuration["Jwt:Key"] ?? "superSecretKey@345";
 
 builder.Services.AddAuthentication(options =>
 {
