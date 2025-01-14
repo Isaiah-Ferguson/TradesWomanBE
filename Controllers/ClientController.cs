@@ -18,7 +18,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("AddClient")]
-        public async Task<IActionResult> AddClient(ClientModel newClient)
+        public async Task<IActionResult> AddClient([FromBody]ClientModel newClient)
         {
             newClient.IsDeleted = false;
             var success = await _clientServices.AddClientAsync(newClient);
@@ -30,7 +30,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPut("EditClient")]
-        public async Task<IActionResult> EditClient(ClientModel clientToEdit)
+        public async Task<IActionResult> EditClient([FromBody]ClientModel clientToEdit)
         {
             var success = await _clientServices.EditClientAsync(clientToEdit);
             if (!success)
@@ -41,7 +41,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPut("DeleteClient")]
-        public async Task<IActionResult> DeleteClient(ClientModel clientToDelete)
+        public async Task<IActionResult> DeleteClient([FromBody]ClientModel clientToDelete)
         {
             var success = await _clientServices.DeleteClientAsync(clientToDelete);
             if (!success)

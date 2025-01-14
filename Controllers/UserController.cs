@@ -44,7 +44,7 @@ namespace TradesWomanBE.Controllers
     
         [HttpPost("AddRecruiter")]
         [Authorize(Roles = "Admin")]
-        public bool AddRecruiter(RecruiterModel newAccount)
+        public bool AddRecruiter([FromBody]RecruiterModel newAccount)
         {
             newAccount.IsDeleted = false;
             return _userService.AddRecruiter(newAccount);
@@ -68,7 +68,7 @@ namespace TradesWomanBE.Controllers
 
         [HttpPut("EditRecruiter")]
         [Authorize]
-        public async Task<IActionResult> UpdateRecruiter(RecruiterModel recruiterinfo)
+        public async Task<IActionResult> UpdateRecruiter([FromBody]RecruiterModel recruiterinfo)
         {
             var success = await _userService.UpdateRecruiterAsync(recruiterinfo);
                 if (!success)

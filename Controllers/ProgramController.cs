@@ -19,7 +19,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("AddProgram")]
-        public async Task<IActionResult> AddProgram(ProgramModel newStipend)
+        public async Task<IActionResult> AddProgram([FromBody]ProgramModel newStipend)
         {
             var success = await _programServices.AddProgramAsync(newStipend);
 
@@ -30,8 +30,8 @@ namespace TradesWomanBE.Controllers
 
             return CreatedAtAction(nameof(GetProgram), new { id = newStipend.Id }, newStipend);
         }
-        [HttpPut("EditProgram/{id}")]
-        public async Task<IActionResult> EditProgram(ProgramModel programToEdit)
+        [HttpPut("EditProgram")]
+        public async Task<IActionResult> EditProgram([FromBody]ProgramModel programToEdit)
         {
             var success = await _programServices.EditProgramAsync(programToEdit);
 
@@ -56,7 +56,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("AddStipend")]
-        public async Task<IActionResult> AddStipend(StipendsModel newStipend)
+        public async Task<IActionResult> AddStipend([FromBody]StipendsModel newStipend)
         {
             var success = await _programServices.AddStipendAsync(newStipend);
 
@@ -68,8 +68,8 @@ namespace TradesWomanBE.Controllers
             return CreatedAtAction(nameof(GetStipend), new { id = newStipend.Id }, newStipend);
         }
         
-        [HttpPut("EditStipend/{id}")]
-        public async Task<IActionResult> EditStipend(StipendsModel stipendToEdit)
+        [HttpPut("EditStipend")]
+        public async Task<IActionResult> EditStipend([FromBody]StipendsModel stipendToEdit)
         {
             var success = await _programServices.EditStipendAsync(stipendToEdit);
 
@@ -100,7 +100,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("AddProgramLookUpName")]
-        public async Task<IActionResult> AddProgramLookUpName(ProgramLookUpModel newProgramName)
+        public async Task<IActionResult> AddProgramLookUpName([FromBody]ProgramLookUpModel newProgramName)
         {
             var success = await _programServices.AddProgramLookUpAsync(newProgramName);
             if (!success)
@@ -111,7 +111,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPut("EditProgramLookUpName")]
-        public async Task<IActionResult> EditProgramLookUpName(ProgramLookUpModel newProgramName)
+        public async Task<IActionResult> EditProgramLookUpName([FromBody]ProgramLookUpModel newProgramName)
         {
             var success = await _programServices.EditProgramLookUpAsync(newProgramName);
             if (!success)
@@ -121,7 +121,7 @@ namespace TradesWomanBE.Controllers
             return Ok("Program added successfully.");
         }
         [HttpDelete("DeleteProgramLookUpName")]
-        public async Task<IActionResult> DeleteProgramLookUpName(ProgramLookUpModel newProgramName)
+        public async Task<IActionResult> DeleteProgramLookUpName([FromBody]ProgramLookUpModel newProgramName)
         {
             var success = await _programServices.DeleteProgramLookUpAsync(newProgramName);
             if (!success)

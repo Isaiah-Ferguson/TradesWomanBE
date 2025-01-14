@@ -18,7 +18,7 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("AddMeeting")]
-        public async Task<IActionResult> AddMeeting(MeetingsModel newMeeting)
+        public async Task<IActionResult> AddMeeting([FromBody]MeetingsModel newMeeting)
         {
             var success = await _meetingsService.AddMeetingAsync(newMeeting);
             
@@ -29,8 +29,8 @@ namespace TradesWomanBE.Controllers
 
             return CreatedAtAction(nameof(GetMeeting), new { id = newMeeting.Id }, newMeeting);
         }
-        [HttpPost("EditMeeting/{id}")]
-        public async Task<IActionResult> EditMeeting(MeetingsModel meetingToEdit)
+        [HttpPost("EditMeeting")]
+        public async Task<IActionResult> EditMeeting([FromBody]MeetingsModel meetingToEdit)
         {
             var success = await _meetingsService.EditMeetingAsync(meetingToEdit);
             
@@ -65,7 +65,7 @@ namespace TradesWomanBE.Controllers
             return Ok(notes);
         }
         [HttpPost("AddMeetingNotes")]
-        public async Task<IActionResult> AddMeetingNotes(MeetingNotesModel newMeetingNotes)
+        public async Task<IActionResult> AddMeetingNotes([FromBody]MeetingNotesModel newMeetingNotes)
         {
             var success = await _meetingsService.AddMeetingNotesAsync(newMeetingNotes);             
             if (!success)
@@ -76,7 +76,7 @@ namespace TradesWomanBE.Controllers
             return CreatedAtAction(nameof(GetMeeting), new { id = newMeetingNotes.Id }, newMeetingNotes);
         }
         [HttpPost("EditMeetingNotes")]
-        public async Task<IActionResult> EditMeetingNotes(MeetingNotesModel newMeetingNotes)
+        public async Task<IActionResult> EditMeetingNotes([FromBody]MeetingNotesModel newMeetingNotes)
         {
             var success = await _meetingsService.EditMeetingNotesAsync(newMeetingNotes);             
             if (!success)
