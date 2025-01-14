@@ -25,7 +25,7 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(conne
 builder.Services.AddCors(options => {
     options.AddPolicy("TEPolicy", 
     builder => {
-        builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://thankful-coast-03112031e.5.azurestaticapps.net")
+        builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://thankful-coast-03112031e.5.azurestaticapps.net", "https://tradeswomen-client.vercel.app")
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
@@ -49,13 +49,15 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuers = new[] 
         { 
-            "https://thankful-coast-03112031e.5.azurestaticapps.net", // Hosted site
+            "https://thankful-coast-03112031e.5.azurestaticapps.net",
+            "https://tradeswomen-client.vercel.app",
             "http://localhost:5000",
             "https://localhost:5281"  // Local testing
         },
         ValidAudiences = new[] 
         { 
-            "https://thankful-coast-03112031e.5.azurestaticapps.net", // Hosted site
+            "https://thankful-coast-03112031e.5.azurestaticapps.net",
+            "https://tradeswomen-client.vercel.app",
             "http://localhost:5000",
             "https://localhost:5281"
         },
@@ -98,9 +100,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Middleware
 app.UseCors("TEPolicy");
-app.UseAuthentication(); // Add authentication middleware
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
