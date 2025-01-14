@@ -155,6 +155,19 @@ namespace TradesWomanBE.Services
             {
                 var existingProgramName = await GetProgramByIdAsync(programLookUp);
                 existingProgramName.ProgramName = programLookUp.ProgramName;
+                existingProgramName.IsDeleted = false;
+
+                _dataContext.Update(existingProgramName);
+                return await _dataContext.SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+        public async Task<bool> DeleteProgramLookUpAsync(ProgramLookUpModel programLookUp)
+        {
+            if (await DoesProgramNameExistIdAsync(programLookUp))
+            {
+                var existingProgramName = await GetProgramByIdAsync(programLookUp);
+                existingProgramName.IsDeleted = true;
 
                 _dataContext.Update(existingProgramName);
                 return await _dataContext.SaveChangesAsync() > 0;

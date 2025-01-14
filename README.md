@@ -56,7 +56,9 @@ Next Js.
 - `GET /CSV/ExportClientsByDate{StartDate}/{EndDate}/{Program}`: Exports Clients into a CSV File filtered By Date and Program.
 - `POST /CSV/ImportClientsFromCsv`: Imports Clients Info from a CSV File.
 
+### What is IActionResult?
 
+ - It's Very Flexible and Returns Response Status IE 200, 400, and 500
 
 ### Why Use Async Methods / Task<IActionResult>?
 

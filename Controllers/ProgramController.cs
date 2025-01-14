@@ -120,6 +120,16 @@ namespace TradesWomanBE.Controllers
             }
             return Ok("Program added successfully.");
         }
+        [HttpDelete("DeleteProgramLookUpName")]
+        public async Task<IActionResult> DeleteProgramLookUpName(ProgramLookUpModel newProgramName)
+        {
+            var success = await _programServices.DeleteProgramLookUpAsync(newProgramName);
+            if (!success)
+            {
+                return BadRequest("Unable to Edit Program Name. Please check the provided data.");
+            }
+            return Ok("Program Deleted successfully.");
+        }
 
     }
 }

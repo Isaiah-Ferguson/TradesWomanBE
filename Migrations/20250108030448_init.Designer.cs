@@ -12,8 +12,8 @@ using TradesWomanBE.Services.Context;
 namespace TradesWomanBE.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241217174033_AddDatesAndContactMethodToMeetingNotes")]
-    partial class AddDatesAndContactMethodToMeetingNotes
+    [Migration("20250108030448_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -138,6 +138,8 @@ namespace TradesWomanBE.Migrations
                     RecruiterInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MeetingId = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Dates = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MeetingsModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
