@@ -93,7 +93,7 @@ namespace TradesWomanBE.Services
 
         public IActionResult Login(LoginDTO user)
         {
-            IActionResult result = Unauthorized();
+            IActionResult result = Unauthorized(new { Message = "Invalid username or password." });
 
             List<Claim> claims = new();
 

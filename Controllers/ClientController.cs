@@ -97,6 +97,7 @@ namespace TradesWomanBE.Controllers
 
             return Ok(clients);
         }
+        
         [HttpGet("GetClientSummaryByRecruiter/{firstName}/{lastName}")]
         public async Task<IActionResult> GetClientSummarieByRecruiter(string firstName, string lastName)
         {

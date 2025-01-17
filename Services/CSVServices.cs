@@ -120,8 +120,7 @@ namespace TradesWomanBE.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error while parsing CSV: {ex.Message}");
-                    throw;
+                    throw new Exception("An error occurred while importing clients from CSV", ex);
                 }
             }
 
