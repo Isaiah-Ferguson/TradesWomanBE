@@ -56,6 +56,9 @@ namespace TradesWomanBE.Services
                     _emailService.SendEmailAsync(userToAdd.Email, subject, body).Wait();
                 }
             }
+            else{
+                            Console.WriteLine("He Exists");
+            }
             return result;
         }
         private static PasswordDTO HashPassword(string password)
