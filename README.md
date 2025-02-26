@@ -59,6 +59,7 @@ Next Js.
 ### What is IActionResult?
 
  - It's Very Flexible and Returns Response Status IE 200, 400, and 500
+ - Allows use to customize our Responses
 
 ### Why Use Async Methods / Task<IActionResult>?
 
@@ -106,3 +107,7 @@ The result of the helper method is a string that represents the full CSV content
 
 ## Example of using
 In our HashPassword method, we are creating two disposable objects: RandomNumberGenerator and Rfc2898DeriveBytes. Both of these implement the IDisposable interface, which means they use resources like unmanaged memory that need to be released when you're done with them. The using statement helps ensure these resources are cleaned up properly and as soon as they are no longer needed, even if an exception is thrown.
+
+## JWT & Auth 
+
+Authentication (auth) is the process of verifying the identity of a user, ensuring they are who they claim to be, typically by using credentials like a username and password. JSON Web Tokens (JWT) are a compact, URL-safe way to securely transmit information between parties as a JSON object. In authentication, a server issues a JWT after verifying a user's credentials, and this token is then used by the client (usually in HTTP headers) to authenticate requests. The JWT contains claims (like user info and expiration time) and is signed by the server's secret key to ensure its integrity, meaning it can't be tampered with.

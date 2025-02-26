@@ -82,7 +82,14 @@ namespace TradesWomanBE.Controllers
         public async Task<IActionResult> GetClientsByFirstNameAndLastname(string firstName, string lastName)
         {
             var clients = await _clientServices.GetClientsByFirstNameAndLastnameAsync(firstName, lastName);
+
+            if(clients != null)
+            {
             return Ok(clients);
+            }else
+            {
+                return BadRequest(new {Message = "Unable to Fetch Clients By First or Last name"});
+            }
         }
 
         [HttpGet("GetClientSummary")]

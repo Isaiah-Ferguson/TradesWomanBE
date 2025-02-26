@@ -18,21 +18,22 @@ builder.Services.AddScoped<CSVServices>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Database connection
-var connectionString = builder.Configuration.GetConnectionString("TEString");
+var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
 // CORS configuration
 builder.Services.AddCors(options => {
-    options.AddPolicy("TEPolicy", 
+    options.AddPolicy("TWPolicy", 
     builder => {
-        builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://thankful-coast-03112031e.5.azurestaticapps.net", "https://tradeswomen-client.vercel.app")
+        builder.WithOrigins("http://localhost:3000", "https://tradeswomen-client.vercel.app")
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
 });
 
 // JWT Authentication Configuration
-var secretKey = builder.Configuration["Jwt:Key"] ?? "superSecretKey@345";
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var secretKey = jwtSettings["Key"];
 
 builder.Services.AddAuthentication(options =>
 {
@@ -47,23 +48,12 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuers = new[] 
-        { 
-            "https://thankful-coast-03112031e.5.azurestaticapps.net",
-            "https://tradeswomen-client.vercel.app",
-            "http://localhost:5000",
-            "https://localhost:5281"  // Local testing
-        },
-        ValidAudiences = new[] 
-        { 
-            "https://thankful-coast-03112031e.5.azurestaticapps.net",
-            "https://tradeswomen-client.vercel.app",
-            "http://localhost:5000",
-            "https://localhost:5281"
-        },
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)) // Secret key
+        ValidIssuers = jwtSettings.GetSection("ValidIssuers").Get<string[]>(), 
+        ValidAudiences = jwtSettings.GetSection("ValidAudiences").Get<string[]>(),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
     };
 });
+
 
 
 builder.Services.AddControllers();
@@ -100,8 +90,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("TEPolicy");
+app.UseCors("TWPolicy");
+
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

@@ -189,7 +189,7 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.ProgramLookUps.AnyAsync(p => p.Id == program.Id);
         }
-        public async Task<ProgramLookUpModel> GetProgramByIdAsync(ProgramLookUpModel programLookUp)
+        public async Task<ProgramLookUpModel?> GetProgramByIdAsync(ProgramLookUpModel programLookUp)
         {
             return await _dataContext.ProgramLookUps.FirstOrDefaultAsync(p => p.Id == programLookUp.Id);
         }

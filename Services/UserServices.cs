@@ -18,11 +18,13 @@ namespace TradesWomanBE.Services
         private readonly DataContext _context;
         private readonly EmailServices _emailService;
         private readonly IMapper _mapper;
-        public UserServices(DataContext dataContext, EmailServices emailServices, IMapper mapper)
+        private readonly IConfiguration _config;
+        public UserServices(DataContext dataContext, EmailServices emailServices, IMapper mapper, IConfiguration config)
         {
             _context = dataContext;
             _emailService = emailServices;
             _mapper = mapper;
+            _config = config;
         }
 
         private bool DoesUserExist(string? email)
@@ -34,7 +36,7 @@ namespace TradesWomanBE.Services
             return _context.RecruiterInfo.SingleOrDefault(recruiter => recruiter.Email == email) != null;
         }
 
-        public bool CreateAdmin(AdminUser userToAdd)
+        public async Task<bool> CreateAdmin(AdminUser userToAdd)
         {
             bool result = false;
             if (!DoesUserExist(userToAdd.Email))
@@ -45,22 +47,21 @@ namespace TradesWomanBE.Services
                 userToAdd.Salt = hashPassword.Salt;
                 userToAdd.Hash = hashPassword.Hash;
 
-
                 _context.Add(userToAdd);
                 result = _context.SaveChanges() != 0;
 
                 if (result)
                 {
                     string subject = "Your New Password";
-                    string body = $"Your new password is: {newPassword} \n Please Follow the Link below to Change your password \n This will be the link ";
-                    _emailService.SendEmailAsync(userToAdd.Email, subject, body).Wait();
+                    string body = $"Your new password is: {newPassword} \n Please Follow the Link below to Change your password \n This will be the link";
+
+                    await _emailService.SendEmailAsync(userToAdd.Email, subject, body);
                 }
             }
-            else{
-                            Console.WriteLine("He Exists");
-            }
+
             return result;
         }
+
         private static PasswordDTO HashPassword(string password)
         {
             string? newpassword = password.ToString();
@@ -130,35 +131,40 @@ namespace TradesWomanBE.Services
             return result;
         }
 
-        // Helper method to generate JWT Token
-        private static string GenerateJwtToken(List<Claim> claims)
+        private string GenerateJwtToken(List<Claim> claims)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            // Retrieve values from appsettings.json
+            var secretKey = _config["Jwt:Key"];
+            var issuer = _config["Jwt:Issuer"];
+            var audience = _config["Jwt:Audience"];
+            
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
             var tokenOptions = new JwtSecurityToken(
-                issuer: "http://localhost:5000",
-                audience: "http://localhost:5000",
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: signinCredentials
+                signingCredentials: signingCredentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 
 
-        public AdminUser GetUserByEmail(string Email)
+
+        public AdminUser? GetUserByEmail(string Email)
         {
             return _context.AdminUsers.SingleOrDefault(user => user.Email == Email);
         }
 
-        private RecruiterModel GetRecruiterByEmailHelper(string email)
+        private RecruiterModel? GetRecruiterByEmailHelper(string email)
         {
-           return _context.RecruiterInfo.SingleOrDefault(recruiter => recruiter.Email == email);
+            return _context.RecruiterInfo.SingleOrDefault(recruiter => recruiter.Email == email);
         }
 
-        public RecruiterModel GetRecruiterByEmail(string email)
+        public RecruiterModel? GetRecruiterByEmail(string email)
         {
             return _context.RecruiterInfo
                 .Where(user => user.Email == email)
@@ -182,7 +188,7 @@ namespace TradesWomanBE.Services
                 .SingleOrDefault();
         }
 
-        public RecruiterDTO GetRecruiterByEmailEP(string email)
+        public RecruiterDTO? GetRecruiterByEmailEP(string email)
         {
             return _context.RecruiterInfo
                 .Where(user => user.Email == email)
@@ -222,7 +228,7 @@ namespace TradesWomanBE.Services
             return await _context.SaveChangesAsync() != 0;
         }
 
-        public RecruiterModel GetUserById(int id)
+        public RecruiterModel? GetUserById(int id)
         {
             return _context.RecruiterInfo.SingleOrDefault(user => user.Id == id);
         }
@@ -324,7 +330,7 @@ namespace TradesWomanBE.Services
                 })
                 .ToListAsync();
         }
-        public async Task<RecruiterDTO> GetRecruiterByEmailAsync(string email)
+        public async Task<RecruiterDTO?> GetRecruiterByEmailAsync(string email)
         {
             return await _context.RecruiterInfo
                 .Where(user => user.Email == email)

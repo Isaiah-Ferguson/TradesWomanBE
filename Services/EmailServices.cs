@@ -1,6 +1,5 @@
 using System.Net.Mail;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace TradesWomanBE.Services
 {
@@ -20,7 +19,6 @@ namespace TradesWomanBE.Services
                 message.Subject = subject;
                 message.Body = body;
                 message.IsBodyHtml = true;
-
                 using (var client = new SmtpClient(_smtpServer, _smtpPort))
                 {
                     client.Credentials = new NetworkCredential(_smtpUsername, _smtpPassword);
