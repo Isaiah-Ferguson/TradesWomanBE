@@ -7,7 +7,7 @@ using TradesWomanBE.Services.Context;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// This is a test
 // Add services to the container.
 builder.Services.AddScoped<ClientServices>();
 builder.Services.AddScoped<UserServices>();
