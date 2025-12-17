@@ -22,9 +22,215 @@ namespace TradesWomanBE.Services
             _programServices = programServices;
             _meetingServices = meetingServices;
         }
+
+        public async Task WriteClientsCsvAsync(Stream outputStream)
+        {
+            await using var writer = new StreamWriter(outputStream, Encoding.UTF8, bufferSize: 16 * 1024, leaveOpen: true);
+            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            WriteClientsHeader(csv);
+
+            await foreach (var client in _dataContext.ClientInfo
+                               .AsNoTracking()
+                               .Include(c => c.ProgramInfo)
+                               .Include(c => c.Stipends)
+                               .AsAsyncEnumerable())
+            {
+                WriteClientRow(csv, client);
+            }
+
+            await writer.FlushAsync();
+        }
+
+        public async Task WriteClientsCsvByProgramAsync(Stream outputStream, string programName)
+        {
+            await using var writer = new StreamWriter(outputStream, Encoding.UTF8, bufferSize: 16 * 1024, leaveOpen: true);
+            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            WriteClientsHeader(csv);
+
+            await foreach (var client in _dataContext.ClientInfo
+                               .AsNoTracking()
+                               .Include(c => c.ProgramInfo)
+                               .Include(c => c.Stipends)
+                               .Where(c => c.ProgramInfo != null && c.ProgramInfo.ProgramEnrolled == programName)
+                               .AsAsyncEnumerable())
+            {
+                WriteClientRow(csv, client);
+            }
+
+            await writer.FlushAsync();
+        }
+
+        public async Task WriteClientsCsvByDateAsync(Stream outputStream, string startDate, string endDate)
+        {
+            if (!DateTime.TryParse(startDate, out var start) || !DateTime.TryParse(endDate, out var end))
+            {
+                throw new FormatException("Start or End date is not in a valid DateTime format.");
+            }
+
+            await using var writer = new StreamWriter(outputStream, Encoding.UTF8, bufferSize: 16 * 1024, leaveOpen: true);
+            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            WriteClientsHeader(csv);
+
+            await foreach (var client in _dataContext.ClientInfo
+                               .AsNoTracking()
+                               .Include(c => c.ProgramInfo)
+                               .Include(c => c.Stipends)
+                               .AsAsyncEnumerable())
+            {
+                if (!DateTime.TryParse(client.DateRegistered, out var dateRegistered))
+                {
+                    continue;
+                }
+
+                if (dateRegistered < start || dateRegistered > end)
+                {
+                    continue;
+                }
+
+                WriteClientRow(csv, client);
+            }
+
+            await writer.FlushAsync();
+        }
+
+        public async Task WriteClientsCsvByProgramAndDateAsync(Stream outputStream, string programName, string startDate, string endDate)
+        {
+            if (!DateTime.TryParse(startDate, out var start) || !DateTime.TryParse(endDate, out var end))
+            {
+                throw new FormatException("Start or End date is not in a valid DateTime format.");
+            }
+
+            await using var writer = new StreamWriter(outputStream, Encoding.UTF8, bufferSize: 16 * 1024, leaveOpen: true);
+            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            WriteClientsHeader(csv);
+
+            await foreach (var client in _dataContext.ClientInfo
+                               .AsNoTracking()
+                               .Include(c => c.ProgramInfo)
+                               .Include(c => c.Stipends)
+                               .Where(c => c.ProgramInfo != null && c.ProgramInfo.ProgramEnrolled == programName)
+                               .AsAsyncEnumerable())
+            {
+                if (!DateTime.TryParse(client.DateRegistered, out var dateRegistered))
+                {
+                    continue;
+                }
+
+                if (dateRegistered < start || dateRegistered > end)
+                {
+                    continue;
+                }
+
+                WriteClientRow(csv, client);
+            }
+
+            await writer.FlushAsync();
+        }
+
+        private static void WriteClientsHeader(CsvWriter csv)
+        {
+            csv.WriteField("Id");
+            csv.WriteField("Age");
+            csv.WriteField("Firstname");
+            csv.WriteField("Lastname");
+            csv.WriteField("MiddleInitial");
+            csv.WriteField("Email");
+            csv.WriteField("ChildrenUnderSix");
+            csv.WriteField("ChildrenOverSix");
+            csv.WriteField("TotalHouseholdFamily");
+            csv.WriteField("SSNLastFour");
+            csv.WriteField("ValidSSNAuthToWrk");
+            csv.WriteField("CriminalHistory");
+            csv.WriteField("Disabled");
+            csv.WriteField("FoundUsOn");
+            csv.WriteField("DateJoinedEAW");
+            csv.WriteField("Address");
+            csv.WriteField("City");
+            csv.WriteField("State");
+            csv.WriteField("ZipCode");
+            csv.WriteField("Gender");
+            csv.WriteField("Employed");
+            csv.WriteField("RecruiterName");
+            csv.WriteField("DateRegistered");
+            csv.WriteField("DateOfBirth");
+            csv.WriteField("ActiveOrFormerMilitary");
+            csv.WriteField("TotalMonthlyIncome");
+            csv.WriteField("PhoneNumber");
+            csv.WriteField("ProgramInfoId");
+            csv.WriteField("HighestEducation");
+            csv.WriteField("ValidCALicense");
+            csv.WriteField("County");
+            csv.WriteField("Ethnicity");
+            csv.WriteField("IsDeleted");
+            csv.WriteField("ProgramEnrolled");
+            csv.WriteField("ProgramEnrolledDate");
+            csv.WriteField("ProgramEndDate");
+            csv.WriteField("CurrentStatus");
+            csv.WriteField("PreApprenticeshipProgram");
+            csv.WriteField("TypeOfStipend");
+            csv.NextRecord();
+        }
+
+        private static void WriteClientRow(CsvWriter csv, ClientModel client)
+        {
+            var program = client.ProgramInfo;
+            var stipend = client.Stipends;
+
+            csv.WriteField(client.Id);
+            csv.WriteField(client.Age);
+            csv.WriteField(client.Firstname);
+            csv.WriteField(client.Lastname);
+            csv.WriteField(client.MiddleInitial);
+            csv.WriteField(client.Email);
+            csv.WriteField(client.ChildrenUnderSix);
+            csv.WriteField(client.ChildrenOverSix);
+            csv.WriteField(client.TotalHouseholdFamily);
+            csv.WriteField(client.SSNLastFour);
+            csv.WriteField(client.ValidSSNAuthToWrk);
+            csv.WriteField(client.CriminalHistory);
+            csv.WriteField(client.Disabled);
+            csv.WriteField(client.FoundUsOn);
+            csv.WriteField(client.DateJoinedEAW);
+            csv.WriteField(client.Address);
+            csv.WriteField(client.City);
+            csv.WriteField(client.State);
+            csv.WriteField(client.ZipCode);
+            csv.WriteField(client.Gender);
+            csv.WriteField(client.Employed);
+            csv.WriteField(client.RecruiterName);
+            csv.WriteField(client.DateRegistered);
+            csv.WriteField(client.DateOfBirth);
+            csv.WriteField(client.ActiveOrFormerMilitary);
+            csv.WriteField(client.TotalMonthlyIncome);
+            csv.WriteField(client.PhoneNumber);
+            csv.WriteField(client.ProgramInfoId);
+            csv.WriteField(client.HighestEducation);
+            csv.WriteField(client.ValidCALicense);
+            csv.WriteField(client.County);
+            csv.WriteField(client.Ethnicity);
+            csv.WriteField(client.IsDeleted);
+
+            csv.WriteField(program?.ProgramEnrolled);
+            csv.WriteField(program?.EnrollDate);
+            csv.WriteField(program?.ProgramEndDate);
+            csv.WriteField(program?.CurrentStatus);
+
+            csv.WriteField(stipend?.PreApprenticeshipProgram);
+            csv.WriteField(stipend?.TypeOfStipend);
+
+            csv.NextRecord();
+        }
         public string GetClientsAsCsv()
         {
-            var clients = _dataContext.ClientInfo.Include(c => c.ProgramInfo).Include(c => c.Stipends).ToList();
+            var clients = _dataContext.ClientInfo
+                .AsNoTracking()
+                .Include(c => c.ProgramInfo)
+                .Include(c => c.Stipends)
+                .ToList();
             return CSVHelper(clients);
         }
         public string GetClientsAsCsvByDate(string startDate, string endDate)
@@ -39,9 +245,10 @@ namespace TradesWomanBE.Services
             }
 
             var clients = _dataContext.ClientInfo
+                .AsNoTracking()
                 .Include(c => c.ProgramInfo)
                 .Include(c => c.Stipends)
-                .ToList() // Move the data into memory before filtering the date.
+                .AsEnumerable()
                 .Where(c => DateTime.TryParse(c.DateRegistered, out var dateRegistered) &&
                             dateRegistered >= start && dateRegistered <= end)
                 .ToList();
@@ -61,9 +268,10 @@ namespace TradesWomanBE.Services
             }
 
             var clients = _dataContext.ClientInfo
+                .AsNoTracking()
                 .Include(c => c.ProgramInfo)
                 .Where(c => c.ProgramInfo != null && c.ProgramInfo.ProgramEnrolled == programName)
-                .ToList()
+                .AsEnumerable()
                 .Where(c => DateTime.TryParse(c.DateRegistered, out var dateRegistered) &&
                             dateRegistered >= start && dateRegistered <= end)
                 .ToList();
@@ -74,6 +282,7 @@ namespace TradesWomanBE.Services
         public string GetClientsAsCsvByProgram(string programName)
         {
             var clients = _dataContext.ClientInfo
+                .AsNoTracking()
                 .Include(c => c.ProgramInfo)
                 .Include(c => c.Stipends)
                 .Where(c => c.ProgramInfo != null && c.ProgramInfo.ProgramEnrolled == programName)

@@ -22,9 +22,14 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpPost("Login")]
-        public IActionResult Login([FromBody] LoginDTO user)
+        public async Task<IActionResult> Login([FromBody] LoginDTO user)
         {
-            return _userService.Login(user);
+            var result = await _userService.LoginAsync(user);
+            if (result == null)
+            {
+                return Unauthorized(new { Message = "Invalid username or password." });
+            }
+            return Ok(result);
         }
 
         [HttpPost("CreateAdmin")]
@@ -35,23 +40,38 @@ namespace TradesWomanBE.Controllers
 
         [HttpPost("ChangeAdminPassword")]
         [Authorize]
-        public bool ChangeAdminPassword(CreateAccountDTO account)
+        public async Task<IActionResult> ChangeAdminPassword(CreateAccountDTO account)
         {
-            return _userService.ChangeAdminPassword(account);
+            var success = await _userService.ChangeAdminPasswordAsync(account);
+            if (!success)
+            {
+                return BadRequest("Unable to change admin password. Please check the provided data.");
+            }
+            return Ok(true);
         }
         [HttpPost("ChangeRecruiterPassword")]
         [Authorize]
-        public bool ChangeRecruiterPassword(CreateAccountDTO account)
+        public async Task<IActionResult> ChangeRecruiterPassword(CreateAccountDTO account)
         {
-            return _userService.ChangeRecruiterPassword(account);
+            var success = await _userService.ChangeRecruiterPasswordAsync(account);
+            if (!success)
+            {
+                return BadRequest("Unable to change recruiter password. Please check the provided data.");
+            }
+            return Ok(true);
         }
 
         [HttpPost("AddRecruiter")]
         [Authorize]
-        public bool AddRecruiter([FromBody] RecruiterModel newAccount)
+        public async Task<IActionResult> AddRecruiter([FromBody] RecruiterModel newAccount)
         {
             newAccount.IsDeleted = false;
-            return _userService.AddRecruiter(newAccount);
+            var success = await _userService.AddRecruiterAsync(newAccount);
+            if (!success)
+            {
+                return BadRequest("Unable to add recruiter. Please check the provided data.");
+            }
+            return Ok(true);
         }
 
         [HttpGet("GetAllRecruiters")]

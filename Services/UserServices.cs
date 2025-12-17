@@ -2,7 +2,6 @@ using TradesWomanBE.Models;
 using TradesWomanBE.Models.DTO;
 using TradesWomanBE.Services.Context;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,7 +12,7 @@ using AutoMapper;
 
 namespace TradesWomanBE.Services
 {
-    public class UserServices : ControllerBase
+    public class UserServices
     {
         private readonly DataContext _context;
         private readonly EmailServices _emailService;
@@ -27,19 +26,19 @@ namespace TradesWomanBE.Services
             _config = config;
         }
 
-        private bool DoesUserExist(string? email)
+        private Task<bool> DoesUserExistAsync(string? email)
         {
-            return _context.AdminUsers.SingleOrDefault(admin => admin.Email == email) != null;
+            return _context.AdminUsers.AnyAsync(admin => admin.Email == email);
         }
-        private bool DoesRecruiterExist(string? email)
+        private Task<bool> DoesRecruiterExistAsync(string? email)
         {
-            return _context.RecruiterInfo.SingleOrDefault(recruiter => recruiter.Email == email) != null;
+            return _context.RecruiterInfo.AnyAsync(recruiter => recruiter.Email == email);
         }
 
         public async Task<bool> CreateAdmin(AdminUser userToAdd)
         {
             bool result = false;
-            if (!DoesUserExist(userToAdd.Email))
+            if (!await DoesUserExistAsync(userToAdd.Email))
             {
                 string newPassword = GenerateRandomPassword();
                 var hashPassword = HashPassword(newPassword);
@@ -48,7 +47,7 @@ namespace TradesWomanBE.Services
                 userToAdd.Hash = hashPassword.Hash;
 
                 _context.Add(userToAdd);
-                result = _context.SaveChanges() != 0;
+                result = await _context.SaveChangesAsync() != 0;
 
                 if (result)
                 {
@@ -95,40 +94,58 @@ namespace TradesWomanBE.Services
             return newHash == storedHash;
         }
 
-        public IActionResult Login(LoginDTO user)
+        public async Task<LoginResultDTO?> LoginAsync(LoginDTO user)
         {
-            IActionResult result = Unauthorized(new { Message = "Invalid username or password." });
-
             List<Claim> claims = new();
 
-            if (DoesUserExist(user.Email))
+            if (await DoesUserExistAsync(user.Email))
             {
-                AdminUser foundUser = GetUserByEmail(user.Email);
-                if (VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
+                AdminUser? foundUser = await GetUserByEmailAsync(user.Email);
+                if (foundUser != null && VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
                 {
                     // Add claims for the Admin User
                     claims.Add(new Claim(ClaimTypes.Name, foundUser.Email));
                     claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin, foundUser.Id, foundUser.FirstTimeLogin });
+                    return new LoginResultDTO
+                    {
+                        Token = tokenString,
+                        FirstName = foundUser.FirstName,
+                        LastName = foundUser.LastName,
+                        Email = foundUser.Email,
+                        IsAdmin = foundUser.IsAdmin,
+                        Id = foundUser.Id,
+                        FirstTimeLogin = foundUser.FirstTimeLogin,
+                        Role = "Admin"
+                    };
                 }
             }
-            else if (DoesRecruiterExist(user.Email))
+            else if (await DoesRecruiterExistAsync(user.Email))
             {
-                RecruiterModel foundUser = GetRecruiterByEmailHelper(user.Email);
-                if (VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
+                RecruiterModel? foundUser = await GetRecruiterByEmailHelperAsync(user.Email);
+                if (foundUser != null && VerifyUserPassword(user.Password, foundUser.Hash, foundUser.Salt))
                 {
                     // Add claims for the Recruiter User
                     claims.Add(new Claim(ClaimTypes.Name, foundUser.Email));
                     claims.Add(new Claim(ClaimTypes.Role, "Recruiter"));
 
                     var tokenString = GenerateJwtToken(claims);
-                    result = Ok(new { Token = tokenString, foundUser.FirstName, foundUser.LastName, foundUser.Email, foundUser.IsAdmin, foundUser.Id, foundUser.FirstTimeLogin });
+                    return new LoginResultDTO
+                    {
+                        Token = tokenString,
+                        FirstName = foundUser.FirstName,
+                        LastName = foundUser.LastName,
+                        Email = foundUser.Email,
+                        IsAdmin = foundUser.IsAdmin,
+                        Id = foundUser.Id,
+                        FirstTimeLogin = foundUser.FirstTimeLogin,
+                        Role = "Recruiter"
+                    };
                 }
             }
 
-            return result;
+            return null;
         }
 
         private string GenerateJwtToken(List<Claim> claims)
@@ -154,14 +171,14 @@ namespace TradesWomanBE.Services
 
 
 
-        public AdminUser? GetUserByEmail(string Email)
+        private Task<AdminUser?> GetUserByEmailAsync(string email)
         {
-            return _context.AdminUsers.SingleOrDefault(user => user.Email == Email);
+            return _context.AdminUsers.SingleOrDefaultAsync(user => user.Email == email);
         }
 
-        private RecruiterModel? GetRecruiterByEmailHelper(string email)
+        private Task<RecruiterModel?> GetRecruiterByEmailHelperAsync(string email)
         {
-            return _context.RecruiterInfo.SingleOrDefault(recruiter => recruiter.Email == email);
+            return _context.RecruiterInfo.SingleOrDefaultAsync(recruiter => recruiter.Email == email);
         }
 
         public RecruiterModel? GetRecruiterByEmail(string email)
@@ -212,7 +229,7 @@ namespace TradesWomanBE.Services
 
         public async Task<bool> UpdateRecruiterAsync(RecruiterModel userToUpdate)
         {
-            var existingRecruiter = GetUserById(userToUpdate.Id);
+            var existingRecruiter = await GetUserByIdAsync(userToUpdate.Id);
             var mapingRecruiter = existingRecruiter;
 
             if (existingRecruiter == null)
@@ -228,16 +245,16 @@ namespace TradesWomanBE.Services
             return await _context.SaveChangesAsync() != 0;
         }
 
-        public RecruiterModel? GetUserById(int id)
+        public Task<RecruiterModel?> GetUserByIdAsync(int id)
         {
-            return _context.RecruiterInfo.SingleOrDefault(user => user.Id == id);
+            return _context.RecruiterInfo.SingleOrDefaultAsync(user => user.Id == id);
         }
 
 
-        public bool AddRecruiter(RecruiterModel userToAdd)
+        public async Task<bool> AddRecruiterAsync(RecruiterModel userToAdd)
         {
             bool result = false;
-            if (!DoesRecruiterExist(userToAdd.Email))
+            if (!await DoesRecruiterExistAsync(userToAdd.Email))
             {
 
                 // Generate a random password
@@ -249,13 +266,13 @@ namespace TradesWomanBE.Services
 
 
                 _context.Add(userToAdd);
-                result = _context.SaveChanges() != 0;
+                result = await _context.SaveChangesAsync() != 0;
 
                 if (result)
                 {
                     string subject = "Your New Password";
                     string body = $"Your new password is: {newPassword} \n Please Follow the Link below to Change your password \n This will be the link ";
-                    _emailService.SendEmailAsync(userToAdd.Email, subject, body).Wait();
+                    await _emailService.SendEmailAsync(userToAdd.Email, subject, body);
                 }
             }
 
@@ -275,46 +292,50 @@ namespace TradesWomanBE.Services
         }
 
 
-        public bool ChangeRecruiterPassword(CreateAccountDTO userToUpdate)
+        public async Task<bool> ChangeRecruiterPasswordAsync(CreateAccountDTO userToUpdate)
         {
-
-            bool result = false;
-            if (DoesRecruiterExist(userToUpdate.Email))
+            if (!await DoesRecruiterExistAsync(userToUpdate.Email))
             {
-                RecruiterModel updateRecruiter = GetRecruiterByEmailHelper(userToUpdate.Email);
-
-                var hashPassword = HashPassword(userToUpdate.Password);
-                updateRecruiter.Email = userToUpdate.Email;
-                updateRecruiter.Salt = hashPassword.Salt;
-                updateRecruiter.Hash = hashPassword.Hash;
-                updateRecruiter.FirstTimeLogin = false;
-
-                _context.Update(updateRecruiter);
-                result = _context.SaveChanges() != 0;
+                return false;
             }
 
-            return result;
+            RecruiterModel? updateRecruiter = await GetRecruiterByEmailHelperAsync(userToUpdate.Email);
+            if (updateRecruiter == null)
+            {
+                return false;
+            }
+
+            var hashPassword = HashPassword(userToUpdate.Password);
+            updateRecruiter.Email = userToUpdate.Email;
+            updateRecruiter.Salt = hashPassword.Salt;
+            updateRecruiter.Hash = hashPassword.Hash;
+            updateRecruiter.FirstTimeLogin = false;
+
+            _context.Update(updateRecruiter);
+            return await _context.SaveChangesAsync() != 0;
         }
 
-        public bool ChangeAdminPassword(CreateAccountDTO userToUpdate)
+        public async Task<bool> ChangeAdminPasswordAsync(CreateAccountDTO userToUpdate)
         {
-
-            bool result = false;
-            if (DoesUserExist(userToUpdate.Email))
+            if (!await DoesUserExistAsync(userToUpdate.Email))
             {
-                AdminUser updateAdmin = GetUserByEmail(userToUpdate.Email);
-
-                var hashPassword = HashPassword(userToUpdate.Password);
-                updateAdmin.Email = userToUpdate.Email;
-                updateAdmin.Salt = hashPassword.Salt;
-                updateAdmin.Hash = hashPassword.Hash;
-                updateAdmin.FirstTimeLogin = false;
-
-                _context.Update(updateAdmin);
-                result = _context.SaveChanges() != 0;
+                return false;
             }
 
-            return result;
+            AdminUser? updateAdmin = await GetUserByEmailAsync(userToUpdate.Email);
+            if (updateAdmin == null)
+            {
+                return false;
+            }
+
+            var hashPassword = HashPassword(userToUpdate.Password);
+            updateAdmin.Email = userToUpdate.Email;
+            updateAdmin.Salt = hashPassword.Salt;
+            updateAdmin.Hash = hashPassword.Hash;
+            updateAdmin.FirstTimeLogin = false;
+
+            _context.Update(updateAdmin);
+            return await _context.SaveChangesAsync() != 0;
         }
 
         public async Task<IEnumerable<object>> GetAllRecruitersAsync()

@@ -23,27 +23,24 @@ namespace TradesWomanBE.Services
                 return false;
             }
 
-            if (await DoesMeetingExistAsync(newMeeting.Id))
+            var existingMeeting = await _dataContext.Meetings.FirstOrDefaultAsync(m => m.Id == newMeeting.Id);
+            if (existingMeeting != null)
             {
-                await EditMeetingAsync(newMeeting);
-            }
-            else
-            {
-                var client = await _dataContext.ClientInfo.FirstOrDefaultAsync(item => item.Id == newMeeting.ClientID);
-
-                if (client != null)
-                {
-                    client.Meetings = newMeeting;
-                    _dataContext.ClientInfo.Update(client);
-                    await _dataContext.SaveChangesAsync();
-                }
-                else
-                {
-                    return false;
-                }
+                _mapper.Map(newMeeting, existingMeeting);
+                _dataContext.Meetings.Update(existingMeeting);
+                return await _dataContext.SaveChangesAsync() > 0;
             }
 
-            return true;
+            var client = await _dataContext.ClientInfo.FirstOrDefaultAsync(item => item.Id == newMeeting.ClientID);
+
+            if (client == null)
+            {
+                return false;
+            }
+
+            client.Meetings = newMeeting;
+            _dataContext.ClientInfo.Update(client);
+            return await _dataContext.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> AddMeetingNotesAsync(MeetingNotesModel newMeetingNotes)
@@ -98,7 +95,7 @@ namespace TradesWomanBE.Services
                 return false;
             }
 
-            MeetingsModel exisintMeeting = await GetMeetingByIdAsync(newMeeting.Id);
+            MeetingsModel exisintMeeting = await _dataContext.Meetings.FirstOrDefaultAsync(m => m.Id == newMeeting.Id);
 
             if (exisintMeeting == null)
             {
@@ -106,9 +103,7 @@ namespace TradesWomanBE.Services
             }
             _mapper.Map(newMeeting, exisintMeeting);
             _dataContext.Meetings.Update(exisintMeeting);
-            await _dataContext.SaveChangesAsync();
-
-            return true;
+            return await _dataContext.SaveChangesAsync() > 0;
         }
 
 
@@ -120,15 +115,14 @@ namespace TradesWomanBE.Services
 
         public async Task<bool> DoesMeetingExistAsync(int id)
         {
-            return await _dataContext.Meetings
-                .Include(m => m.MeetingNotes)
-                    .AnyAsync(meetings => meetings.Id == id);
+            return await _dataContext.Meetings.AnyAsync(meetings => meetings.Id == id);
         }
 
         public async Task<IEnumerable<MeetingNotesModel>> GetMeetingNotesByMeetingIdAsync(int meetingId)
         {
             return await _dataContext.MeetingNotes
                 .Where(meetingnotes => meetingnotes.MeetingId == meetingId)
+                    .AsNoTracking()
                     .ToListAsync();
         }
     }

@@ -68,7 +68,7 @@ namespace TradesWomanBE.Services
 
         public async Task<ProgramModel?> GetProgramByIdAsync(int id)
         {
-            return await _dataContext.Programs.FirstOrDefaultAsync(program => program.Id == id);
+            return await _dataContext.Programs.AsNoTracking().FirstOrDefaultAsync(program => program.Id == id);
         }
 
         public async Task<bool> DoesProgramExistAsync(int id)
@@ -130,7 +130,7 @@ namespace TradesWomanBE.Services
 
         public async Task<StipendsModel?> GetStipendByIdAsync(int id)
         {
-            return await _dataContext.Stipends.FirstOrDefaultAsync(stipend => stipend.Id == id);
+            return await _dataContext.Stipends.AsNoTracking().FirstOrDefaultAsync(stipend => stipend.Id == id);
         }
 
         public async Task<bool> DoesStipendExistAsync(int id)
@@ -177,7 +177,7 @@ namespace TradesWomanBE.Services
 
         public async Task<IEnumerable<ProgramLookUpModel>> GetProgramLookUpAsync()
         {
-            return await _dataContext.ProgramLookUps.ToListAsync();
+            return await _dataContext.ProgramLookUps.AsNoTracking().ToListAsync();
         }
 
         public async Task<bool> DoesProgramNameExistAsync(string programName)
@@ -191,7 +191,7 @@ namespace TradesWomanBE.Services
         }
         public async Task<ProgramLookUpModel?> GetProgramByIdAsync(ProgramLookUpModel programLookUp)
         {
-            return await _dataContext.ProgramLookUps.FirstOrDefaultAsync(p => p.Id == programLookUp.Id);
+            return await _dataContext.ProgramLookUps.AsNoTracking().FirstOrDefaultAsync(p => p.Id == programLookUp.Id);
         }
 
     }

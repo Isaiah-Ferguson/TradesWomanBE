@@ -20,43 +20,39 @@ namespace TradesWomanBE.Controllers
         }
 
         [HttpGet("ExportClients")]
-        public IActionResult ExportClients()
+        public async Task<IActionResult> ExportClients()
         {
-            var csv = _csvServices.GetClientsAsCsv();
-            var bytes = Encoding.UTF8.GetBytes(csv);
-            var stream = new MemoryStream(bytes);
-
-            return File(stream, "text/csv", "clients.csv");
+            Response.ContentType = "text/csv";
+            Response.Headers.ContentDisposition = "attachment; filename=clients.csv";
+            await _csvServices.WriteClientsCsvAsync(Response.Body);
+            return new EmptyResult();
         }
 
         [HttpGet("ExportClientsByDate/{startDate}/{endDate}")]
-        public IActionResult ExportClientsByDate(string startDate, string endDate)
+        public async Task<IActionResult> ExportClientsByDate(string startDate, string endDate)
         {
-            var csv = _csvServices.GetClientsAsCsvByDate(startDate, endDate);
-            var bytes = Encoding.UTF8.GetBytes(csv);
-            var stream = new MemoryStream(bytes);
-
-            return File(stream, "text/csv", "clients.csv");
+            Response.ContentType = "text/csv";
+            Response.Headers.ContentDisposition = "attachment; filename=clients.csv";
+            await _csvServices.WriteClientsCsvByDateAsync(Response.Body, startDate, endDate);
+            return new EmptyResult();
         }
 
         [HttpGet("ExportClientsByProgram/{program}")]
-        public IActionResult ExportClientsByProgram(string program)
+        public async Task<IActionResult> ExportClientsByProgram(string program)
         {
-            var csv = _csvServices.GetClientsAsCsvByProgram(program);
-            var bytes = Encoding.UTF8.GetBytes(csv);
-            var stream = new MemoryStream(bytes);
-
-            return File(stream, "text/csv", "clients.csv");
+            Response.ContentType = "text/csv";
+            Response.Headers.ContentDisposition = "attachment; filename=clients.csv";
+            await _csvServices.WriteClientsCsvByProgramAsync(Response.Body, program);
+            return new EmptyResult();
         }
 
         [HttpGet("ExportClientsByProgram/{program}/{startDate}/{endDate}")]
-        public IActionResult ExportClientsByProgramAndDate(string program, string startDate, string endDate)
+        public async Task<IActionResult> ExportClientsByProgramAndDate(string program, string startDate, string endDate)
         {
-            var csv = _csvServices.GetClientsAsCsvByProgramAndDate(program, startDate, endDate);
-            var bytes = Encoding.UTF8.GetBytes(csv);
-            var stream = new MemoryStream(bytes);
-
-            return File(stream, "text/csv", "clients.csv");
+            Response.ContentType = "text/csv";
+            Response.Headers.ContentDisposition = "attachment; filename=clients.csv";
+            await _csvServices.WriteClientsCsvByProgramAndDateAsync(Response.Body, program, startDate, endDate);
+            return new EmptyResult();
         }
 
 

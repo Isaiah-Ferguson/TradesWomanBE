@@ -16,15 +16,10 @@ namespace TradesWomanBE.Services
             _mapper = mapper;
         }
 
-        private async Task<bool> DoesClientExistAsync(int? SSN)
-        {
-            return await _dataContext.ClientInfo
-                .SingleOrDefaultAsync(client => client.SSNLastFour == SSN) != null;
-        }
-
         public async Task<IEnumerable<ClientModel>> GetLast30ClientsAsync()
         {
             return await _dataContext.ClientInfo
+                .AsNoTracking()
                 .OrderByDescending(client => client.DateRegistered)
                 .Take(30)
                 .ToListAsync();
@@ -32,73 +27,82 @@ namespace TradesWomanBE.Services
 
         public async Task<bool> AddClientAsync(ClientModel clientModel)
         {
-            if (!await DoesClientExistAsync(clientModel.SSNLastFour))
+            var ssnLastFour = clientModel.SSNLastFour;
+            var exists = await _dataContext.ClientInfo
+                .AsNoTracking()
+                .AnyAsync(c => c.SSNLastFour == ssnLastFour);
+
+            if (exists)
             {
-                await _dataContext.AddAsync(clientModel);
-                return await _dataContext.SaveChangesAsync() > 0;
+                return false;
             }
-            return false;
+
+            await _dataContext.AddAsync(clientModel);
+            return await _dataContext.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> EditClientAsync(ClientModel clientModel)
         {
-            if (await DoesClientExistAsync(clientModel.SSNLastFour))
+            var existingClient = await _dataContext.ClientInfo
+                .Where(c => c.IsDeleted == false)
+                .FirstOrDefaultAsync(c => c.Id == clientModel.Id);
+
+            if (existingClient == null)
             {
-                // Get the existing client record from the database
-                ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
-
-                // Update only the required fields (excluding ProgramInfo, Meetings, Stipends, and Id)
-                existingClient.Age = clientModel.Age;
-                existingClient.Firstname = clientModel.Firstname;
-                existingClient.Lastname = clientModel.Lastname;
-                existingClient.MiddleInitial = clientModel.MiddleInitial;
-                existingClient.Email = clientModel.Email;
-                existingClient.ChildrenUnderSix = clientModel.ChildrenUnderSix;
-                existingClient.ChildrenOverSix = clientModel.ChildrenOverSix;
-                existingClient.TotalHouseholdFamily = clientModel.TotalHouseholdFamily;
-                existingClient.SSNLastFour = clientModel.SSNLastFour;
-                existingClient.ValidSSNAuthToWrk = clientModel.ValidSSNAuthToWrk;
-                existingClient.CriminalHistory = clientModel.CriminalHistory;
-                existingClient.Disabled = clientModel.Disabled;
-                existingClient.FoundUsOn = clientModel.FoundUsOn;
-                existingClient.DateJoinedEAW = clientModel.DateJoinedEAW;
-                existingClient.Address = clientModel.Address;
-                existingClient.City = clientModel.City;
-                existingClient.State = clientModel.State;
-                existingClient.ZipCode = clientModel.ZipCode;
-                existingClient.Gender = clientModel.Gender;
-                existingClient.Employed = clientModel.Employed;
-                existingClient.RecruiterName = clientModel.RecruiterName;
-                existingClient.DateRegistered = clientModel.DateRegistered;
-                existingClient.DateOfBirth = clientModel.DateOfBirth;
-                existingClient.ActiveOrFormerMilitary = clientModel.ActiveOrFormerMilitary;
-                existingClient.TotalMonthlyIncome = clientModel.TotalMonthlyIncome;
-                existingClient.PhoneNumber = clientModel.PhoneNumber;
-                existingClient.HighestEducation = clientModel.HighestEducation;
-                existingClient.ValidCALicense = clientModel.ValidCALicense;
-                existingClient.County = clientModel.County;
-                existingClient.Ethnicity = clientModel.Ethnicity;
-
-                // Save changes to the database
-                _dataContext.Update(existingClient);
-                return await _dataContext.SaveChangesAsync() > 0;
+                return false;
             }
-            return false;
+
+            // Update only the required fields (excluding ProgramInfo, Meetings, Stipends, and Id)
+            existingClient.Age = clientModel.Age;
+            existingClient.Firstname = clientModel.Firstname;
+            existingClient.Lastname = clientModel.Lastname;
+            existingClient.MiddleInitial = clientModel.MiddleInitial;
+            existingClient.Email = clientModel.Email;
+            existingClient.ChildrenUnderSix = clientModel.ChildrenUnderSix;
+            existingClient.ChildrenOverSix = clientModel.ChildrenOverSix;
+            existingClient.TotalHouseholdFamily = clientModel.TotalHouseholdFamily;
+            existingClient.SSNLastFour = clientModel.SSNLastFour;
+            existingClient.ValidSSNAuthToWrk = clientModel.ValidSSNAuthToWrk;
+            existingClient.CriminalHistory = clientModel.CriminalHistory;
+            existingClient.Disabled = clientModel.Disabled;
+            existingClient.FoundUsOn = clientModel.FoundUsOn;
+            existingClient.DateJoinedEAW = clientModel.DateJoinedEAW;
+            existingClient.Address = clientModel.Address;
+            existingClient.City = clientModel.City;
+            existingClient.State = clientModel.State;
+            existingClient.ZipCode = clientModel.ZipCode;
+            existingClient.Gender = clientModel.Gender;
+            existingClient.Employed = clientModel.Employed;
+            existingClient.RecruiterName = clientModel.RecruiterName;
+            existingClient.DateRegistered = clientModel.DateRegistered;
+            existingClient.DateOfBirth = clientModel.DateOfBirth;
+            existingClient.ActiveOrFormerMilitary = clientModel.ActiveOrFormerMilitary;
+            existingClient.TotalMonthlyIncome = clientModel.TotalMonthlyIncome;
+            existingClient.PhoneNumber = clientModel.PhoneNumber;
+            existingClient.HighestEducation = clientModel.HighestEducation;
+            existingClient.ValidCALicense = clientModel.ValidCALicense;
+            existingClient.County = clientModel.County;
+            existingClient.Ethnicity = clientModel.Ethnicity;
+
+            _dataContext.Update(existingClient);
+            return await _dataContext.SaveChangesAsync() > 0;
         }
 
 
         public async Task<bool> DeleteClientAsync(ClientModel clientModel)
         {
-            if (await DoesClientExistAsync(clientModel.Id))
+            var existingClient = await _dataContext.ClientInfo
+                .Where(c => c.IsDeleted == false)
+                .FirstOrDefaultAsync(c => c.Id == clientModel.Id);
+
+            if (existingClient == null)
             {
-                ClientModel existingClient = await GetClientByIdAsync(clientModel.Id);
-
-                existingClient.IsDeleted = clientModel.IsDeleted;
-
-                _dataContext.Update(existingClient);
-                return await _dataContext.SaveChangesAsync() > 0;
+                return false;
             }
-            return false;
+
+            existingClient.IsDeleted = clientModel.IsDeleted;
+            _dataContext.Update(existingClient);
+            return await _dataContext.SaveChangesAsync() > 0;
         }
 
 
@@ -106,6 +110,7 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.ClientInfo
             .Where(c => c.IsDeleted == false)
+                .AsNoTracking()
                 .Include(c => c.ProgramInfo)
                     .Include(c => c.Stipends)
                         .Include(c => c.Meetings)
@@ -115,6 +120,7 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.ClientInfo
                 .Where(c => c.IsDeleted == false)
+                .AsNoTracking()
                 .Select(c => new
                 {
                     c.Id,
@@ -129,6 +135,7 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.ClientInfo
                 .Where(c => c.IsDeleted == false && c.RecruiterName == recruitername)
+                .AsNoTracking()
                 .Select(c => new
                 {
                     c.Id,
@@ -144,6 +151,7 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.ClientInfo
             .Where(c => c.IsDeleted == false)
+                .AsNoTracking()
                 .Include(c => c.ProgramInfo)
                     .Include(c => c.Stipends)
                         .Include(c => c.Meetings)
@@ -155,6 +163,7 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.ClientInfo
             .Where(c => c.IsDeleted == false)
+                .AsNoTracking()
                 .Include(c => c.ProgramInfo)
                     .Include(c => c.Stipends)
                         .Include(c => c.Meetings)
@@ -166,6 +175,7 @@ namespace TradesWomanBE.Services
         {
             return await _dataContext.ClientInfo
             .Where(c => c.IsDeleted == false && c.Firstname == Firstname && c.Lastname == Lastname)
+                .AsNoTracking()
                 .Include(c => c.ProgramInfo)
                     .Include(c => c.Meetings)
                         .ThenInclude(m => m.MeetingNotes)
