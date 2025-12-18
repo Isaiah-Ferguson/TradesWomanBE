@@ -181,13 +181,13 @@ namespace TradesWomanBE.Services
             csv.WriteField("ValidCALicense");
             csv.WriteField("County");
             csv.WriteField("Ethnicity");
-            csv.WriteField("IsDeleted");
             csv.WriteField("ProgramEnrolled");
             csv.WriteField("ProgramEnrolledDate");
             csv.WriteField("ProgramEndDate");
             csv.WriteField("CurrentStatus");
             csv.WriteField("PreApprenticeshipProgram");
             csv.WriteField("TypeOfStipend");
+            csv.WriteField("IsDeleted");
             csv.NextRecord();
         }
 
@@ -228,7 +228,6 @@ namespace TradesWomanBE.Services
             csv.WriteField(client.ValidCALicense);
             csv.WriteField(client.County);
             csv.WriteField(client.Ethnicity);
-            csv.WriteField(client.IsDeleted);
 
             csv.WriteField(program?.ProgramEnrolled);
             csv.WriteField(program?.EnrollDate);
@@ -238,6 +237,7 @@ namespace TradesWomanBE.Services
             csv.WriteField(stipend?.PreApprenticeshipProgram);
             csv.WriteField(stipend?.TypeOfStipend);
 
+            csv.WriteField(client.IsDeleted);
             csv.NextRecord();
         }
         public string GetClientsAsCsv()
