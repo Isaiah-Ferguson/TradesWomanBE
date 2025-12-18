@@ -26,7 +26,11 @@ namespace TradesWomanBE.Services
         public async Task WriteClientsCsvAsync(Stream outputStream)
         {
             await using var writer = new StreamWriter(outputStream, Encoding.UTF8, bufferSize: 16 * 1024, leaveOpen: true);
-            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                ShouldQuote = _ => true
+            };
+            await using var csv = new CsvWriter(writer, csvConfig);
 
             WriteClientsHeader(csv);
 
@@ -45,7 +49,11 @@ namespace TradesWomanBE.Services
         public async Task WriteClientsCsvByProgramAsync(Stream outputStream, string programName)
         {
             await using var writer = new StreamWriter(outputStream, Encoding.UTF8, bufferSize: 16 * 1024, leaveOpen: true);
-            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                ShouldQuote = _ => true
+            };
+            await using var csv = new CsvWriter(writer, csvConfig);
 
             WriteClientsHeader(csv);
 
@@ -70,7 +78,11 @@ namespace TradesWomanBE.Services
             }
 
             await using var writer = new StreamWriter(outputStream, Encoding.UTF8, bufferSize: 16 * 1024, leaveOpen: true);
-            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                ShouldQuote = _ => true
+            };
+            await using var csv = new CsvWriter(writer, csvConfig);
 
             WriteClientsHeader(csv);
 
@@ -104,7 +116,11 @@ namespace TradesWomanBE.Services
             }
 
             await using var writer = new StreamWriter(outputStream, Encoding.UTF8, bufferSize: 16 * 1024, leaveOpen: true);
-            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                ShouldQuote = _ => true
+            };
+            await using var csv = new CsvWriter(writer, csvConfig);
 
             WriteClientsHeader(csv);
 
@@ -300,11 +316,70 @@ namespace TradesWomanBE.Services
             {
                 var program = client.ProgramInfo;
                 var stipend = client.Stipends;
-                sb.AppendLine($"{client.Id},{client.Age},{client.Firstname},{client.Lastname},{client.MiddleInitial},{client.Email},{client.ChildrenUnderSix},{client.ChildrenOverSix},{client.TotalHouseholdFamily},{client.SSNLastFour},{client.ValidSSNAuthToWrk},{client.CriminalHistory},{client.Disabled},{client.FoundUsOn},{client.DateJoinedEAW},{client.Address},{client.City},{client.State},{client.ZipCode},{client.Gender},{client.Employed},{client.RecruiterName},{client.DateRegistered},{client.DateOfBirth},{client.ActiveOrFormerMilitary},{client.TotalMonthlyIncome},{client.PhoneNumber},{client.ProgramInfoId},{client.HighestEducation},{client.ValidCALicense},{client.County},{client.Ethnicity},{client.IsDeleted}" +
-                              $"{program?.ProgramEnrolled},{program?.EnrollDate},{program?.ProgramEndDate},{program?.CurrentStatus}" + $"{stipend?.PreApprenticeshipProgram}, {stipend?.TypeOfStipend}");
+                var fields = new[]
+                {
+                    client.Id.ToString(),
+                    client.Age.ToString(),
+                    client.Firstname,
+                    client.Lastname,
+                    client.MiddleInitial,
+                    client.Email,
+                    client.ChildrenUnderSix.ToString(),
+                    client.ChildrenOverSix.ToString(),
+                    client.TotalHouseholdFamily.ToString(),
+                    client.SSNLastFour.ToString(),
+                    client.ValidSSNAuthToWrk,
+                    client.CriminalHistory,
+                    client.Disabled,
+                    client.FoundUsOn,
+                    client.DateJoinedEAW,
+                    client.Address,
+                    client.City,
+                    client.State,
+                    client.ZipCode.ToString(),
+                    client.Gender,
+                    client.Employed,
+                    client.RecruiterName,
+                    client.DateRegistered,
+                    client.DateOfBirth,
+                    client.ActiveOrFormerMilitary,
+                    client.TotalMonthlyIncome.ToString(),
+                    client.PhoneNumber,
+                    client.ProgramInfoId?.ToString(),
+                    client.HighestEducation,
+                    client.ValidCALicense,
+                    client.County,
+                    client.Ethnicity,
+                    client.IsDeleted.ToString(),
+                    program?.ProgramEnrolled,
+                    program?.EnrollDate,
+                    program?.ProgramEndDate,
+                    program?.CurrentStatus,
+                    stipend?.PreApprenticeshipProgram,
+                    stipend?.TypeOfStipend
+                };
+
+                sb.AppendLine(string.Join(",", fields.Select(EscapeCsv)));
             }
 
             return sb.ToString(); // Return the final CSV string
+        }
+
+        private static string EscapeCsv(string? value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return "";
+            }
+
+            var needsQuotes = value.Contains(',') || value.Contains('"') || value.Contains('\n') || value.Contains('\r');
+            if (!needsQuotes)
+            {
+                return value;
+            }
+
+            var escaped = value.Replace("\"", "\"\"");
+            return $"\"{escaped}\"";
         }
 
         public async Task<List<ClientModel>> ImportClientsFromCsvAsync(Stream csvStream)
