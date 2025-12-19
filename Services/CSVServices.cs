@@ -237,7 +237,7 @@ namespace TradesWomanBE.Services
             csv.WriteField(stipend?.PreApprenticeshipProgram);
             csv.WriteField(stipend?.TypeOfStipend);
 
-            csv.WriteField(client.IsDeleted);
+            csv.WriteField(client.IsDeleted ? "TRUE" : "FALSE");
             csv.NextRecord();
         }
         public string GetClientsAsCsv()
@@ -350,7 +350,7 @@ namespace TradesWomanBE.Services
                     client.ValidCALicense,
                     client.County,
                     client.Ethnicity,
-                    client.IsDeleted.ToString(),
+                    client.IsDeleted ? "TRUE" : "FALSE",
                     program?.ProgramEnrolled,
                     program?.EnrollDate,
                     program?.ProgramEndDate,
