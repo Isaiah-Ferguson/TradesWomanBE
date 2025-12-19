@@ -316,13 +316,13 @@ namespace TradesWomanBE.Services
             {
                 var program = client.ProgramInfo;
                 var stipend = client.Stipends;
-                var fields = new[]
+                var fields = new string?[]
                 {
                     client.Id.ToString(),
                     client.Age.ToString(),
                     client.Firstname,
                     client.Lastname,
-                    client.MiddleInitial,
+                    client.MiddleInitial?.ToString(),
                     client.Email,
                     client.ChildrenUnderSix.ToString(),
                     client.ChildrenOverSix.ToString(),
